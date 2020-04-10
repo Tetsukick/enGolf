@@ -26,13 +26,16 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: NewsTab(),
+      home: CupertinoTabView(
+        defaultTitle: NewsTab.title,
+        builder: (context) => NewsTab(),
+      ),
     );
   }
 }
 
 class NewsTab extends StatefulWidget {
-  static const title = 'News';
+  static const title = 'enGolf';
   static const androidIcon = Icon(Icons.library_books);
   static const iosIcon = Icon(CupertinoIcons.news);
 
