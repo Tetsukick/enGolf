@@ -157,6 +157,7 @@ class NewsTab extends StatelessWidget {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               TextFormField(
+                                                controller: TextEditingController(text: players[index].name),
                                                 decoration: InputDecoration(
                                                   enabledBorder: const OutlineInputBorder(
                                                     borderSide: const BorderSide(color: Colors.white, width: 0.0),
