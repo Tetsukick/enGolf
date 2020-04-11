@@ -18,9 +18,26 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CupertinoTabView(
-        defaultTitle: NewsTab.title,
-        builder: (context) => NewsTab(),
+      home: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              expandedHeight: 200.0,
+              floating: false,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: true,
+                  title: Text("Collapsing Toolbar",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                      )),
+                  background: Image.asset('assets/top-background.jpg', fit: BoxFit.cover)
+              ),
+            ),
+          ];
+        },
+        body: NewsTab(),
       ),
     );
   }
@@ -112,9 +129,6 @@ class _NewsTabState extends State<NewsTab> {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('enGolf', style: TextStyle(color: Colors.black),),
-      ),
       body: Container(
         child: ListView.builder(
           itemBuilder: _listBuilder,
@@ -125,7 +139,6 @@ class _NewsTabState extends State<NewsTab> {
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(),
       child: ListView.builder(
         itemBuilder: _listBuilder,
       ),
