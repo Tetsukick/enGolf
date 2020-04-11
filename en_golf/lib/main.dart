@@ -24,21 +24,47 @@ class MyApp extends StatelessWidget {
           expandedHeight: 200,
           flexibleSpace: FlexibleSpaceBar(
             title: Container(
-                width: 100,
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'Rate',
-                    labelStyle: TextStyle(
-                      color: Colors.white
+                margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: Row( // 1行目
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                      width: 200,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Rate',
+                          labelStyle: TextStyle(
+                              color: Colors.white
+                          ),
+                        ),
+                        style: TextStyle(
+                            color: Colors.white
+                        ),
+                        onChanged: ((text) {
+                          print(text);
+                        }),
+                      ),
                     ),
-                  ),
-                  style: TextStyle(
-                    color: Colors.white
-                  ),
-                  onChanged: ((text) {
-                    print(text);
-                  }),
+                    Expanded(
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Player',
+                          labelStyle: TextStyle(
+                              color: Colors.white
+                          ),
+                        ),
+                        style: TextStyle(
+                            color: Colors.white
+                        ),
+                        onChanged: ((text) {
+                          print(text);
+                        }),
+                      ),
+                    ),
+                  ],
                 ),
             ),
             background: Image.asset('assets/top-background.jpg', fit: BoxFit.cover),
