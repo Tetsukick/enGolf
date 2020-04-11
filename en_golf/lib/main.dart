@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: '',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       home: MultiProvider(
         providers: [
@@ -46,16 +46,18 @@ class NewsTab extends StatelessWidget {
     return CustomScrollView(slivers: <Widget>[
       SliverAppBar(
         pinned: true,
-        expandedHeight: 200,
+        expandedHeight: 150,
         flexibleSpace: FlexibleSpaceBar(
           title: Container(
 //            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: Row( // 1行目
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
-                  width: size.width * 2 / 3,
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  width: size.width / 3,
                   child: TextFormField(
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -78,7 +80,8 @@ class NewsTab extends StatelessWidget {
                     }),
                   ),
                 ),
-                Expanded(
+                Container(
+                  width: size.width / 4,
                   child: TextFormField(
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
