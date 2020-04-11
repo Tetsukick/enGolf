@@ -150,19 +150,52 @@ class NewsTab extends StatelessWidget {
                                   ),
                                   Padding(padding: EdgeInsets.only(left: 16)),
                                   Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          players[index].name,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              TextFormField(
+                                                decoration: InputDecoration(
+                                                  enabledBorder: const OutlineInputBorder(
+                                                    borderSide: const BorderSide(color: Colors.white, width: 0.0),
+                                                  ),
+                                                  labelStyle: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                style: TextStyle(
+                                                    color: Colors.black
+                                                ),
+                                                onChanged: ((text) {
+                                                }),
+                                              ),
+                                              Padding(padding: EdgeInsets.only(top: 8)),
+                                              Text(
+                                                players[index].result.toString(),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Padding(padding: EdgeInsets.only(top: 8)),
-                                        Text(
-                                          players[index].score.toString(),
+                                        Container(
+                                          width: 100,
+                                          child: TextFormField(
+                                            keyboardType: TextInputType.number,
+                                            decoration: InputDecoration(
+                                              labelText: 'Score',
+                                              labelStyle: TextStyle(
+                                                  color: Colors.black
+                                              ),
+                                            ),
+                                            style: TextStyle(
+                                                color: Colors.black
+                                            ),
+                                            onChanged: ((text) {
+                                            }),
+                                          ),
                                         ),
                                       ],
                                     ),
