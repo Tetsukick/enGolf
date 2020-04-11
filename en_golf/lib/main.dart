@@ -18,26 +18,33 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              expandedHeight: 200.0,
-              floating: false,
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: Text("Collapsing Toolbar",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                      )),
-                  background: Image.asset('assets/top-background.jpg', fit: BoxFit.cover)
-              ),
+      home: CustomScrollView(slivers: <Widget>[
+        SliverAppBar(
+          pinned: true, 
+          expandedHeight: 200,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Container(
+                width: 100,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Rate',
+                    labelStyle: TextStyle(
+                      color: Colors.white
+                    ),
+                  ),
+                  style: TextStyle(
+                    color: Colors.white
+                  ),
+                  onChanged: ((text) {
+                    print(text);
+                  }),
+                ),
             ),
-          ];
-        },
-        body: NewsTab(),
+            background: Image.asset('assets/top-background.jpg', fit: BoxFit.cover),
+          ),
+        ),
+        SliverFillRemaining(child: NewsTab(),),
+      ],
       ),
     );
   }
