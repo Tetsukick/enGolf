@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
             title: Container(
                 width: 100,
                 child: TextFormField(
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: 'Rate',
                     labelStyle: TextStyle(
