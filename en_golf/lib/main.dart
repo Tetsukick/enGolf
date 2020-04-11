@@ -28,7 +28,10 @@ class MyApp extends StatelessWidget {
             dispose: (context, bloc) => bloc.dispose(),
           ),
         ],
-        child: NewsTab(),
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: NewsTab(),
+        ),
       ),
     );
   }
