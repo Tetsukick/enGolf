@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "895847817509",
+    "firebase_url": "https://engolf-7f031.firebaseio.com",
+    "project_id": "engolf-7f031",
+    "storage_bucket": "engolf-7f031.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895847817509:android:e2be98694694ebadf63acc",
+        "android_client_info": {
+          "package_name": "com.tetsukick.engolf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "895847817509-tfr7faq4n5ojt2p8krghidtpju22k9o7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBifD-6xTNeinAhRkiGN736Wo3ZRmQXnxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "895847817509-tfr7faq4n5ojt2p8krghidtpju22k9o7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "895847817509-sh0ajum923v4s6r6moofmogoqs1ahhmv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tetsukick.engolf"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
