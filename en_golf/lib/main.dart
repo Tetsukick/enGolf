@@ -109,9 +109,9 @@ class NewsTab extends StatelessWidget {
                                 child: CupertinoPicker(
                                   scrollController: FixedExtentScrollController(initialItem: snapshot.data - 1),
                                   itemExtent: 40,
-                                  children: _items.map(_pickerItem).toList(),
+                                  children: _playerCountItems.map(_pickerItem).toList(),
                                   onSelectedItemChanged: ((index) {
-                                    olympicBloc.changePlayerCountAction.add(_items[index]);
+                                    olympicBloc.changePlayerCountAction.add(_playerCountItems[index]);
                                   }),
                                 ),
                               ),
@@ -239,7 +239,7 @@ class NewsTab extends StatelessWidget {
 
   String _selectedItem = 'none';
 
-  final List<int> _items = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50];
+  final List<int> _playerCountItems = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50];
 
   Widget _pickerItem(int str) {
     return Text(
