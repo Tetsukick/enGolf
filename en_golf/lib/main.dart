@@ -58,27 +58,32 @@ class NewsTab extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   width: size.width / 3,
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Rate',
-                      labelStyle: TextStyle(
-                          color: Colors.white
-                      ),
-                    ),
-                    style: TextStyle(
-                        color: Colors.white
-                    ),
-                    onFieldSubmitted: ((text) {
-                      int rate;
-                      try {
-                        rate = int.parse(text);
-                        olympicBloc.changeRateAction.add(rate);
-                      } catch (e) {
-                        print(e);
-                      }
+                  child: StreamBuilder(
+                    stream: olympicBloc.rate,
+                    builder: (context, snapshot) {
+                      return TextFormField(
+                        controller: TextEditingController(text: snapshot.data.toString()),
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'Rate',
+                          labelStyle: TextStyle(
+                              color: Colors.white
+                          ),
+                        ),
+                        style: TextStyle(
+                            color: Colors.white
+                        ),
+                        onFieldSubmitted: ((text) {
+                          int rate;
+                          try {
+                            rate = int.parse(text);
+                            olympicBloc.changeRateAction.add(rate);
+                          } catch (e) {
+                            print(e);
+                          }
+                        }),
+                      );
                     }),
-                  ),
                 ),
                 Container(
                   width: size.width / 4,

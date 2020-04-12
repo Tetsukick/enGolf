@@ -5,6 +5,7 @@ class OlympicBloc {
   // input
   final _rateController = BehaviorSubject<int>();
   Sink<int> get changeRateAction => _rateController.sink;
+  Stream<int> get rate => _rateController.stream;
 
   final _playerCountController = BehaviorSubject<int>();
   Sink<int> get changePlayerCountAction => _playerCountController.sink;
@@ -29,16 +30,26 @@ class OlympicBloc {
   OlympicBloc() {
     _playersController.add(_players);
     _playerCountController.add(_playerCount);
+    _rateController.add(_rate);
 
     _rateController.stream.listen((newRate) {
       _rate = newRate;
-//      _countController.sink.add(_count);
+
+      recalculate();
+
+      _playersController.add(_players);
     });
 
     listenPlayerCount();
     
+    listenPlayer();
+  }
+
+  void listenPlayer() {
     _playerController.stream.listen((player) {
       _players[player.id] = player;
+
+      recalculate();
 
       _playersController.add(_players);
     });
@@ -70,6 +81,19 @@ class OlympicBloc {
       _playerCountController.add(_playerCount);
     });
   }
+  
+  void recalculate() {
+    _players = _players.map((player) {
+      player.result = formulaOlympic(player.id);
+      return player;
+    }).toList();
+  }
+
+  int formulaOlympic(int index) {
+    int playerScore = _players[index].score;
+    int totalScore = _players.fold(0, (curr, next) => curr + next.score);
+    return ((playerScore * (_players.length - 1)) - (totalScore - playerScore)) * _rate;
+  }
 
   void dispose() {
     _rateController.close();
@@ -83,7 +107,7 @@ class Player {
   int id;
   String name;
   int score;
-  int result;
+  int result = 0;
 
   Player(id, name, score) {
     this.id = id;
