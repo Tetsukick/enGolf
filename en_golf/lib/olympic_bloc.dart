@@ -32,26 +32,24 @@ class OlympicBloc {
     _playerCountController.add(_playerCount);
     _rateController.add(_rate);
 
+    listenRate();
+    listenPlayerCount();
+    listenPlayer();
+  }
+
+  void listenRate() {
     _rateController.stream.listen((newRate) {
       _rate = newRate;
 
-      recalculate();
-
-      _playersController.add(_players);
+      updatePlayer();
     });
-
-    listenPlayerCount();
-    
-    listenPlayer();
   }
 
   void listenPlayer() {
     _playerController.stream.listen((player) {
       _players[player.id] = player;
 
-      recalculate();
-
-      _playersController.add(_players);
+      updatePlayer();
     });
   }
   
@@ -77,9 +75,14 @@ class OlympicBloc {
 
       _playerCount = newCount;
 
-      _playersController.add(_players);
+      updatePlayer();
       _playerCountController.add(_playerCount);
     });
+  }
+
+  void updatePlayer() {
+    recalculate();
+    _playersController.add(_players);
   }
   
   void recalculate() {
