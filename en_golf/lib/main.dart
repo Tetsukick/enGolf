@@ -247,10 +247,6 @@ class NewsTab extends StatelessWidget {
       style: const TextStyle(fontSize: 32),
     );
   }
-
-  void _onSelectedItemChanged(int index) {
-    print(index);
-  }
 }
 
 class AlwaysDisabledFocusNode extends FocusNode {
