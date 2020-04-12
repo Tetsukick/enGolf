@@ -192,7 +192,8 @@ class NewsTab extends StatelessWidget {
                                                   ),
                                                 ),
                                                 style: TextStyle(
-                                                    color: Colors.black
+                                                    color: Colors.black,
+                                                    fontSize: 18,
                                                 ),
                                                 onFieldSubmitted: ((text) {
                                                   players[index].name = text;
@@ -202,6 +203,11 @@ class NewsTab extends StatelessWidget {
                                               Padding(padding: EdgeInsets.only(top: 8)),
                                               Text(
                                                 players[index].result.toString(),
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -215,11 +221,14 @@ class NewsTab extends StatelessWidget {
                                             decoration: InputDecoration(
                                               labelText: 'Score',
                                               labelStyle: TextStyle(
-                                                  color: Colors.black
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                             ),
                                             style: TextStyle(
-                                                color: Colors.black
+                                                color: Colors.black,
+                                                fontSize: 18,
                                             ),
                                             onTap: () => showModalBottomSheet<void>(
                                               context: context,
