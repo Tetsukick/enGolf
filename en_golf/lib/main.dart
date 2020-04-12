@@ -188,10 +188,6 @@ class NewsTab extends StatelessWidget {
                                                 style: TextStyle(
                                                     color: Colors.black
                                                 ),
-//                                                onChanged: ((text) {
-//                                                  players[index].name = text;
-//                                                  olympicBloc.changePlayerAction.add(players[index]);
-//                                                }),
                                                 onFieldSubmitted: ((text) {
                                                   print(text);
                                                   players[index].name = text;
