@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
 }
 
 class NewsTab extends StatelessWidget {
-  final colors = getRandomColors(50);
+  final colors = getRandomColors(51);
 
   @override
   Widget build(context) {
