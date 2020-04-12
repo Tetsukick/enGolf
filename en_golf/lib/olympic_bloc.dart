@@ -82,6 +82,7 @@ class OlympicBloc {
 
   void updatePlayer() {
     recalculate();
+    setRank();
     _playersController.add(_players);
   }
   
@@ -90,6 +91,27 @@ class OlympicBloc {
       player.result = formulaOlympic(player.id);
       return player;
     }).toList();
+  }
+
+  void setRank() {
+    List<Player> sortPlayers = _players.map((player) => player).toList();
+    sortPlayers.sort((a,b) => b.score - a.score);
+
+    int rank = 1;
+    int targetIndex = _players.indexOf(sortPlayers[0]);
+    Player targetPlayer = _players[targetIndex];
+    targetPlayer.rank = rank;
+    _players[targetIndex] = targetPlayer;
+
+    for (int i = 1; i < _players.length; i++) {
+      if (sortPlayers[i].score != sortPlayers[i-1].score) {
+        rank = i + 1;
+      }
+      int _targetIndex = _players.indexOf(sortPlayers[i]);
+      Player _targetPlayer = _players[_targetIndex];
+      _targetPlayer.rank = rank;
+      _players[_targetIndex] = _targetPlayer;
+    }
   }
 
   int formulaOlympic(int index) {
@@ -108,6 +130,7 @@ class OlympicBloc {
 
 class Player {
   int id;
+  int rank = 1;
   String name;
   int score;
   int result = 0;

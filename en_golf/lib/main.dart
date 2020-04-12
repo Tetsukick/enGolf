@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
 }
 
 class NewsTab extends StatelessWidget {
+  final colors = getRandomColors(50);
 
   @override
   Widget build(context) {
@@ -142,7 +143,6 @@ class NewsTab extends StatelessWidget {
                 return Container();
               } else {
                 List<Player> players = snapshot.data;
-                final colors = getRandomColors(players.length);
                 return ListView.builder(
                     itemCount: players.length,
                     itemBuilder: (context, int index) {
@@ -165,10 +165,13 @@ class NewsTab extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CircleAvatar(
-                                    backgroundColor: colors[index],
+                                    backgroundColor: colors[players[index].rank],
                                     child: Text(
-                                      players[index].name.substring(0, 1),
-                                      style: TextStyle(color: Colors.white),
+                                      players[index].rank.toString(),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                      ),
                                     ),
                                   ),
                                   Padding(padding: EdgeInsets.only(left: 16)),
