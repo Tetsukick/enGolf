@@ -73,7 +73,7 @@ class NewsTab extends StatelessWidget {
                         style: TextStyle(
                             color: Colors.white
                         ),
-                        onFieldSubmitted: ((text) {
+                        onChanged: ((text) {
                           int rate;
                           try {
                             rate = int.parse(text);
@@ -105,6 +105,7 @@ class NewsTab extends StatelessWidget {
                         onTap: () => showModalBottomSheet<void>(
                           context: context,
                           builder: (BuildContext context) {
+                            FocusScope.of(context).unfocus();
                             return Container(
                               height: MediaQuery.of(context).size.height / 3,
                               child: GestureDetector(
@@ -223,6 +224,7 @@ class NewsTab extends StatelessWidget {
                                             onTap: () => showModalBottomSheet<void>(
                                               context: context,
                                               builder: (BuildContext context) {
+                                                FocusScope.of(context).unfocus();
                                                 return Container(
                                                   height: MediaQuery.of(context).size.height / 3,
                                                   child: GestureDetector(
@@ -262,15 +264,13 @@ class NewsTab extends StatelessWidget {
     );
   }
 
-  String _selectedItem = 'none';
-
   final List<int> _playerCountItems = new List.generate(50, (i) => i + 1);
   final List<int> _scoreItems = new List.generate(201, (i) => i - 100);
 
   Widget _pickerItem(int str) {
     return Text(
       str.toString(),
-      style: const TextStyle(fontSize: 32),
+      style: const TextStyle(fontSize: 28),
     );
   }
 }
@@ -278,4 +278,6 @@ class NewsTab extends StatelessWidget {
 class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
+  @override
+  bool get hasPrimaryFocus => false;
 }
