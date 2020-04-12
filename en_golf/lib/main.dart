@@ -189,11 +189,9 @@ class NewsTab extends StatelessWidget {
                                                     color: Colors.black
                                                 ),
                                                 onFieldSubmitted: ((text) {
-                                                  print(text);
                                                   players[index].name = text;
                                                   olympicBloc.changePlayerAction.add(players[index]);
                                                 }),
-                                                onEditingComplete: () => print('end'),
                                               ),
                                               Padding(padding: EdgeInsets.only(top: 8)),
                                               Text(
@@ -205,6 +203,8 @@ class NewsTab extends StatelessWidget {
                                         Container(
                                           width: 100,
                                           child: TextFormField(
+                                            focusNode: AlwaysDisabledFocusNode(),
+                                            controller: TextEditingController(text: _scoreItems.firstWhere((score) => score == players[index].score).toString()),
                                             keyboardType: TextInputType.number,
                                             decoration: InputDecoration(
                                               labelText: 'Score',
@@ -215,8 +215,28 @@ class NewsTab extends StatelessWidget {
                                             style: TextStyle(
                                                 color: Colors.black
                                             ),
-                                            onChanged: ((text) {
-                                            }),
+                                            onTap: () => showModalBottomSheet<void>(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Container(
+                                                  height: MediaQuery.of(context).size.height / 3,
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: CupertinoPicker(
+                                                      scrollController: FixedExtentScrollController(initialItem: _scoreItems.indexOf(players[index].score)),
+                                                      itemExtent: 40,
+                                                      children: _scoreItems.map(_pickerItem).toList(),
+                                                      onSelectedItemChanged: ((pickerIndex) {
+                                                        players[index].score = _scoreItems[pickerIndex];
+                                                        olympicBloc.changePlayerAction.add(players[index]);
+                                                      }),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -239,7 +259,8 @@ class NewsTab extends StatelessWidget {
 
   String _selectedItem = 'none';
 
-  final List<int> _playerCountItems = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50];
+  final List<int> _playerCountItems = new List.generate(50, (i) => i + 1);
+  final List<int> _scoreItems = new List.generate(201, (i) => i - 100);
 
   Widget _pickerItem(int str) {
     return Text(
