@@ -1,5 +1,6 @@
 # enGolf
 Golfのオリンピック計算アプリ
+![image](https://user-images.githubusercontent.com/47769514/79771499-d5cce080-8369-11ea-8bde-c5f6bd0fffb0.png)
 
 ## リリース情報
 ### iOS版
