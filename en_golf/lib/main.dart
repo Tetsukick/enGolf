@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'utils.dart';
 import 'widgets.dart';
 import 'olympic_bloc.dart';
+import 'constants.dart' as Constants;
 
 void main() => runApp(MyApp());
 
@@ -38,7 +39,6 @@ class MyApp extends StatelessWidget {
 }
 
 class NewsTab extends StatelessWidget {
-  final colors = getRandomColors(51);
 
   @override
   Widget build(context) {
@@ -50,8 +50,7 @@ class NewsTab extends StatelessWidget {
         expandedHeight: 150,
         flexibleSpace: FlexibleSpaceBar(
           title: Container(
-//            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: Row( // 1行目
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.min,
@@ -149,123 +148,7 @@ class NewsTab extends StatelessWidget {
                       return SafeArea(
                         top: false,
                         bottom: false,
-                        child: Card(
-                          elevation: 1.5,
-                          margin: EdgeInsets.fromLTRB(6, 12, 6, 0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: InkWell(
-                            // Make it splash on Android. It would happen automatically if this
-                            // was a real card but this is just a demo. Skip the splash on iOS.
-                            onTap: defaultTargetPlatform == TargetPlatform.iOS ? null : () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: colors[players[index].rank],
-                                    child: Text(
-                                      players[index].rank.toString(),
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(padding: EdgeInsets.only(left: 16)),
-                                  Expanded(
-                                    child: Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              TextFormField(
-                                                controller: TextEditingController(text: players[index].name),
-                                                decoration: InputDecoration(
-                                                  enabledBorder: const OutlineInputBorder(
-                                                    borderSide: const BorderSide(color: Colors.white, width: 0.0),
-                                                  ),
-                                                  labelStyle: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 18,
-                                                ),
-                                                onFieldSubmitted: ((text) {
-                                                  players[index].name = text;
-                                                  olympicBloc.changePlayerAction.add(players[index]);
-                                                }),
-                                              ),
-                                              Padding(padding: EdgeInsets.only(top: 8)),
-                                              Text(
-                                                players[index].result.toString(),
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 100,
-                                          child: TextFormField(
-                                            focusNode: AlwaysDisabledFocusNode(),
-                                            controller: TextEditingController(text: _scoreItems.firstWhere((score) => score == players[index].score).toString()),
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                              labelText: 'Score',
-                                              labelStyle: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                            ),
-                                            onTap: () => showModalBottomSheet<void>(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                FocusScope.of(context).unfocus();
-                                                return Container(
-                                                  height: MediaQuery.of(context).size.height / 3,
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: CupertinoPicker(
-                                                      scrollController: FixedExtentScrollController(initialItem: _scoreItems.indexOf(players[index].score)),
-                                                      itemExtent: 40,
-                                                      children: _scoreItems.map(_pickerItem).toList(),
-                                                      onSelectedItemChanged: ((pickerIndex) {
-                                                        players[index].score = _scoreItems[pickerIndex];
-                                                        olympicBloc.changePlayerAction.add(players[index]);
-                                                      }),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        child: ScoreCard(color: Constants.colors[players[index].rank], player: players[index],)
                       );
                     });
               }
@@ -276,8 +159,7 @@ class NewsTab extends StatelessWidget {
     );
   }
 
-  final List<int> _playerCountItems = new List.generate(50, (i) => i + 1);
-  final List<int> _scoreItems = new List.generate(201, (i) => i - 100);
+  final List<int> _playerCountItems = List.generate(50, (i) => i + 1);
 
   Widget _pickerItem(int str) {
     return Text(
@@ -285,11 +167,4 @@ class NewsTab extends StatelessWidget {
       style: const TextStyle(fontSize: 28),
     );
   }
-}
-
-class AlwaysDisabledFocusNode extends FocusNode {
-  @override
-  bool get hasFocus => false;
-  @override
-  bool get hasPrimaryFocus => false;
 }

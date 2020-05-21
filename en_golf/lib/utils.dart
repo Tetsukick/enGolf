@@ -76,3 +76,10 @@ String capitalize(String word) {
 String capitalizePair(WordPair pair) {
   return '${capitalize(pair.first)} ${capitalize(pair.second)}';
 }
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
+  @override
+  bool get hasPrimaryFocus => false;
+}
