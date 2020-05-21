@@ -114,7 +114,6 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 }
 
-// 広告ターゲット
 MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
   keywords: <String>['flutterio', 'beautiful apps'],
   contentUrl: 'https://flutter.io',
