@@ -8,15 +8,45 @@ import 'package:provider/provider.dart';
 import 'utils.dart';
 import 'widgets.dart';
 import 'olympic_bloc.dart';
+import 'olympic_screen.dart';
 import 'constants.dart' as Constants;
 
-void main() => runApp(MyApp());
+void main() => runApp(new HomeScreen());
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key key}) : super(key: key);
+
+  @override
+  HomeScreenState createState() => new HomeScreenState();
+}
+
+class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  TabController tabController;
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(vsync: this, length: 2);
+    tabController.addListener(_handleTabSelection);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    tabController.dispose();
+  }
+
+  void _handleTabSelection() {
+    setState(() {
+      _currentIndex = tabController.index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return
+      MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '',
       theme: ThemeData(
@@ -31,140 +61,38 @@ class MyApp extends StatelessWidget {
         ],
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: NewsTab(),
-        ),
-      ),
-    );
-  }
-}
-
-class NewsTab extends StatelessWidget {
-
-  @override
-  Widget build(context) {
-    final olympicBloc = Provider.of<OlympicBloc>(context);
-    final Size size = MediaQuery.of(context).size;
-    return CustomScrollView(slivers: <Widget>[
-      SliverAppBar(
-        pinned: true,
-        expandedHeight: 150,
-        flexibleSpace: FlexibleSpaceBar(
-          title: Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  width: size.width / 3,
-                  child: StreamBuilder(
-                    stream: olympicBloc.rate,
-                    builder: (context, snapshot) {
-                      return TextFormField(
-                        controller: TextEditingController(text: snapshot.data.toString()),
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Rate',
-                          labelStyle: TextStyle(
-                              color: Colors.white
-                          ),
-                        ),
-                        style: TextStyle(
-                            color: Colors.white
-                        ),
-                        onChanged: ((text) {
-                          int rate;
-                          try {
-                            rate = int.parse(text);
-                            olympicBloc.changeRateAction.add(rate);
-                          } catch (e) {
-                            print(e);
-                          }
-                        }),
-                      );
-                    }),
+          child: Scaffold(
+            bottomNavigationBar: TabBar(
+              controller: tabController,
+              labelColor: Colors.lightGreen,
+              unselectedLabelColor: Colors.grey,
+              labelStyle: TextStyle(
+                  color: Colors.grey
+              ),
+              indicatorColor: Colors.white,
+              tabs: <Widget>[
+                new Tab(
+                  icon: Icon(Icons.monetization_on),
+                  text: "Calculator",
                 ),
-                Container(
-                  width: size.width / 4,
-                  child: StreamBuilder(
-                    stream: olympicBloc.playerCount,
-                    builder: (context, snapshot) {
-                      return TextFormField(
-                        controller: TextEditingController(text: snapshot.data.toString()),
-                        focusNode: AlwaysDisabledFocusNode(),
-                        decoration: InputDecoration(
-                          labelText: 'Player',
-                          labelStyle: TextStyle(
-                              color: Colors.white
-                          ),
-                        ),
-                        style: TextStyle(
-                            color: Colors.white
-                        ),
-                        onTap: () => showModalBottomSheet<void>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            FocusScope.of(context).unfocus();
-                            return Container(
-                              height: MediaQuery.of(context).size.height / 3,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: CupertinoPicker(
-                                  scrollController: FixedExtentScrollController(initialItem: snapshot.data - 1),
-                                  itemExtent: 40,
-                                  children: _playerCountItems.map(_pickerItem).toList(),
-                                  onSelectedItemChanged: ((index) {
-                                    olympicBloc.changePlayerCountAction.add(_playerCountItems[index]);
-                                  }),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    }),
+                new Tab(
+                  icon: Icon(Icons.casino),
+                  text: "Dice",
                 ),
               ],
             ),
+            body: SafeArea(
+              child: TabBarView(
+                controller: tabController,
+                children: <Widget> [
+                  olympic_screen(),
+                  olympic_screen(),
+                ],
+              ),
+            ),
           ),
-          background: Image.asset('assets/top-background.jpg', fit: BoxFit.cover),
         ),
       ),
-      SliverFillRemaining(child:
-      CupertinoPageScaffold(
-        child: StreamBuilder(
-            stream: olympicBloc.players,
-            builder: (context, snapshot) {
-              if (snapshot.data == null) {
-                return Container();
-              } else {
-                List<Player> players = snapshot.data;
-                return ListView.builder(
-                    itemCount: players.length,
-                    itemBuilder: (context, int index) {
-                      return SafeArea(
-                        top: false,
-                        bottom: false,
-                        child: ScoreCard(color: Constants.colors[players[index].rank], player: players[index],)
-                      );
-                    });
-              }
-            }),
-      ),
-        ),
-    ],
-    );
-  }
-
-  final List<int> _playerCountItems = List.generate(50, (i) => i + 1);
-
-  Widget _pickerItem(int str) {
-    return Text(
-      str.toString(),
-      style: const TextStyle(fontSize: 28),
     );
   }
 }
