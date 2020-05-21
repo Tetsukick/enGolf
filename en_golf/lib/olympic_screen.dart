@@ -6,13 +6,15 @@ import 'package:provider/provider.dart';
 import 'utils.dart';
 import 'widgets.dart';
 import 'olympic_bloc.dart';
+import 'dice_bloc.dart';
 import 'constants.dart' as Constants;
 
-class olympic_screen extends StatelessWidget {
+class OlympicScreen extends StatelessWidget {
 
   @override
   Widget build(context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
+    final diceBloc = Provider.of<DiceBloc>(context);
     final Size size = MediaQuery.of(context).size;
     return CustomScrollView(slivers: <Widget>[
       SliverAppBar(

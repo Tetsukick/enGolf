@@ -1,3 +1,5 @@
+import 'package:engolf/dice_bloc.dart';
+import 'package:engolf/dice_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +60,10 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             create: (context) => OlympicBloc(),
             dispose: (context, bloc) => bloc.dispose(),
           ),
+          Provider<DiceBloc>(
+            create: (context) => DiceBloc(),
+            dispose: (context, bloc) => bloc.dispose(),
+          ),
         ],
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -85,8 +91,8 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: tabController,
                 children: <Widget> [
-                  olympic_screen(),
-                  olympic_screen(),
+                  OlympicScreen(),
+                  DiceScreen(),
                 ],
               ),
             ),

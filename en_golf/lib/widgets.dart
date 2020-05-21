@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'olympic_bloc.dart';
@@ -270,90 +271,6 @@ class SongPlaceholderTile extends StatelessWidget {
   }
 }
 
-// ===========================================================================
-// Non-shared code below because different interfaces are shown to prompt
-// for a multiple-choice answer.
-//
-// This is a design choice and you may want to do something different in your
-// app.
-// ===========================================================================
-/// This uses a platform-appropriate mechanism to show users multiple choices.
-///
-/// On Android, it uses a dialog with radio buttons. On iOS, it uses a picker.
-void showChoices(BuildContext context, List<String> choices) {
-  switch (defaultTargetPlatform) {
-    case TargetPlatform.android:
-      showDialog<void>(
-        context: context,
-        builder: (context) {
-          int selectedRadio = 1;
-          return AlertDialog(
-            contentPadding: EdgeInsets.only(top: 12),
-            content: StatefulBuilder(
-              builder: (context, setState) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List<Widget>.generate(choices.length, (index) {
-                    return RadioListTile(
-                      title: Text(choices[index]),
-                      value: index,
-                      groupValue: selectedRadio,
-                      // ignore: avoid_types_on_closure_parameters
-                      onChanged: (int value) {
-                        setState(() => selectedRadio = value);
-                      },
-                    );
-                  }),
-                );
-              },
-            ),
-            actions: [
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              FlatButton(
-                child: Text('CANCEL'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    case TargetPlatform.iOS:
-      showCupertinoModalPopup<void>(
-        context: context,
-        builder: (context) {
-          return SizedBox(
-            height: 250,
-            child: CupertinoPicker(
-              backgroundColor: Theme.of(context).canvasColor,
-              useMagnifier: true,
-              magnification: 1.1,
-              itemExtent: 40,
-              scrollController: FixedExtentScrollController(initialItem: 1),
-              children: List<Widget>.generate(choices.length, (index) {
-                return Center(
-                  child: Text(
-                    choices[index],
-                    style: TextStyle(
-                      fontSize: 21,
-                    ),
-                  ),
-                );
-              }),
-              onSelectedItemChanged: (value) {},
-            ),
-          );
-        },
-      );
-      return;
-    default:
-      assert(false, 'Unexpected platform $defaultTargetPlatform');
-  }
-}
-
 class ScoreCard extends StatelessWidget {
   const ScoreCard({
     Key key,
@@ -389,7 +306,7 @@ class ScoreCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
                 backgroundColor: color,
@@ -431,13 +348,15 @@ class ScoreCard extends StatelessWidget {
                               olympicBloc.changePlayerAction.add(tempPlayer);
                             }),
                           ),
-                          Padding(padding: EdgeInsets.only(top: 8)),
-                          Text(
-                            player.result.toString(),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
+                          Padding(
+                            padding: EdgeInsets.only(left: 15),
+                            child: Text(
+                              'result: ${player.result.toString()}',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ],
