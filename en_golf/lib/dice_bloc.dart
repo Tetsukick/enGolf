@@ -31,9 +31,19 @@ class DiceBloc {
     final List<int> numbers = List.generate(numOfRange, (i) => i + _range.start.round());
 
     var rand = new Random();
-    int lottery = rand.nextInt(numOfRange);
+    int lottery = rand.nextInt(numbers.length - 1);
 
     _histories.add(numbers[lottery]);
+    _historyController.add(_histories);
+  }
+
+  void reset() {
+    _histories.clear();
+    _historyController.add(_histories);
+  }
+
+  void undo() {
+    _histories.removeLast();
     _historyController.add(_histories);
   }
 

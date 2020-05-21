@@ -25,7 +25,7 @@ class DiceScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           _createSlider(context),
-          _createHistoryView(context: context, controller: _scrollController),
+          _createHistoryParts(context: context, controller: _scrollController),
           StreamBuilder(
               stream: diceBloc.histories,
               builder: (context, snapshot) {
@@ -113,6 +113,61 @@ class DiceScreen extends StatelessWidget {
             }
           }
       ),
+    );
+  }
+
+  Widget _createHistoryParts({BuildContext context, ScrollController controller}) {
+    final diceBloc = Provider.of<DiceBloc>(context);
+
+    return Column(
+      children: <Widget>[
+        _createHistoryView(context: context, controller: controller),
+        _createButtons(context: context),
+      ],
+    );
+  }
+
+  Widget _createButtons ({BuildContext context}) {
+    final diceBloc = Provider.of<DiceBloc>(context);
+
+    return StreamBuilder(
+        stream: diceBloc.histories,
+        builder: (context, snapshot) {
+          List<int> _histories = snapshot.data;
+          if (_histories == null || _histories.length == 0) {
+            return Container();
+          } else {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                RaisedButton(
+                  child: Icon(
+                    Icons.delete_forever,
+                    color: Colors.white,
+                  ),
+                  color: Colors.lightGreen,
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    diceBloc.reset();
+                    Timer(Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
+                  },
+                ),
+                RaisedButton(
+                  child: Icon(
+                    Icons.undo,
+                    color: Colors.white,
+                  ),
+                  color: Colors.lightGreen,
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    diceBloc.undo();
+                    Timer(Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
+                  },
+                ),
+              ],
+            );
+          }
+        }
     );
   }
 
