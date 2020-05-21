@@ -80,8 +80,9 @@ class DiceScreen extends StatelessWidget {
                           values: _range,
                           min: min,
                           max: max,
-                          onChanged: (values) {
-                            diceBloc.changeRangeAction.add(values);
+                          onChanged: (value) {
+                            _range = value;
+                            diceBloc.changeRangeAction.add(value);
                           },
                         ),
                       ),
