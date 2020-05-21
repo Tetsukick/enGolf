@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -53,6 +55,7 @@ class DiceScreen extends StatelessWidget {
             shape: StadiumBorder(),
             onPressed: () {
               diceBloc.createRandomNumber();
+              Timer(Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
             },
           ),
         ],
