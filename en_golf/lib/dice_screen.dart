@@ -40,24 +40,7 @@ class DiceScreen extends StatelessWidget {
                 }
               }
           ),
-          RaisedButton(
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                "Shake!!",
-                style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            color: Colors.lightGreen,
-            shape: StadiumBorder(),
-            onPressed: () {
-              diceBloc.createRandomNumber();
-              Timer(Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
-            },
-          ),
+          _createSubmitButton(context: context),
         ],
       ),
     );
@@ -214,6 +197,60 @@ class DiceScreen extends StatelessWidget {
           style: TextStyle(fontSize: height/2),
         ),
       ),
+    );
+  }
+
+  Widget _createSubmitButton({BuildContext context}) {
+    final diceBloc = Provider.of<DiceBloc>(context);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        StreamBuilder(
+          stream: diceBloc.isAllowed,
+          builder: (context, snapshot) {
+            final bool _isAllowed = snapshot.data;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Checkbox(
+                  activeColor: Colors.lightGreen,
+                  value: _isAllowed ?? true,
+                  onChanged: (value) {
+                    print('change');
+                    diceBloc.changeIsAllowedAction.add(value);
+                  },
+                ),
+                Text(
+                  'Allow duplicate number',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+        RaisedButton(
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              "Shake!!",
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          color: Colors.lightGreen,
+          shape: StadiumBorder(),
+          onPressed: () {
+            diceBloc.createRandomNumber();
+            Timer(Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
+          },
+        ),
+      ],
     );
   }
 
