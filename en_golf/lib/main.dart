@@ -1,3 +1,4 @@
+import 'package:engolf/ar_measure_screen.dart';
 import 'package:engolf/dice_bloc.dart';
 import 'package:engolf/dice_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,7 +32,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 2);
+    tabController = TabController(vsync: this, length: 3);
     tabController.addListener(_handleTabSelection);
 
     FirebaseAdMob.instance.initialize(appId: Platform.isIOS ? 'ca-app-pub-8604906384604870~8704941903' : 'ca-app-pub-8604906384604870~8130705763');
@@ -96,6 +97,10 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   icon: Icon(Icons.casino),
                   text: "Dice",
                 ),
+                new Tab(
+                  icon: Icon(Icons.fullscreen),
+                  text: "Measure",
+                ),
               ],
             ),
             body: SafeArea(
@@ -104,6 +109,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 children: <Widget> [
                   OlympicScreen(),
                   DiceScreen(),
+                  ARMeasureScreen(),
                 ],
               ),
             ),
