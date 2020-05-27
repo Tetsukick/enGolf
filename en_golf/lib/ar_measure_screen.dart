@@ -2,6 +2,8 @@ import 'package:arkit_plugin/arkit_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
+import 'dart:io';
+
 class ARMeasureScreen extends StatefulWidget {
   @override
   _ARMeasureScreen createState() => _ARMeasureScreen();
@@ -18,24 +20,31 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context){
+    return Platform.isIOS ? Scaffold(
       body: Container(
         child: ARKitSceneView(
           enableTapRecognizer: true,
           onARKitViewCreated: onARKitViewCreated,
         ),
       ),
-    floatingActionButton: FloatingActionButton(
-      child: Icon(Icons.delete),
-      backgroundColor: Colors.lightGreen,
-      onPressed: () {
-        arkitController.remove('point');
-        arkitController.remove('text');
-        arkitController.remove('line');
-        lastPosition = null;
-      },
-    ),
-  );
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.delete),
+        backgroundColor: Colors.lightGreen,
+        onPressed: () {
+          arkitController.remove('point');
+          arkitController.remove('text');
+          arkitController.remove('line');
+          lastPosition = null;
+        },
+      ),
+    ) :
+    Scaffold(
+      body: Center(
+        child: Text('Androidには対応しておりません\n現在開発中のためしばらくお待ち下さい。'),
+      ),
+    );
+  }
 
   void onARKitViewCreated(ARKitController arkitController) {
     this.arkitController = arkitController;
