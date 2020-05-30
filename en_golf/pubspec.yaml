@@ -37,6 +37,8 @@ dependencies:
 
   flutter_staggered_animations: ^0.1.2
 
+  pedantic_mono: ^1.9.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

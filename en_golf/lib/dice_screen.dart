@@ -29,10 +29,10 @@ class DiceScreen extends StatelessWidget {
           StreamBuilder(
               stream: diceBloc.histories,
               builder: (context, snapshot) {
-                List<int> _histories = snapshot.data;
-                if (_histories == null || _histories.length == 0) {
-                  return Text(
-                    "Shake!!",
+                final _histories = snapshot.data as List<int>;
+                if (_histories == null || _histories.isEmpty) {
+                  return const Text(
+                    'Shake!!',
                     style: TextStyle(fontSize: 30),
                   );
                 } else {
@@ -54,21 +54,21 @@ class DiceScreen extends StatelessWidget {
           stream: diceBloc.range,
           builder: (context, snapshot) {
             if (snapshot.data == null) {
-              return Center(
+              return const Center(
                 child: Text('error'),
               );
             } else {
-              RangeValues _range = snapshot.data;
+              var _range = snapshot.data as RangeValues;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: 50,),
+                  const SizedBox(height: 50,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Text(
                         _range.start.round().toString(),
-                        style: TextStyle(fontSize: 30),
+                        style: const TextStyle(fontSize: 30),
                       ),
                       SliderTheme(
                         data: SliderThemeData(
@@ -88,7 +88,7 @@ class DiceScreen extends StatelessWidget {
                       ),
                       Text(
                         _range.end.round().toString(),
-                        style: TextStyle(fontSize: 30),
+                        style: const TextStyle(fontSize: 30),
                       ),
                     ],
                   ),
@@ -117,8 +117,8 @@ class DiceScreen extends StatelessWidget {
     return StreamBuilder(
         stream: diceBloc.histories,
         builder: (context, snapshot) {
-          List<int> _histories = snapshot.data;
-          if (_histories == null || _histories.length == 0) {
+          final _histories = snapshot.data as List<int>;
+          if (_histories == null || _histories.isEmpty) {
             return Container();
           } else {
             return Row(
@@ -130,10 +130,9 @@ class DiceScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
                   color: Colors.lightGreen,
-                  shape: CircleBorder(),
+                  shape: const CircleBorder(),
                   onPressed: () {
                     diceBloc.reset();
-                    Timer(Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
                   },
                 ),
                 RaisedButton(
@@ -145,7 +144,7 @@ class DiceScreen extends StatelessWidget {
                   shape: CircleBorder(),
                   onPressed: () {
                     diceBloc.undo();
-                    Timer(Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
+                    Timer(const Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
                   },
                 ),
               ],
@@ -161,8 +160,8 @@ class DiceScreen extends StatelessWidget {
     return StreamBuilder(
         stream: diceBloc.histories,
         builder: (context, snapshot) {
-          List<int> _histories = snapshot.data;
-          if (_histories == null || _histories.length == 0) {
+          final _histories = snapshot.data as List<int>;
+          if (_histories == null || _histories.isEmpty) {
             return Container();
           } else {
             return Center(
@@ -186,10 +185,10 @@ class DiceScreen extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
               fit: BoxFit.fill,
-              image: AssetImage("assets/golf_ball.png")
+              image: AssetImage('assets/golf_ball.png')
           )
       ),
       child: Center(
@@ -210,7 +209,7 @@ class DiceScreen extends StatelessWidget {
         StreamBuilder(
           stream: diceBloc.isAllowed,
           builder: (context, snapshot) {
-            final bool _isAllowed = snapshot.data;
+            final _isAllowed = snapshot.data as bool;
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -235,9 +234,9 @@ class DiceScreen extends StatelessWidget {
         ),
         RaisedButton(
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Text(
-              "Shake!!",
+              'Shake!!',
               style: TextStyle(
                 fontSize: 30,
                 color: Colors.white,
@@ -245,10 +244,10 @@ class DiceScreen extends StatelessWidget {
             ),
           ),
           color: Colors.lightGreen,
-          shape: StadiumBorder(),
+          shape: const StadiumBorder(),
           onPressed: () {
             diceBloc.createRandomNumber();
-            Timer(Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
+            Timer(const Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
           },
         ),
       ],
