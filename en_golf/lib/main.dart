@@ -16,26 +16,28 @@ import 'olympic_screen.dart';
 import 'constants.dart' as Constants;
 import 'dart:io';
 
-void main() => runApp(new HomeScreen());
+void main() => runApp(const HomeScreen());
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
 
   @override
-  HomeScreenState createState() => new HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
 class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   TabController tabController;
   int _currentIndex = 0;
+  final _iosAppId = 'ca-app-pub-8604906384604870~8704941903';
+  final _androidAppId = 'ca-app-pub-8604906384604870~8130705763';
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 3);
-    tabController.addListener(_handleTabSelection);
+    tabController = TabController(vsync: this, length: 3)
+      ..addListener(_handleTabSelection);
 
-    FirebaseAdMob.instance.initialize(appId: Platform.isIOS ? 'ca-app-pub-8604906384604870~8704941903' : 'ca-app-pub-8604906384604870~8130705763');
+    FirebaseAdMob.instance.initialize(appId: Platform.isIOS ? _iosAppId : _androidAppId);
 
     myBanner
       ..load()
@@ -88,18 +90,18 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   color: Colors.grey
               ),
               indicatorColor: Colors.white,
-              tabs: <Widget>[
-                new Tab(
+              tabs: const <Widget> [
+                Tab(
                   icon: Icon(Icons.monetization_on),
-                  text: "Calculator",
+                  text: 'Calculator',
                 ),
-                new Tab(
+                Tab(
                   icon: Icon(Icons.casino),
-                  text: "Dice",
+                  text: 'Dice',
                 ),
-                new Tab(
+                Tab(
                   icon: Icon(Icons.fullscreen),
-                  text: "Measure",
+                  text: 'Measure',
                 ),
               ],
             ),
@@ -136,6 +138,6 @@ BannerAd myBanner = BannerAd(
   size: AdSize.smartBanner,
   targetingInfo: targetingInfo,
   listener: (MobileAdEvent event) {
-    print("BannerAd event is $event");
+    print('BannerAd event is $event');
   },
 );

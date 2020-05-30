@@ -16,7 +16,7 @@ class OlympicScreen extends StatelessWidget {
   Widget build(context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
     final diceBloc = Provider.of<DiceBloc>(context);
-    final Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return CustomScrollView(slivers: <Widget>[
       SliverAppBar(
         pinned: true,
@@ -46,15 +46,16 @@ class OlympicScreen extends StatelessWidget {
                           style: TextStyle(
                               color: Colors.white
                           ),
-                          onChanged: ((text) {
+                          onChanged: (text) {
                             int rate;
                             try {
                               rate = int.parse(text);
                               olympicBloc.changeRateAction.add(rate);
-                            } catch (e) {
+                            }
+                            on Exception catch(e) {
                               print(e);
                             }
-                          }),
+                          },
                         );
                       }),
                 ),
@@ -63,8 +64,9 @@ class OlympicScreen extends StatelessWidget {
                   child: StreamBuilder(
                       stream: olympicBloc.playerCount,
                       builder: (context, snapshot) {
+                        final playerCount = snapshot.data as int;
                         return TextFormField(
-                          controller: TextEditingController(text: snapshot.data.toString()),
+                          controller: TextEditingController(text: playerCount.toString()),
                           focusNode: AlwaysDisabledFocusNode(),
                           decoration: InputDecoration(
                             labelText: 'Player',
@@ -86,12 +88,12 @@ class OlympicScreen extends StatelessWidget {
                                     Navigator.pop(context);
                                   },
                                   child: CupertinoPicker(
-                                    scrollController: FixedExtentScrollController(initialItem: snapshot.data - 1),
+                                    scrollController: FixedExtentScrollController(initialItem: playerCount - 1),
                                     itemExtent: 40,
                                     children: _playerCountItems.map(_pickerItem).toList(),
-                                    onSelectedItemChanged: ((index) {
+                                    onSelectedItemChanged: (index) {
                                       olympicBloc.changePlayerCountAction.add(_playerCountItems[index]);
-                                    }),
+                                    },
                                   ),
                                 ),
                               );
@@ -114,7 +116,7 @@ class OlympicScreen extends StatelessWidget {
               if (snapshot.data == null) {
                 return Container();
               } else {
-                List<Player> players = snapshot.data;
+                final players = snapshot.data as List<Player>;
                 return AnimationLimiter(
                   child: ListView.builder(
                     itemCount: players.length,

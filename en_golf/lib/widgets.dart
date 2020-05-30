@@ -20,7 +20,7 @@ class PlatformWidget extends StatelessWidget {
   final WidgetBuilder iosBuilder;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return androidBuilder(context);
@@ -80,7 +80,7 @@ class _PressableCardState extends State<PressableCard>
   double get flatten => 1 - widget.flattenAnimation.value;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return Listener(
       onPointerDown: (details) {
         if (widget.onPressed != null) {
@@ -111,7 +111,8 @@ class _PressableCardState extends State<PressableCard>
               // in your own app.
               scale: 1 - elevationAnimation.value * 0.03,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16) *
+                padding:
+                  const EdgeInsets.symmetric(vertical: 16, horizontal: 16) *
                     flatten,
                 child: PhysicalModel(
                   elevation:
@@ -138,7 +139,7 @@ class _PressableCardState extends State<PressableCard>
 /// This is an example of a custom widget that an app developer might create for
 /// use on both iOS and Android as part of their brand's unique design.
 class HeroAnimatingSongCard extends StatelessWidget {
-  HeroAnimatingSongCard(
+  const HeroAnimatingSongCard(
       {this.song, this.color, this.heroAnimation, this.onPressed});
 
   final String song;
@@ -149,7 +150,7 @@ class HeroAnimatingSongCard extends StatelessWidget {
   double get playButtonSize => 50 + 50 * heroAnimation.value;
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     // This is an inefficient usage of AnimatedBuilder since it's rebuilding
     // the entire subtree instead of passing in a non-changing child and
     // building a transition widget in between.
@@ -177,7 +178,7 @@ class HeroAnimatingSongCard extends StatelessWidget {
                     height: 80,
                     color: Colors.black12,
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       song,
                       style: TextStyle(
@@ -190,7 +191,8 @@ class HeroAnimatingSongCard extends StatelessWidget {
                 // The play button grows in the hero animation.
                 Padding(
                   padding:
-                      EdgeInsets.only(bottom: 45) * (1 - heroAnimation.value),
+                      const EdgeInsets.only(bottom: 45) *
+                          (1 - heroAnimation.value),
                   child: Container(
                     height: playButtonSize,
                     width: playButtonSize,
@@ -229,7 +231,7 @@ class SongPlaceholderTile extends StatelessWidget {
               color: Theme.of(context).textTheme.body1.color,
               width: 130,
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(left: 12),
             ),
             Expanded(
@@ -238,27 +240,27 @@ class SongPlaceholderTile extends StatelessWidget {
                 children: [
                   Container(
                     height: 9,
-                    margin: EdgeInsets.only(right: 60),
+                    margin: const EdgeInsets.only(right: 60),
                     color: Theme.of(context).textTheme.body1.color,
                   ),
                   Container(
                     height: 9,
-                    margin: EdgeInsets.only(right: 20, top: 8),
+                    margin: const EdgeInsets.only(right: 20, top: 8),
                     color: Theme.of(context).textTheme.body1.color,
                   ),
                   Container(
                     height: 9,
-                    margin: EdgeInsets.only(right: 40, top: 8),
+                    margin: const EdgeInsets.only(right: 40, top: 8),
                     color: Theme.of(context).textTheme.body1.color,
                   ),
                   Container(
                     height: 9,
-                    margin: EdgeInsets.only(right: 80, top: 8),
+                    margin: const EdgeInsets.only(right: 80, top: 8),
                     color: Theme.of(context).textTheme.body1.color,
                   ),
                   Container(
                     height: 9,
-                    margin: EdgeInsets.only(right: 50, top: 8),
+                    margin: const EdgeInsets.only(right: 50, top: 8),
                     color: Theme.of(context).textTheme.body1.color,
                   ),
                 ],
@@ -281,7 +283,7 @@ class ScoreCard extends StatelessWidget {
   final Color color;
   final Player player;
 
-  static final List<int> _scoreItems = new List.generate(201, (i) => i - 100);
+  static final List<int> _scoreItems = List.generate(201, (i) => i - 100);
 
   Widget _pickerItem(int str) {
     return Text(
@@ -295,7 +297,7 @@ class ScoreCard extends StatelessWidget {
     final olympicBloc = Provider.of<OlympicBloc>(context);
     return Card(
       elevation: 1.5,
-      margin: EdgeInsets.fromLTRB(6, 12, 6, 0),
+      margin: const EdgeInsets.fromLTRB(6, 12, 6, 0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
       ),
@@ -312,7 +314,7 @@ class ScoreCard extends StatelessWidget {
                 backgroundColor: color,
                 child: Text(
                   player.rank.toString(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                   ),
@@ -342,11 +344,11 @@ class ScoreCard extends StatelessWidget {
                               color: Colors.black,
                               fontSize: 18,
                             ),
-                            onFieldSubmitted: ((text) {
-                              Player tempPlayer = player;
-                              tempPlayer.name = text;
+                            onFieldSubmitted: (text) {
+                              final tempPlayer = player
+                                  ..name = text;
                               olympicBloc.changePlayerAction.add(tempPlayer);
-                            }),
+                            },
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 15),
@@ -394,10 +396,10 @@ class ScoreCard extends StatelessWidget {
                                   scrollController: FixedExtentScrollController(initialItem: _scoreItems.indexOf(player.score)),
                                   itemExtent: 40,
                                   children: _scoreItems.map(_pickerItem).toList(),
-                                  onSelectedItemChanged: ((pickerIndex) {
+                                  onSelectedItemChanged: (pickerIndex) {
                                     player.score = _scoreItems[pickerIndex];
                                     olympicBloc.changePlayerAction.add(player);
-                                  }),
+                                  },
                                 ),
                               ),
                             );

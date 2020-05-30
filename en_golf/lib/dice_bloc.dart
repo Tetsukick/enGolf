@@ -4,6 +4,11 @@ import 'package:rxdart/rxdart.dart';
 import 'dart:math';
 
 class DiceBloc {
+  DiceBloc() {
+    _listenRange();
+    _listenIsAllowed();
+  }
+
   // input
   final _rangeController = BehaviorSubject<RangeValues>.seeded(RangeValues(1, 18));
   Sink<RangeValues> get changeRangeAction => _rangeController.sink;
@@ -12,18 +17,13 @@ class DiceBloc {
   final _historyController = BehaviorSubject<List<int>>.seeded([]);
   Stream<List<int>> get histories => _historyController.stream;
 
-  final _isAllowedDuplicattionController = BehaviorSubject<bool>.seeded(true);
-  Sink<bool> get changeIsAllowedAction => _isAllowedDuplicattionController.sink;
-  Stream<bool> get isAllowed => _isAllowedDuplicattionController.stream;
+  final _isAllowedDuplicationController = BehaviorSubject<bool>.seeded(true);
+  Sink<bool> get changeIsAllowedAction => _isAllowedDuplicationController.sink;
+  Stream<bool> get isAllowed => _isAllowedDuplicationController.stream;
 
-  RangeValues _range = RangeValues(1, 18);
+  RangeValues _range = const RangeValues(1, 18);
   List<int> _histories = [];
   bool _isAllowed = true;
-
-  DiceBloc() {
-    _listenRange();
-    _listenIsAllowed();
-  }
 
   void _listenRange() {
     range.listen((newRange) {
@@ -41,19 +41,18 @@ class DiceBloc {
     final numOfRange = _range.end.round() - _range.start.round() + 1;
     List<int> numbers = List.generate(numOfRange, (i) => i + _range.start.round());
     if (!_isAllowed) {
-      _histories.forEach((targetNum) {
-        numbers.removeWhere((number) => number == targetNum);
-        print(numbers);
-      });
+      for (final history in _histories) {
+        numbers.removeWhere((number) => number == history);
+      }
     }
-    if (numbers.length == 0) {
+    if (numbers.isEmpty) {
       return;
     }
 
-    var rand = new Random();
-    int lottery = rand.nextInt(numbers.length);
+    final rand = Random();
+    final _lottery = rand.nextInt(numbers.length);
 
-    _histories.add(numbers[lottery]);
+    _histories.add(numbers[_lottery]);
     _historyController.add(_histories);
   }
 
@@ -69,5 +68,7 @@ class DiceBloc {
 
   void dispose() {
     _rangeController.close();
+    _historyController.close();
+    _isAllowedDuplicationController.close();
   }
 }
