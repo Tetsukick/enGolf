@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 
 import 'package:provider/provider.dart';
 
