@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:engolf/ar_measure_screen.dart';
 import 'package:engolf/dice_bloc.dart';
 import 'package:engolf/dice_screen.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_performance/firebase_performance.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:provider/provider.dart';
 
@@ -16,8 +19,15 @@ import 'olympic_bloc.dart';
 import 'olympic_screen.dart';
 import 'constants.dart' as Constants;
 import 'dart:io';
+import 'package:flutter/material.dart';
 
-void main() => runApp(const HomeScreen());
+void main() {
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  runZoned(() {
+    runApp(const HomeScreen());
+  }, onError: Crashlytics.instance.recordError);
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);

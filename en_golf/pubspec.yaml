@@ -42,6 +42,7 @@ dependencies:
   flare_flutter:
 
   firebase_performance:
+  firebase_crashlytics:
 
 dev_dependencies:
   flutter_test:
