@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 import 'package:provider/provider.dart';
 
@@ -15,6 +17,7 @@ class DiceScreen extends StatelessWidget {
   final double min = 1;
   final double max = 18;
   final ScrollController _scrollController = ScrollController();
+  final FlareControls golfBallAnimationController = FlareControls();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,8 @@ class DiceScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 30),
                   );
                 } else {
-                  return _createGolfBallView(num: _histories.last, height: 150, width: 150);
+                  golfBallAnimationController.play('start');
+                  return _createAnimationGolfBallView(num: _histories.last, height: 150, width: 150);
                 }
               }
           ),
@@ -196,6 +200,30 @@ class DiceScreen extends StatelessWidget {
           num.toString(),
           style: TextStyle(fontSize: height/2),
         ),
+      ),
+    );
+  }
+
+  Widget _createAnimationGolfBallView({int num, double height, double width}) {
+    return Container(
+      height: height,
+      width: width,
+      child: Stack(
+        children: <Widget>[
+          FlareActor(
+            'assets/golf_ball_rotate.flr',
+            animation: 'start',
+            alignment: Alignment.center,
+            controller: golfBallAnimationController,
+            fit: BoxFit.fill,
+          ),
+          Center(
+            child: Text(
+              num.toString(),
+              style: TextStyle(fontSize: height / 2),
+            ),
+          ),
+        ],
       ),
     );
   }
