@@ -39,6 +39,8 @@ dependencies:
 
   pedantic_mono: ^1.9.1
 
+  flare_flutter:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
