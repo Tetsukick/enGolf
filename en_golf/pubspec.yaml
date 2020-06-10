@@ -41,6 +41,8 @@ dependencies:
 
   flare_flutter:
 
+  firebase_performance:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
