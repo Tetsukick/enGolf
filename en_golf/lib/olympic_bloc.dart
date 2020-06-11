@@ -2,6 +2,16 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 
 class OlympicBloc {
+  OlympicBloc() {
+    _playersController.add(_players);
+    _playerCountController.add(_playerCount);
+    _rateController.add(_rate);
+
+    listenRate();
+    listenPlayerCount();
+    listenPlayer();
+  }
+  
   // input
   final _rateController = BehaviorSubject<int>();
   Sink<int> get changeRateAction => _rateController.sink;
@@ -21,21 +31,11 @@ class OlympicBloc {
   int _playerCount = 4;
   int _rate = 1;
   List<Player> _players = [
-    Player(0, 'Player1', 0),
-    Player(1, 'Player2', 0),
-    Player(2, 'Player3', 0),
-    Player(3, 'Player4', 0),
+    Player(id: 0, name: 'Player1', score: 0),
+    Player(id: 1, name: 'Player2', score: 0),
+    Player(id: 2, name: 'Player3', score: 0),
+    Player(id: 3, name: 'Player4', score: 0),
   ];
-
-  OlympicBloc() {
-    _playersController.add(_players);
-    _playerCountController.add(_playerCount);
-    _rateController.add(_rate);
-
-    listenRate();
-    listenPlayerCount();
-    listenPlayer();
-  }
 
   void listenRate() {
     _rateController.stream.listen((newRate) {
@@ -56,19 +56,19 @@ class OlympicBloc {
   void listenPlayerCount() {
     _playerCountController.stream.listen((newCount) {
 
-      int diff = newCount - _playerCount;
+      final diff = newCount - _playerCount;
 
       if (diff == 0) {
         return;
       } else if (diff > 0) {
-        int currentNum = _players.length;
-        for (int i = 1; i <= diff; i++) {
+        var currentNum = _players.length;
+        for (var i = 1; i <= diff; i++) {
           currentNum++;
-          String name = 'Player' + currentNum.toString();
-          _players.add(new Player(currentNum - 1, name, 0));
+          final name = 'Player$currentNum';
+          _players.add(Player(id: currentNum - 1, name: name, score: 0));
         }
       } else if (diff < 0) {
-        for (int i = 0; i > diff; i--) {
+        for (var i = 0; i > diff; i--) {
           _players.removeLast();
         }
       }
@@ -94,29 +94,29 @@ class OlympicBloc {
   }
 
   void setRank() {
-    List<Player> sortPlayers = _players.map((player) => player).toList();
-    sortPlayers.sort((a,b) => b.score - a.score);
+    final sortPlayers = _players.map((player) => player).toList()
+      ..sort((a,b) => b.score - a.score);
 
-    int rank = 1;
-    int targetIndex = _players.indexOf(sortPlayers[0]);
-    Player targetPlayer = _players[targetIndex];
-    targetPlayer.rank = rank;
+    var rank = 1;
+    final targetIndex = _players.indexOf(sortPlayers[0]);
+    final targetPlayer = _players[targetIndex]
+      ..rank = rank;
     _players[targetIndex] = targetPlayer;
 
-    for (int i = 1; i < _players.length; i++) {
+    for (var i = 1; i < _players.length; i++) {
       if (sortPlayers[i].score != sortPlayers[i-1].score) {
         rank = i + 1;
       }
-      int _targetIndex = _players.indexOf(sortPlayers[i]);
-      Player _targetPlayer = _players[_targetIndex];
-      _targetPlayer.rank = rank;
+      final _targetIndex = _players.indexOf(sortPlayers[i]);
+      final _targetPlayer = _players[_targetIndex]
+        ..rank = rank;
       _players[_targetIndex] = _targetPlayer;
     }
   }
 
   int formulaOlympic(int index) {
-    int playerScore = _players[index].score;
-    int totalScore = _players.fold(0, (curr, next) => curr + next.score);
+    final playerScore = _players[index].score;
+    final int totalScore = _players.fold(0, (curr, next) => curr + next.score);
     return ((playerScore * (_players.length - 1)) - (totalScore - playerScore)) * _rate;
   }
 
@@ -135,9 +135,5 @@ class Player {
   int score;
   int result = 0;
 
-  Player(id, name, score) {
-    this.id = id;
-    this.name = name;
-    this.score = score;
-  }
+  Player({this.id, this.name, this.score});
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:engolf/ar_measure_screen.dart';
 import 'package:engolf/dice_bloc.dart';
 import 'package:engolf/dice_screen.dart';
@@ -6,6 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:firebase_performance/firebase_performance.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:provider/provider.dart';
 
@@ -15,27 +19,36 @@ import 'olympic_bloc.dart';
 import 'olympic_screen.dart';
 import 'constants.dart' as Constants;
 import 'dart:io';
+import 'package:flutter/material.dart';
 
-void main() => runApp(new HomeScreen());
+void main() {
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  runZoned(() {
+    runApp(const HomeScreen());
+  }, onError: Crashlytics.instance.recordError);
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
 
   @override
-  HomeScreenState createState() => new HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
 class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   TabController tabController;
   int _currentIndex = 0;
+  final _iosAppId = 'ca-app-pub-8604906384604870~8704941903';
+  final _androidAppId = 'ca-app-pub-8604906384604870~8130705763';
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 3);
-    tabController.addListener(_handleTabSelection);
+    tabController = TabController(vsync: this, length: 3)
+      ..addListener(_handleTabSelection);
 
-    FirebaseAdMob.instance.initialize(appId: Platform.isIOS ? 'ca-app-pub-8604906384604870~8704941903' : 'ca-app-pub-8604906384604870~8130705763');
+    FirebaseAdMob.instance.initialize(appId: Platform.isIOS ? _iosAppId : _androidAppId);
 
     myBanner
       ..load()
@@ -88,18 +101,18 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   color: Colors.grey
               ),
               indicatorColor: Colors.white,
-              tabs: <Widget>[
-                new Tab(
+              tabs: const <Widget> [
+                Tab(
                   icon: Icon(Icons.monetization_on),
-                  text: "Calculator",
+                  text: 'Calculator',
                 ),
-                new Tab(
+                Tab(
                   icon: Icon(Icons.casino),
-                  text: "Dice",
+                  text: 'Dice',
                 ),
-                new Tab(
+                Tab(
                   icon: Icon(Icons.fullscreen),
-                  text: "Measure",
+                  text: 'Measure',
                 ),
               ],
             ),
@@ -136,6 +149,6 @@ BannerAd myBanner = BannerAd(
   size: AdSize.smartBanner,
   targetingInfo: targetingInfo,
   listener: (MobileAdEvent event) {
-    print("BannerAd event is $event");
+    print('BannerAd event is $event');
   },
 );

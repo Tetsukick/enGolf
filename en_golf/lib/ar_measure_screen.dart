@@ -32,15 +32,16 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
         child: Icon(Icons.delete),
         backgroundColor: Colors.lightGreen,
         onPressed: () {
-          arkitController.remove('point');
-          arkitController.remove('text');
-          arkitController.remove('line');
+          arkitController
+            ..remove('point')
+            ..remove('text')
+            ..remove('line');
           lastPosition = null;
         },
       ),
     ) :
-    Scaffold(
-      body: Center(
+    const Scaffold(
+      body: const Center(
         child: Text('Androidには対応しておりません\n現在開発中のためしばらくお待ち下さい。'),
       ),
     );
