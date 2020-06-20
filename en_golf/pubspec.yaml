@@ -44,6 +44,8 @@ dependencies:
   firebase_performance:
   firebase_crashlytics:
 
+  flutter_inappwebview: ^3.3.0+3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

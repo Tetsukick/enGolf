@@ -1,17 +1,9 @@
 import 'dart:async';
 
-import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flare_flutter/flare_actor.dart';
-
-import 'package:provider/provider.dart';
-
-import 'utils.dart';
-import 'widgets.dart';
-import 'dice_bloc.dart';
-import 'olympic_bloc.dart';
-import 'constants.dart' as Constants;
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:engolf/utils.dart';
 
 class MenuScreen extends StatelessWidget {
   @override
@@ -22,7 +14,13 @@ class MenuScreen extends StatelessWidget {
       ),
       body: ListView(
           children: [
-            _menuItem("メニュー1", Icon(Icons.settings)),
+            _menuItem(
+              "Feedback",
+              Icon(Icons.settings),
+              onTap: () {
+                setBrowserPage();
+              },
+            ),
             _menuItem("メニュー2", Icon(Icons.map)),
             _menuItem("メニュー3", Icon(Icons.room)),
             _menuItem("メニュー4", Icon(Icons.local_shipping)),
@@ -32,7 +30,7 @@ class MenuScreen extends StatelessWidget {
     );
   }
 
-  Widget _menuItem(String title, Icon icon) {
+  Widget _menuItem(String title, Icon icon, {GestureTapCallback onTap}) {
     return GestureDetector(
       child:Container(
           padding: EdgeInsets.all(8.0),
@@ -56,8 +54,30 @@ class MenuScreen extends StatelessWidget {
           )
       ),
       onTap: () {
-        print("onTap called.");
+        onTap();
       },
+    );
+  }
+
+  Future<void> setBrowserPage() async {
+    MyInAppBrowser browser = new MyInAppBrowser();
+    await browser.openUrl(
+      url: "https://forms.gle/xR5f875pD27v9k4U7",
+      options: InAppBrowserClassOptions(
+        crossPlatform: InAppBrowserOptions(
+          // 共通オプション
+          toolbarTopBackgroundColor: "#2b374d",
+        ),
+        android: AndroidInAppBrowserOptions(
+          // Android用オプション
+        ),
+        ios: IOSInAppBrowserOptions(
+          // iOS用オプション
+            toolbarBottomBackgroundColor: "#2b374d",
+            closeButtonCaption: "閉じる",
+            closeButtonColor: "#ffffff"
+        ),
+      ),
     );
   }
 }
