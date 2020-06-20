@@ -13,6 +13,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:provider/provider.dart';
 
+import 'menu_screen.dart';
 import 'utils.dart';
 import 'widgets.dart';
 import 'olympic_bloc.dart';
@@ -45,7 +46,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 3)
+    tabController = TabController(vsync: this, length: 4)
       ..addListener(_handleTabSelection);
 
     FirebaseAdMob.instance.initialize(appId: Platform.isIOS ? _iosAppId : _androidAppId);
@@ -114,6 +115,10 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   icon: Icon(Icons.fullscreen),
                   text: 'Measure',
                 ),
+                Tab(
+                  icon: Icon(Icons.list),
+                  text: 'Settings',
+                ),
               ],
             ),
             body: SafeArea(
@@ -123,6 +128,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   OlympicScreen(),
                   DiceScreen(),
                   ARMeasureScreen(),
+                  MenuScreen()
                 ],
               ),
             ),
