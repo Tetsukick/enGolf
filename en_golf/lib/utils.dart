@@ -5,6 +5,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 // ignore: implementation_imports
 import 'package:flutter/material.dart';
 
+import 'dart:io';
+
 // This file has a number of platform-agnostic non-Widget utility functions.
 
 const _myListOfRandomColors = [
@@ -96,4 +98,22 @@ class MyInAppBrowser extends InAppBrowser {
       messageLevel: ${consoleMessage.messageLevel.toValue()}
    """);
   }
+}
+
+String getAppId() {
+  if (Platform.isIOS) {
+    return 'ca-app-pub-8604906384604870~8704941903';
+  } else if (Platform.isAndroid) {
+    return 'ca-app-pub-8604906384604870~8130705763';
+  }
+  return null;
+}
+
+String getBannerAdUnitId() {
+  if (Platform.isIOS) {
+    return 'ca-app-pub-8604906384604870/3452615229';
+  } else if (Platform.isAndroid) {
+    return 'ca-app-pub-8604906384604870/4738255665';
+  }
+  return null;
 }
