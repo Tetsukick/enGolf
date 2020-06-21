@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:engolf/utils.dart';
 
+import 'package:package_info/package_info.dart';
+
 class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,15 +18,38 @@ class MenuScreen extends StatelessWidget {
           children: [
             _menuItem(
               "Feedback",
-              Icon(Icons.settings),
+              Icon(
+                Icons.comment,
+                color: Colors.grey,
+              ),
               onTap: () {
-                setBrowserPage();
+                setBrowserPage("https://forms.gle/xR5f875pD27v9k4U7");
               },
             ),
-            _menuItem("メニュー2", Icon(Icons.map)),
-            _menuItem("メニュー3", Icon(Icons.room)),
-            _menuItem("メニュー4", Icon(Icons.local_shipping)),
-            _menuItem("メニュー5", Icon(Icons.airplanemode_active)),
+            _menuItem(
+              "privacy policy",
+              Icon(
+                Icons.security,
+                color: Colors.grey,
+              ),
+              onTap: () {
+                setBrowserPage("https://qiita.com/tetsukick/items/a3c844940064e15f0dac");
+              },
+            ),
+            FutureBuilder(
+              future: _getPackageInfo(),
+              builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+                String version = snapshot.data.version ?? '';
+                String buildVersion = snapshot.data.buildNumber ?? '';
+                return _menuItem(
+                    "version $version $buildVersion",
+                    Icon(
+                      Icons.settings,
+                      color: Colors.grey,
+                    ),
+                );
+              },
+            ),
           ]
       ),
     );
@@ -59,10 +84,10 @@ class MenuScreen extends StatelessWidget {
     );
   }
 
-  Future<void> setBrowserPage() async {
+  Future<void> setBrowserPage(String url) async {
     MyInAppBrowser browser = new MyInAppBrowser();
     await browser.openUrl(
-      url: "https://forms.gle/xR5f875pD27v9k4U7",
+      url: url,
       options: InAppBrowserClassOptions(
         crossPlatform: InAppBrowserOptions(
           // 共通オプション
@@ -79,5 +104,10 @@ class MenuScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<PackageInfo> _getPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo;
   }
 }
