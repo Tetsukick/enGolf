@@ -7,9 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:provider/provider.dart';
 
@@ -23,6 +23,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 void main() {
+  Admob.initialize(testDeviceIds: [getAppId()]);
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   runZoned(() {
@@ -48,15 +49,6 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.initState();
     tabController = TabController(vsync: this, length: 4)
       ..addListener(_handleTabSelection);
-
-    FirebaseAdMob.instance.initialize(appId: Platform.isIOS ? _iosAppId : _androidAppId);
-
-    myBanner
-      ..load()
-      ..show(
-        anchorOffset: 20,
-        anchorType: AnchorType.top,
-      );
   }
 
   @override
@@ -138,23 +130,3 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 }
-
-MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-  keywords: <String>['flutterio', 'beautiful apps'],
-  contentUrl: 'https://flutter.io',
-  birthday: DateTime.now(),
-  childDirected: false,
-  designedForFamilies: false,
-  gender: MobileAdGender.male, // or female, unknown
-  testDevices: <String>[], // Android emulators are considered test devices
-);
-
-BannerAd myBanner = BannerAd(
-//  adUnitId: BannerAd.testAdUnitId,
-  adUnitId: Platform.isIOS ? 'ca-app-pub-8604906384604870/3452615229' : 'ca-app-pub-8604906384604870/4738255665',
-  size: AdSize.smartBanner,
-  targetingInfo: targetingInfo,
-  listener: (MobileAdEvent event) {
-    print('BannerAd event is $event');
-  },
-);

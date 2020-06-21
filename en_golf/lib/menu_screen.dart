@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:engolf/utils.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:package_info/package_info.dart';
 
@@ -14,44 +15,68 @@ class MenuScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Settings'),
       ),
-      body: ListView(
-          children: [
-            _menuItem(
-              "Feedback",
-              Icon(
-                Icons.comment,
-                color: Colors.grey,
+      body: Stack(
+        children: [
+          ListView(
+            children: [
+              _menuItem(
+                "Feedback",
+                Icon(
+                  Icons.comment,
+                  color: Colors.grey,
+                ),
+                onTap: () {
+                  setBrowserPage("https://forms.gle/xR5f875pD27v9k4U7");
+                },
               ),
-              onTap: () {
-                setBrowserPage("https://forms.gle/xR5f875pD27v9k4U7");
-              },
-            ),
-            _menuItem(
-              "privacy policy",
-              Icon(
-                Icons.security,
-                color: Colors.grey,
+              _menuItem(
+                "privacy policy",
+                Icon(
+                  Icons.security,
+                  color: Colors.grey,
+                ),
+                onTap: () {
+                  setBrowserPage("https://qiita.com/tetsukick/items/a3c844940064e15f0dac");
+                },
               ),
-              onTap: () {
-                setBrowserPage("https://qiita.com/tetsukick/items/a3c844940064e15f0dac");
-              },
+              FutureBuilder(
+                future: _getPackageInfo(),
+                builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+                  if (!snapshot.hasData) {
+                    return _menuItem(
+                      "version",
+                      Icon(
+                        Icons.settings,
+                        color: Colors.grey,
+                      ),
+                    );
+                  }
+                  String version = snapshot.data.version ?? '';
+                  String buildVersion = snapshot.data.buildNumber ?? '';
+                  return _menuItem(
+                      "version $version $buildVersion",
+                      Icon(
+                        Icons.settings,
+                        color: Colors.grey,
+                      ),
+                  );
+                },
+              ),
+            ]
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: Container(
+            height: 50,
+            child: AdmobBanner(
+              adUnitId: getBannerAdUnitId(),
+              adSize: AdmobBannerSize.LEADERBOARD,
             ),
-            FutureBuilder(
-              future: _getPackageInfo(),
-              builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
-                String version = snapshot.data.version ?? '';
-                String buildVersion = snapshot.data.buildNumber ?? '';
-                return _menuItem(
-                    "version $version $buildVersion",
-                    Icon(
-                      Icons.settings,
-                      color: Colors.grey,
-                    ),
-                );
-              },
-            ),
-          ]
-      ),
+          ),
+        )
+      ]),
     );
   }
 
