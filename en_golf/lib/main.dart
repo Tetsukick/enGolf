@@ -23,8 +23,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 void main() {
-  Admob.initialize(testDeviceIds: [getAppId()]);
+  Crashlytics.instance.enableInDevMode = true;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  Admob.initialize(testDeviceIds: [getAppId()]);
 
   runZoned(() {
     runApp(const HomeScreen());
