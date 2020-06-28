@@ -31,7 +31,7 @@ dependencies:
 
   english_words: ^3.1.5
   flutter_lorem: ^1.1.0
-  firebase_admob:
+  admob_flutter: ^1.0.0-beta.5
 
   arkit_plugin: ^0.5.1
 
@@ -43,6 +43,10 @@ dependencies:
 
   firebase_performance:
   firebase_crashlytics:
+
+  flutter_inappwebview: ^3.3.0+3
+
+  package_info:
 
 dev_dependencies:
   flutter_test:

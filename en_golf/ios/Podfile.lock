@@ -1,4 +1,9 @@
 PODS:
+  - admob_flutter (1.0.0-beta.3):
+    - Firebase/AdMob
+    - Firebase/Analytics (~> 6.5)
+    - Flutter
+    - Google-Mobile-Ads-SDK (~> 7.59)
   - arkit_plugin (0.0.1):
     - Flutter
   - Crashlytics (3.14.0):
@@ -17,10 +22,6 @@ PODS:
   - Firebase/Performance (6.24.0):
     - Firebase/CoreOnly
     - FirebasePerformance (~> 3.1.11)
-  - firebase_admob (0.0.1):
-    - Firebase/AdMob
-    - Firebase/Core
-    - Flutter
   - firebase_analytics (0.0.1):
     - Firebase/Analytics (~> 6.0)
     - Firebase/Core
@@ -90,7 +91,9 @@ PODS:
     - "GoogleUtilities/NSData+zlib (~> 6.2)"
     - Protobuf (>= 3.9.2, ~> 3.9)
   - Flutter (1.0.0)
-  - Google-Mobile-Ads-SDK (7.60.0):
+  - flutter_inappwebview (0.0.1):
+    - Flutter
+  - Google-Mobile-Ads-SDK (7.61.0):
     - GoogleAppMeasurement (~> 6.0)
   - GoogleAppMeasurement (6.5.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
@@ -133,18 +136,22 @@ PODS:
     - nanopb/encode (= 1.30905.0)
   - nanopb/decode (1.30905.0)
   - nanopb/encode (1.30905.0)
+  - package_info (0.0.1):
+    - Flutter
   - PromisesObjC (1.2.8)
   - Protobuf (3.11.4)
 
 DEPENDENCIES:
+  - admob_flutter (from `.symlinks/plugins/admob_flutter/ios`)
   - arkit_plugin (from `.symlinks/plugins/arkit_plugin/ios`)
-  - firebase_admob (from `.symlinks/plugins/firebase_admob/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_performance (from `.symlinks/plugins/firebase_performance/ios`)
   - Flutter (from `Flutter`)
+  - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
 
 SPEC REPOS:
   trunk:
@@ -172,10 +179,10 @@ SPEC REPOS:
     - Protobuf
 
 EXTERNAL SOURCES:
+  admob_flutter:
+    :path: ".symlinks/plugins/admob_flutter/ios"
   arkit_plugin:
     :path: ".symlinks/plugins/arkit_plugin/ios"
-  firebase_admob:
-    :path: ".symlinks/plugins/firebase_admob/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_core:
@@ -188,13 +195,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_performance/ios"
   Flutter:
     :path: Flutter
+  flutter_inappwebview:
+    :path: ".symlinks/plugins/flutter_inappwebview/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
 
 SPEC CHECKSUMS:
+  admob_flutter: 753df2f47d573a329a5702e5c482078253bc0327
   arkit_plugin: 3e42571e8be84adabb8a178bd51c22fa981e16bd
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   Firebase: b28e55c60efd98963cd9011fe2fac5a10c2ba124
-  firebase_admob: d8c2bc95b5e0069406280ce6adb816cdee6aa595
   firebase_analytics: dacdcfc524d722fff13dcff942f0dfa47e6be567
   firebase_core: 0d8be0e0d14c4902953aeb5ac5d7316d1fe4b978
   firebase_core_web: d501d8b946b60c8af265428ce483b0fff5ad52d1
@@ -210,7 +221,8 @@ SPEC CHECKSUMS:
   FirebasePerformance: 5652d2004001e886da6dca04f478c695f87c4702
   FirebaseRemoteConfig: 12669ca87e6d9cf87a6123cb8ad8a771a7b49c6b
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  Google-Mobile-Ads-SDK: d70efb31e7ea19fe99d466dc5d4788966b6914f8
+  flutter_inappwebview: 69dfbac46157b336ffbec19ca6dfd4638c7bf189
+  Google-Mobile-Ads-SDK: 4c3b24b04293b4bb370b2cb392cdd3ee97c87752
   GoogleAppMeasurement: 4c644d86835d827bab30ab6aabb9ecaf1f500735
   GoogleDataTransport: f6f8eba931df03ebd2232ff4645aa85f8f47b5ab
   GoogleDataTransportCCTSupport: d70a561f7d236af529fee598835caad5e25f6d3d
@@ -218,6 +230,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 39530bc0ad980530298e9c4af8549e991fd033b1
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
 
