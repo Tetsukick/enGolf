@@ -21,6 +21,7 @@ import 'olympic_screen.dart';
 import 'constants.dart' as Constants;
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'floating_bottom_bar.dart';
 
 void main() {
   Crashlytics.instance.enableInDevMode = true;
@@ -41,28 +42,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  TabController tabController;
-  int _currentIndex = 0;
+  final _controller = PageController();
   final _iosAppId = 'ca-app-pub-8604906384604870~8704941903';
   final _androidAppId = 'ca-app-pub-8604906384604870~8130705763';
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 4)
-      ..addListener(_handleTabSelection);
   }
 
   @override
   void dispose() {
     super.dispose();
-    tabController.dispose();
-  }
-
-  void _handleTabSelection() {
-    setState(() {
-      _currentIndex = tabController.index;
-    });
+    _controller.dispose();
   }
 
   @override
@@ -88,36 +80,28 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
-            bottomNavigationBar: TabBar(
-              controller: tabController,
-              labelColor: Colors.lightGreen,
-              unselectedLabelColor: Colors.grey,
-              labelStyle: TextStyle(
-                  color: Colors.grey
-              ),
-              indicatorColor: Colors.white,
-              tabs: const <Widget> [
-                Tab(
-                  icon: Icon(Icons.monetization_on),
-                  text: 'Calculator',
-                ),
-                Tab(
-                  icon: Icon(Icons.casino),
-                  text: 'Dice',
-                ),
-                Tab(
-                  icon: Icon(Icons.fullscreen),
-                  text: 'Measure',
-                ),
-                Tab(
-                  icon: Icon(Icons.list),
-                  text: 'Settings',
-                ),
+            bottomNavigationBar: FloatingBottomBar(
+              controller: _controller,
+              items: [
+                FloatingBottomBarItem(Icons.monetization_on, label: 'Calculator'),
+                FloatingBottomBarItem(Icons.casino, label: 'Dice'),
+                FloatingBottomBarItem(Icons.fullscreen, label: 'Measure'),
+                FloatingBottomBarItem(Icons.list, label: 'Settings'),
               ],
+              activeItemColor: Colors.lightGreen,
+              enableIconRotation: true,
+              onTap: (index) {
+                print('Tapped: item $index');
+                _controller.animateToPage(
+                  index,
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeOut,
+                );
+              },
             ),
             body: SafeArea(
-              child: TabBarView(
-                controller: tabController,
+              child: PageView(
+                controller: _controller,
                 children: <Widget> [
                   OlympicScreen(),
                   DiceScreen(),
