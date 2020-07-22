@@ -58,8 +58,9 @@ class _FloatingBottomBarState extends State<FloatingBottomBar> {
     return AnimatedBuilder(
       animation: widget.controller,
       builder: (_, child) {
-        final scrollPosition = widget.controller.page ?? 0.0;
-        final currentIndex = ((widget.controller.page ?? 0.0) + 0.5).toInt();
+        final page = widget.controller.page ?? 0.0;
+        final scrollPosition = page;
+        final currentIndex = (page + 0.5).toInt();
 
         return Stack(
           overflow: Overflow.visible,
