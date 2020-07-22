@@ -62,48 +62,50 @@ class OlympicScreen extends StatelessWidget {
                           );
                         }),
                   ),
-                  Container(
-                    width: size.width / 4,
-                    child: StreamBuilder(
-                        stream: olympicBloc.playerCount,
-                        builder: (context, snapshot) {
-                          final playerCount = snapshot.data as int;
-                          return TextFormField(
-                            controller: TextEditingController(text: playerCount.toString()),
-                            focusNode: AlwaysDisabledFocusNode(),
-                            decoration: InputDecoration(
-                              labelText: 'Player',
-                              labelStyle: TextStyle(
+                  Expanded(
+                    child: Container(
+                      width: size.width / 4,
+                      child: StreamBuilder(
+                          stream: olympicBloc.playerCount,
+                          builder: (context, snapshot) {
+                            final playerCount = snapshot.data as int;
+                            return TextFormField(
+                              controller: TextEditingController(text: playerCount.toString()),
+                              focusNode: AlwaysDisabledFocusNode(),
+                              decoration: InputDecoration(
+                                labelText: 'Player',
+                                labelStyle: TextStyle(
+                                    color: Colors.white
+                                ),
+                              ),
+                              style: TextStyle(
                                   color: Colors.white
                               ),
-                            ),
-                            style: TextStyle(
-                                color: Colors.white
-                            ),
-                            onTap: () => showModalBottomSheet<void>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                FocusScope.of(context).unfocus();
-                                return Container(
-                                  height: MediaQuery.of(context).size.height / 3,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: CupertinoPicker(
-                                      scrollController: FixedExtentScrollController(initialItem: playerCount - 1),
-                                      itemExtent: 40,
-                                      children: _playerCountItems.map(_pickerItem).toList(),
-                                      onSelectedItemChanged: (index) {
-                                        olympicBloc.changePlayerCountAction.add(_playerCountItems[index]);
+                              onTap: () => showModalBottomSheet<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  FocusScope.of(context).unfocus();
+                                  return Container(
+                                    height: MediaQuery.of(context).size.height / 3,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
                                       },
+                                      child: CupertinoPicker(
+                                        scrollController: FixedExtentScrollController(initialItem: playerCount - 1),
+                                        itemExtent: 40,
+                                        children: _playerCountItems.map(_pickerItem).toList(),
+                                        onSelectedItemChanged: (index) {
+                                          olympicBloc.changePlayerCountAction.add(_playerCountItems[index]);
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        }),
+                                  );
+                                },
+                              ),
+                            );
+                          }),
+                    ),
                   ),
                 ],
               ),
