@@ -43,7 +43,7 @@ android {
         applicationId "com.tetsukick.engolf"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 6
+        versionCode 8
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -51,9 +51,9 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("key.jks")
+            storeFile file("engolf-keystore.jks")
             storePassword "engolf29"
-            keyAlias "teppei.kikuchi"
+            keyAlias "engolf-alias"
             keyPassword "engolf29"
         }
     }
