@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:engolf/utils.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 
@@ -20,7 +21,7 @@ class MenuScreen extends StatelessWidget {
           ListView(
             children: [
               _menuItem(
-                "Feedback",
+                AppLocalizations.of(context).feedback,
                 Icon(
                   Icons.comment,
                   color: Colors.grey,
@@ -30,7 +31,7 @@ class MenuScreen extends StatelessWidget {
                 },
               ),
               _menuItem(
-                "privacy policy",
+                AppLocalizations.of(context).privacyPolicy,
                 Icon(
                   Icons.security,
                   color: Colors.grey,

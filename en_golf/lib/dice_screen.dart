@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 
@@ -35,8 +36,8 @@ class DiceScreen extends StatelessWidget {
               builder: (context, snapshot) {
                 final _histories = snapshot.data as List<int>;
                 if (_histories == null || _histories.isEmpty) {
-                  return const Text(
-                    'Shake!!',
+                  return Text(
+                    AppLocalizations.of(context).shake,
                     style: TextStyle(fontSize: 30),
                   );
                 } else {
@@ -258,7 +259,7 @@ class DiceScreen extends StatelessWidget {
                   },
                 ),
                 Text(
-                  'Allow duplicate number',
+                  AppLocalizations.of(context).allowDuplicateNumber,
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -272,7 +273,7 @@ class DiceScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Text(
-              'Shake!!',
+              AppLocalizations.of(context).shake,
               style: TextStyle(
                 fontSize: 30,
                 color: Colors.white,
