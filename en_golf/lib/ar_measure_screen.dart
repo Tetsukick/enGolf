@@ -42,8 +42,11 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
       ),
     ) :
     Scaffold(
-      body: Center(
-        child: Text(AppLocalizations.of(context).noServiceMessage),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Center(
+          child: Text(AppLocalizations.of(context).noServiceMessage),
+        ),
       ),
     );
   }
