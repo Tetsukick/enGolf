@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:provider/provider.dart';
@@ -16,7 +17,6 @@ class OlympicScreen extends StatelessWidget {
   @override
   Widget build(context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
-    final diceBloc = Provider.of<DiceBloc>(context);
     final size = MediaQuery.of(context).size;
     return Stack(
       children: [
@@ -24,91 +24,25 @@ class OlympicScreen extends StatelessWidget {
         SliverAppBar(
           pinned: true,
           expandedHeight: 150,
+          collapsedHeight: 100,
           flexibleSpace: FlexibleSpaceBar(
-            title: Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    width: size.width / 3,
-                    child: StreamBuilder(
-                        stream: olympicBloc.rate,
-                        builder: (context, snapshot) {
-                          return TextFormField(
-                            controller: TextEditingController(text: snapshot.data.toString()),
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              labelText: 'Rate',
-                              labelStyle: TextStyle(
-                                  color: Colors.white
-                              ),
-                            ),
-                            style: TextStyle(
-                                color: Colors.white
-                            ),
-                            onChanged: (text) {
-                              int rate;
-                              try {
-                                rate = int.parse(text);
-                                olympicBloc.changeRateAction.add(rate);
-                              }
-                              on Exception catch(e) {
-                                print(e);
-                              }
-                            },
-                          );
-                        }),
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: size.width / 4,
-                      child: StreamBuilder(
-                          stream: olympicBloc.playerCount,
-                          builder: (context, snapshot) {
-                            final playerCount = snapshot.data as int;
-                            return TextFormField(
-                              controller: TextEditingController(text: playerCount.toString()),
-                              focusNode: AlwaysDisabledFocusNode(),
-                              decoration: InputDecoration(
-                                labelText: 'Player',
-                                labelStyle: TextStyle(
-                                    color: Colors.white
-                                ),
-                              ),
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),
-                              onTap: () => showModalBottomSheet<void>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  FocusScope.of(context).unfocus();
-                                  return Container(
-                                    height: MediaQuery.of(context).size.height / 3,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: CupertinoPicker(
-                                        scrollController: FixedExtentScrollController(initialItem: playerCount - 1),
-                                        itemExtent: 40,
-                                        children: _playerCountItems.map(_pickerItem).toList(),
-                                        onSelectedItemChanged: (index) {
-                                          olympicBloc.changePlayerCountAction.add(_playerCountItems[index]);
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          }),
-                    ),
-                  ),
-                ],
-              ),
+            titlePadding: const EdgeInsets.all(0),
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                titleTextField(
+                    context,
+                    AppLocalizations.of(context).rate,
+                    olympicBloc.rate,
+                    olympicBloc.changeRateAction.add),
+                titleTextField(
+                    context,
+                    AppLocalizations.of(context).player,
+                    olympicBloc.playerCount,
+                    olympicBloc.changePlayerCountAction.add),
+              ],
             ),
             background: Image.asset('assets/top-background.jpg', fit: BoxFit.cover),
           ),
@@ -166,6 +100,40 @@ class OlympicScreen extends StatelessWidget {
         ),
       )
     ]
+    );
+  }
+
+  Widget titleTextField(
+      BuildContext context,
+      String labelTitle,
+      Stream<int> stream,
+      Function(int) function) {
+    final size = MediaQuery.of(context).size;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      width: size.width / 3,
+      child: StreamBuilder(
+          stream: stream,
+          builder: (context, snapshot) {
+            return TextFormField(
+              controller: TextEditingController(text: snapshot.data.toString()),
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: labelTitle,
+                labelStyle: TextStyle(color: Colors.white),
+              ),
+              style: TextStyle(color: Colors.white),
+              onChanged: (text) {
+                try {
+                  final value = int.parse(text);
+                  function(value);
+                }
+                on Exception catch(e) {
+                  print(e);
+                }
+              },
+            );
+          }),
     );
   }
 

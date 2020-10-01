@@ -1,5 +1,6 @@
 import 'package:arkit_plugin/arkit_plugin.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
 import 'dart:io';
@@ -40,9 +41,9 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
         },
       ),
     ) :
-    const Scaffold(
-      body: const Center(
-        child: Text('Androidには対応しておりません\n現在開発中のためしばらくお待ち下さい。'),
+    Scaffold(
+      body: Center(
+        child: Text(AppLocalizations.of(context).noServiceMessage),
       ),
     );
   }
