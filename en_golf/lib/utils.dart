@@ -111,7 +111,7 @@ String getAppId() {
 
 String getBannerAdUnitId() {
   if (Platform.isIOS) {
-    return 'ca-app-pub-8604906384604870/3452615229';
+    return 'ca-app-pub-8604906384604870/8136991267';
   } else if (Platform.isAndroid) {
     return 'ca-app-pub-8604906384604870/4738255665';
   }

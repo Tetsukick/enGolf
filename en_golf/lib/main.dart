@@ -6,6 +6,7 @@ import 'package:engolf/dice_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -25,14 +26,10 @@ import 'package:flutter/material.dart';
 import 'floating_bottom_bar.dart';
 
 void main() {
-  Crashlytics.instance.enableInDevMode = true;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   Admob.initialize(testDeviceIds: [getAppId()]);
 
-  runZoned(() {
-    runApp(const HomeScreen());
-  }, onError: Crashlytics.instance.recordError);
+  runApp(const HomeScreen());
 }
 
 class HomeScreen extends StatefulWidget {
@@ -49,6 +46,12 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+          statusBarColor: Colors.green,
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light),
+    );
     super.initState();
   }
 
