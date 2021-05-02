@@ -135,13 +135,4 @@ class OlympicScreen extends StatelessWidget {
           }),
     );
   }
-
-  final List<int> _playerCountItems = List.generate(50, (i) => i + 1);
-
-  Widget _pickerItem(int str) {
-    return Text(
-      str.toString(),
-      style: const TextStyle(fontSize: 28),
-    );
-  }
 }
