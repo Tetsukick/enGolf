@@ -9,11 +9,8 @@ import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:provider/provider.dart';
 
-import 'utils.dart';
-import 'widgets.dart';
-import 'dice_bloc.dart';
-import 'olympic_bloc.dart';
-import 'constants.dart' as Constants;
+import '../../../utils.dart';
+import '../model/dice_bloc.dart';
 
 class DiceScreen extends StatelessWidget {
   final double min = 1;

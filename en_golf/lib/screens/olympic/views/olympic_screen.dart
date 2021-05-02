@@ -1,3 +1,4 @@
+import 'package:engolf/screens/olympic/views/score_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -6,11 +7,9 @@ import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:provider/provider.dart';
 
-import 'utils.dart';
-import 'widgets.dart';
-import 'olympic_bloc.dart';
-import 'dice_bloc.dart';
-import 'constants.dart' as Constants;
+import '../../../utils.dart';
+import '../model/olympic_bloc.dart';
+import '../../../constants.dart' as Constants;
 
 class OlympicScreen extends StatelessWidget {
 

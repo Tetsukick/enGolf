@@ -1,28 +1,19 @@
-import 'dart:async';
-
-import 'package:engolf/ar_measure_screen.dart';
-import 'package:engolf/dice_bloc.dart';
-import 'package:engolf/dice_screen.dart';
+import 'package:engolf/screens/ar_measure/ar_measure_screen.dart';
+import 'package:engolf/screens/dice/model/dice_bloc.dart';
+import 'package:engolf/screens/dice/views/dice_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
-import 'package:firebase_performance/firebase_performance.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:provider/provider.dart';
 
-import 'menu_screen.dart';
+import 'screens/menu/menu_screen.dart';
 import 'utils.dart';
-import 'widgets.dart';
-import 'olympic_bloc.dart';
-import 'olympic_screen.dart';
-import 'constants.dart' as Constants;
-import 'dart:io';
-import 'package:flutter/material.dart';
+import 'screens/olympic/model/olympic_bloc.dart';
+import 'screens/olympic/views/olympic_screen.dart';
 import 'floating_bottom_bar.dart';
 
 void main() {
@@ -41,8 +32,6 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final _controller = PageController();
-  final _iosAppId = 'ca-app-pub-8604906384604870~8704941903';
-  final _androidAppId = 'ca-app-pub-8604906384604870~8130705763';
 
   @override
   void initState() {
