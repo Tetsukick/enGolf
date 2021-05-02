@@ -9,7 +9,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../utils.dart';
+import '../../../common/utils.dart';
 import '../model/dice_bloc.dart';
 
 class DiceScreen extends StatelessWidget {

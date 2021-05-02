@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utils.dart';
+import '../../../common/utils.dart';
 
 class ScoreCard extends StatelessWidget {
   const ScoreCard({

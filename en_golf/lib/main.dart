@@ -11,10 +11,10 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/menu/menu_screen.dart';
-import 'utils.dart';
+import 'common/utils.dart';
 import 'screens/olympic/model/olympic_bloc.dart';
 import 'screens/olympic/views/olympic_screen.dart';
-import 'floating_bottom_bar.dart';
+import 'common/views/floating_bottom_bar.dart';
 
 void main() {
 

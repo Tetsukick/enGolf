@@ -7,9 +7,9 @@ import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../utils.dart';
+import '../../../common/utils.dart';
 import '../model/olympic_bloc.dart';
-import '../../../constants.dart' as Constants;
+import '../../../common/constants.dart' as Constants;
 
 class OlympicScreen extends StatelessWidget {
 

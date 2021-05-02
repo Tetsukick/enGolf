@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:engolf/utils.dart';
+import 'package:engolf/common/utils.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:package_info/package_info.dart';
