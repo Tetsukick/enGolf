@@ -1,36 +1,26 @@
-import 'dart:async';
-
-import 'package:engolf/ar_measure_screen.dart';
-import 'package:engolf/dice_bloc.dart';
-import 'package:engolf/dice_screen.dart';
+import 'package:engolf/screens/ar_measure/ar_measure_screen.dart';
+import 'package:engolf/screens/dice/model/dice_bloc.dart';
+import 'package:engolf/screens/dice/views/dice_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
-import 'package:firebase_performance/firebase_performance.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:provider/provider.dart';
 
-import 'menu_screen.dart';
-import 'utils.dart';
-import 'widgets.dart';
-import 'olympic_bloc.dart';
-import 'olympic_screen.dart';
-import 'constants.dart' as Constants;
-import 'dart:io';
-import 'package:flutter/material.dart';
+import 'screens/menu/menu_screen.dart';
+import 'common/utils.dart';
+import 'screens/olympic/model/olympic_bloc.dart';
+import 'screens/olympic/views/olympic_screen.dart';
+import 'common/views/floating_bottom_bar.dart';
 
 void main() {
-  Crashlytics.instance.enableInDevMode = true;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   Admob.initialize(testDeviceIds: [getAppId()]);
 
-  runZoned(() {
-    runApp(const HomeScreen());
-  }, onError: Crashlytics.instance.recordError);
+  runApp(const HomeScreen());
 }
 
 class HomeScreen extends StatefulWidget {
@@ -41,34 +31,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  TabController tabController;
-  int _currentIndex = 0;
-  final _iosAppId = 'ca-app-pub-8604906384604870~8704941903';
-  final _androidAppId = 'ca-app-pub-8604906384604870~8130705763';
+  final _controller = PageController();
 
   @override
   void initState() {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+          statusBarColor: Colors.green,
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light),
+    );
     super.initState();
-    tabController = TabController(vsync: this, length: 4)
-      ..addListener(_handleTabSelection);
   }
 
   @override
   void dispose() {
     super.dispose();
-    tabController.dispose();
-  }
-
-  void _handleTabSelection() {
-    setState(() {
-      _currentIndex = tabController.index;
-    });
+    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return
-      MaterialApp(
+    return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       title: '',
       theme: ThemeData(
@@ -88,36 +74,28 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
-            bottomNavigationBar: TabBar(
-              controller: tabController,
-              labelColor: Colors.lightGreen,
-              unselectedLabelColor: Colors.grey,
-              labelStyle: TextStyle(
-                  color: Colors.grey
-              ),
-              indicatorColor: Colors.white,
-              tabs: const <Widget> [
-                Tab(
-                  icon: Icon(Icons.monetization_on),
-                  text: 'Calculator',
-                ),
-                Tab(
-                  icon: Icon(Icons.casino),
-                  text: 'Dice',
-                ),
-                Tab(
-                  icon: Icon(Icons.fullscreen),
-                  text: 'Measure',
-                ),
-                Tab(
-                  icon: Icon(Icons.list),
-                  text: 'Settings',
-                ),
+            bottomNavigationBar: FloatingBottomBar(
+              controller: _controller,
+              items: [
+                FloatingBottomBarItem(Icons.monetization_on, label: 'Calculator'),
+                FloatingBottomBarItem(Icons.casino, label: 'Dice'),
+                FloatingBottomBarItem(Icons.fullscreen, label: 'Measure'),
+                FloatingBottomBarItem(Icons.list, label: 'Settings'),
               ],
+              activeItemColor: Colors.lightGreen,
+              enableIconRotation: true,
+              onTap: (index) {
+                print('Tapped: item $index');
+                _controller.animateToPage(
+                  index,
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeOut,
+                );
+              },
             ),
             body: SafeArea(
-              child: TabBarView(
-                controller: tabController,
+              child: PageView(
+                controller: _controller,
                 children: <Widget> [
                   OlympicScreen(),
                   DiceScreen(),

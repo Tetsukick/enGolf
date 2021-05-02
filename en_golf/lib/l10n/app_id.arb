@@ -1,0 +1,11 @@
+{
+  "@@locale": "id",
+
+  "rate": "menilai",
+  "player": "Jumlah pemain",
+  "shake": "Generasi acak",
+  "allowDuplicateNumber": "Izinkan duplikasi",
+  "noServiceMessage": "Tidak kompatibel dengan Android.\nHarap tunggu sebentar karena saat ini sedang dalam pengembangan.",
+  "feedback": "Umpan balik",
+  "privacyPolicy": "Rahasia pribadi"
+}

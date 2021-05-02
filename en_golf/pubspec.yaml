@@ -11,7 +11,7 @@ description: A new Flutter application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.4.0+1
+version: 1.6.2+21
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -19,34 +19,29 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^0.4.4+3
-  firebase_analytics: ^5.0.11
+  firebase_core:
+  firebase_analytics:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
+  cupertino_icons:
 
   provider:
   rxdart:
-
-  english_words: ^3.1.5
-  flutter_lorem: ^1.1.0
-  admob_flutter: ^1.0.0-beta.5
-
-  arkit_plugin: ^0.5.1
-
-  flutter_staggered_animations: ^0.1.2
-
-  pedantic_mono: ^1.9.1
-
+  english_words:
+  flutter_lorem:
+  admob_flutter:
+  arkit_plugin:
+  flutter_staggered_animations:
+  pedantic_mono:
   flare_flutter:
-
   firebase_performance:
   firebase_crashlytics:
-
-  flutter_inappwebview: ^3.3.0+3
-
+  flutter_inappwebview:
   package_info:
+  flutter_localizations:
+    sdk: flutter
+  intl:
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +59,7 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
