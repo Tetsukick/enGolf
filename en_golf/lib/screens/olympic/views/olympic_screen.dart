@@ -114,8 +114,15 @@ class OlympicScreen extends StatelessWidget {
       child: StreamBuilder(
           stream: stream,
           builder: (context, snapshot) {
+            final _controller = TextEditingController.fromValue(
+              TextEditingValue(
+                text: snapshot?.data?.toString() ?? "",
+                selection: TextSelection.collapsed(
+                    offset: snapshot?.data?.toString()?.length ?? 0),
+              ),
+            );
             return TextFormField(
-              controller: TextEditingController(text: snapshot.data.toString()),
+              controller: _controller,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: labelTitle,
