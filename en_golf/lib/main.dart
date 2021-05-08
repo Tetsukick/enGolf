@@ -1,3 +1,4 @@
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:engolf/screens/ar_measure/ar_measure_screen.dart';
 import 'package:engolf/screens/dice/model/dice_bloc.dart';
 import 'package:engolf/screens/dice/views/dice_screen.dart';
@@ -41,6 +42,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.light),
     );
+    confirmATTStatus();
     super.initState();
   }
 
@@ -108,5 +110,10 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  Future<void> confirmATTStatus() async {
+    final status = await AppTrackingTransparency.requestTrackingAuthorization();
+    print('ATT Status = $status');
   }
 }
