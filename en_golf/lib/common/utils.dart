@@ -48,8 +48,6 @@ class AlwaysDisabledFocusNode extends FocusNode {
 
 class MyInAppBrowser extends InAppBrowser {
 
-  /// 各関数をオーバーライドしてお好みの処理を記述する。
-  /// 以下はgithubの例そのままです。
   @override
   Future onBrowserCreated() async {
     print("\n\nBrowser Created!\n\n");
