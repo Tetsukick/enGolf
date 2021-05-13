@@ -40,6 +40,7 @@ dependencies:
   flutter_inappwebview:
   package_info:
   app_tracking_transparency:
+  flutter_svg:
   flutter_localizations:
     sdk: flutter
   intl:

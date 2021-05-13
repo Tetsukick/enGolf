@@ -11,6 +11,11 @@
         "description": "number of player label"
       },
 
+  "cupName": "Cup Name",
+      "@cupName": {
+        "description": "name of the game"
+      },
+
   "shake": "Shake!!",
       "@shake": {
         "description": "start create random number"
