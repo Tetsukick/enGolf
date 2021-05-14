@@ -25,7 +25,7 @@ class IconStreamTextField extends StatelessWidget {
           )
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      width: size.width - SizeConfig.mediumMargin,
+      width: (size.width - SizeConfig.mediumLargeMargin * 2) / 2,
       child: StreamBuilder(
           stream: stream,
           builder: (context, snapshot) {

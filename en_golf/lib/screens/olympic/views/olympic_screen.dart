@@ -107,17 +107,21 @@ class OlympicScreen extends StatelessWidget {
           '',
         ),
         SizedBox(height: SizeConfig.smallMargin),
-        IconStreamTextField(
-            'assets/people.svg',
-            AppLocalizations.of(context).player,
-            olympicBloc.playerCount,
-            olympicBloc.changePlayerCountAction.add),
-        SizedBox(height: SizeConfig.smallMargin),
-        IconStreamTextField(
-            'assets/money.svg',
-            AppLocalizations.of(context).rate,
-            olympicBloc.rate,
-            olympicBloc.changeRateAction.add),
+        Row(
+          children: [
+            IconStreamTextField(
+                'assets/people.svg',
+                AppLocalizations.of(context).player,
+                olympicBloc.playerCount,
+                olympicBloc.changePlayerCountAction.add),
+            const SizedBox(width: SizeConfig.smallMargin),
+            IconStreamTextField(
+                'assets/money.svg',
+                AppLocalizations.of(context).rate,
+                olympicBloc.rate,
+                olympicBloc.changeRateAction.add),
+          ],
+        ),
       ],
     );
   }
