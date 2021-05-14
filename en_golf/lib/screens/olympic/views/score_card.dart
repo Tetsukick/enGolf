@@ -1,3 +1,5 @@
+import 'package:engolf/common/color_config.dart';
+import 'package:engolf/common/size_config.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -19,9 +21,11 @@ class ScoreCard extends StatelessWidget {
   static final List<int> _scoreItems = List.generate(201, (i) => i - 100);
 
   Widget _pickerItem(int str) {
-    return Text(
-      str.toString(),
-      style: const TextStyle(fontSize: 28),
+    return Center(
+      child: Text(
+        str.toString(),
+        style: const TextStyle(fontSize: 20, color: ColorConfig.textGreenLight),
+      ),
     );
   }
 
@@ -29,121 +33,80 @@ class ScoreCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
     return Card(
+      color: ColorConfig.bgDarkGreen,
       elevation: 1.5,
-      margin: const EdgeInsets.fromLTRB(6, 12, 6, 0),
+      margin: const EdgeInsets.symmetric(
+          vertical: SizeConfig.mediumMargin,
+          horizontal: SizeConfig.smallestMargin),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(SizeConfig.smallestMargin),
       ),
       child: InkWell(
-        // Make it splash on Android. It would happen automatically if this
-        // was a real card but this is just a demo. Skip the splash on iOS.
         onTap: defaultTargetPlatform == TargetPlatform.iOS ? null : () {},
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                backgroundColor: color,
-                child: Text(
-                  player.rank.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
+          padding: const EdgeInsets.all(SizeConfig.mediumSmallMargin),
+          child: Container(
+            width: 60,
+            height: 250,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  backgroundColor: color,
+                  child: Text(
+                    player.rank.toString(),
+                    style: const TextStyle(
+                      color: ColorConfig.textGreenLight,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
-              ),
-              Padding(padding: EdgeInsets.only(left: 16)),
-              Expanded(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFormField(
-                            controller: TextEditingController(text: player.name),
-                            decoration: InputDecoration(
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.white, width: 0.0),
-                              ),
-                              labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                            ),
-                            onFieldSubmitted: (text) {
-                              final tempPlayer = player
-                                ..name = text;
-                              olympicBloc.changePlayerAction.add(tempPlayer);
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Text(
-                              'result: ${player.result.toString()}',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: 100,
-                      child: TextFormField(
-                        focusNode: AlwaysDisabledFocusNode(),
-                        controller: TextEditingController(text: _scoreItems.firstWhere((score) => score == player.score).toString()),
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Score',
-                          labelStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
-                        onTap: () => showModalBottomSheet<void>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            FocusScope.of(context).unfocus();
-                            return Container(
-                              height: MediaQuery.of(context).size.height / 3,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: CupertinoPicker(
-                                  scrollController: FixedExtentScrollController(initialItem: _scoreItems.indexOf(player.score)),
-                                  itemExtent: 40,
-                                  children: _scoreItems.map(_pickerItem).toList(),
-                                  onSelectedItemChanged: (pickerIndex) {
-                                    player.score = _scoreItems[pickerIndex];
-                                    olympicBloc.changePlayerAction.add(player);
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                const SizedBox(height: SizeConfig.smallMargin),
+                Text(
+                  player.result.toString(),
+                  style: const TextStyle(
+                    color: ColorConfig.textGreenLight,
+                    fontSize: SizeConfig.mediumLargeMargin,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: SizeConfig.smallMargin),
+                TextFormField(
+                  textAlign: TextAlign.center,
+                  controller: TextEditingController(text: player.name),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.white, width: 0.0),
+                    ),
+                  ),
+                  style: TextStyle(
+                    color: ColorConfig.textGreenLight,
+                    fontSize: 16,
+                  ),
+                  onFieldSubmitted: (text) {
+                    final tempPlayer = player
+                      ..name = text;
+                    olympicBloc.changePlayerAction.add(tempPlayer);
+                  },
+                ),
+                const SizedBox(height: SizeConfig.smallMargin),
+                Expanded(
+                  child: Container(
+                    width: 40,
+                    child: CupertinoPicker(
+                      scrollController: FixedExtentScrollController(initialItem: _scoreItems.indexOf(player.score)),
+                      itemExtent: 26,
+                      children: _scoreItems.map(_pickerItem).toList(),
+                      onSelectedItemChanged: (pickerIndex) {
+                        player.score = _scoreItems[pickerIndex];
+                        olympicBloc.changePlayerAction.add(player);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

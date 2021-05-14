@@ -41,13 +41,14 @@ class OlympicScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 55),
                             child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
                               itemCount: players.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return AnimationConfiguration.staggeredList(
                                   position: index,
                                   duration: const Duration(milliseconds: 375),
                                   child: SlideAnimation(
-                                    verticalOffset: 50.0,
+                                    horizontalOffset: 50.0,
                                     child: FadeInAnimation(
                                       child: SafeArea(
                                           top: false,
