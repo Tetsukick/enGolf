@@ -6,6 +6,7 @@ class OlympicBloc {
     _playersController.add(_players);
     _playerCountController.add(_playerCount);
     _rateController.add(_rate);
+    _dateController.add(_date);
 
     listenRate();
     listenPlayerCount();
@@ -24,12 +25,21 @@ class OlympicBloc {
   final _playerController = BehaviorSubject<Player>();
   Sink<Player> get changePlayerAction => _playerController.sink;
 
+  final _gameNameController = BehaviorSubject<String>();
+  Sink<String> get changeGameNameAction => _gameNameController.sink;
+  Stream<String> get gameName => _gameNameController.stream;
+
+  final _dateController = BehaviorSubject<DateTime>();
+  Sink<DateTime> get changeDateAction => _dateController.sink;
+  Stream<DateTime> get date => _dateController.stream;
+
   //output
   final _playersController = BehaviorSubject<List<Player>>();
   Stream<List<Player>> get players => _playersController.stream;
 
   int _playerCount = 4;
   int _rate = 1;
+  DateTime _date = DateTime.now();
   List<Player> _players = [
     Player(id: 0, name: 'Player1', score: 0),
     Player(id: 1, name: 'Player2', score: 0),
@@ -125,6 +135,8 @@ class OlympicBloc {
     _playerCountController.close();
     _playerController.close();
     _playersController.close();
+    _dateController.close();
+    _gameNameController.close();
   }
 }
 

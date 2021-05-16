@@ -100,11 +100,15 @@ class OlympicScreen extends StatelessWidget {
         IconTextField(
           'assets/golf_course.svg',
           AppLocalizations.of(context).cupName,
+          olympicBloc.gameName,
+          olympicBloc.changeGameNameAction.add,
         ),
         SizedBox(height: SizeConfig.smallMargin),
-        IconTextField(
+        IconTextFieldDate(
           'assets/calendar.svg',
           '',
+          olympicBloc.date,
+          olympicBloc.changeDateAction.add,
         ),
         SizedBox(height: SizeConfig.smallMargin),
         Row(
