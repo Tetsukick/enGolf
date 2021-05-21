@@ -1,6 +1,7 @@
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
+import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

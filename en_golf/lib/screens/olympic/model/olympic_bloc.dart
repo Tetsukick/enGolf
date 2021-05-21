@@ -1,4 +1,7 @@
 import 'dart:async';
+
+import 'package:engolf/common/shared_preference.dart';
+import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OlympicBloc {
@@ -94,6 +97,7 @@ class OlympicBloc {
     recalculate();
     setRank();
     _playersController.add(_players);
+    SharedPreferenceManager().savePlayers(_players);
   }
   
   void recalculate() {
@@ -138,14 +142,4 @@ class OlympicBloc {
     _dateController.close();
     _gameNameController.close();
   }
-}
-
-class Player {
-  int id;
-  int rank = 1;
-  String name;
-  int score;
-  int result = 0;
-
-  Player({this.id, this.name, this.score});
 }

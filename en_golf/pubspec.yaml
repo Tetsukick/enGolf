@@ -41,6 +41,7 @@ dependencies:
   package_info:
   app_tracking_transparency:
   flutter_svg:
+  shared_preferences:
   flutter_localizations:
     sdk: flutter
   intl:

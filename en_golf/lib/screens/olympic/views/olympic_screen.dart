@@ -1,7 +1,10 @@
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/size_config.dart';
+import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
+import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:engolf/screens/olympic/views/score_card.dart';
 import 'package:engolf/screens/olympic/views/text_fields.dart';
+import 'package:engolf/screens/result_olympic/result_olympic_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -91,10 +94,27 @@ class OlympicScreen extends StatelessWidget {
       children: [
         SizedBox(height: SizeConfig.smallestMargin),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            SizedBox(width: SizeConfig.smallMargin),
-            SvgPicture.asset('assets/engolf_logo_only.svg'),
+            Padding(
+              padding: const EdgeInsets.all(SizeConfig.smallMargin),
+              child: SvgPicture.asset('assets/engolf_logo_only.svg'),
+            ),
+            RaisedButton.icon(
+              icon: SvgPicture.asset('assets/tolophy_dark_green.svg'),
+              label: const Text('結果を表示'),
+              onPressed: () async {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<ResultOlympicScreen>(
+                        builder: (BuildContext context) {
+                          return ResultOlympicScreen();
+                        },
+                        fullscreenDialog: true));
+              },
+              color: Colors.green,
+              textColor: Colors.white,
+            ),
           ],
         ),
         IconTextField(
