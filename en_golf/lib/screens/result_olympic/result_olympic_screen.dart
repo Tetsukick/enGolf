@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:engolf/common/shared_preference.dart';
 import 'package:engolf/common/size_config.dart';
+import 'package:engolf/common/utils.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:engolf/screens/result_olympic/result_score_card.dart';
 import 'package:flutter/material.dart';
@@ -23,11 +24,15 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   GlobalKey _globalKey = GlobalKey();
   List<Player> _players;
+  String _gameName;
+  DateTime _gameDate;
   Image _image;
 
   @override
   void initState() {
     getPlayers();
+    getGameName();
+    getDate();
     super.initState();
   }
 
@@ -39,7 +44,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
       Scaffold(
         appBar: AppBar(
           title: Text(
-            'engolf',
+            _gameName ?? 'engolf',
           ),
         ),
         body: Container(
@@ -50,6 +55,17 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
+                    Positioned(
+                      left: 0,
+                      child: Text(
+                        dateTimeToString(_gameDate ?? DateTime.now()),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       width: 64,
                       child: Center(
@@ -122,6 +138,16 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   Future<void> getPlayers() async {
     _players = await SharedPreferenceManager().getPlayers();
+    setState(() {});
+  }
+
+  Future<void> getDate() async {
+    _gameDate = await SharedPreferenceManager().getGameDate();
+    setState(() {});
+  }
+
+  Future<void> getGameName() async {
+    _gameName = await SharedPreferenceManager().getGameName();
     setState(() {});
   }
 

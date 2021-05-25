@@ -14,6 +14,8 @@ class OlympicBloc {
     listenRate();
     listenPlayerCount();
     listenPlayer();
+    listenGameName();
+    listenGameDate();
   }
   
   // input
@@ -132,6 +134,18 @@ class OlympicBloc {
     final playerScore = _players[index].score;
     final int totalScore = _players.fold(0, (curr, next) => curr + next.score);
     return ((playerScore * (_players.length - 1)) - (totalScore - playerScore)) * _rate;
+  }
+
+  void listenGameName() {
+    _gameNameController.stream.listen((newGameName) {
+      SharedPreferenceManager().setGameName(newGameName);
+    });
+  }
+
+  void listenGameDate() {
+    _dateController.stream.listen((newGameDate) {
+      SharedPreferenceManager().setGameDate(newGameDate);
+    });
   }
 
   void dispose() {
