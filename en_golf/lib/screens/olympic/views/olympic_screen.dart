@@ -94,7 +94,7 @@ class OlympicScreen extends StatelessWidget {
       children: [
         SizedBox(height: SizeConfig.smallestMargin),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
               padding: const EdgeInsets.all(SizeConfig.smallMargin),
