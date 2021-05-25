@@ -161,7 +161,7 @@ class IconTextFieldDate extends StatelessWidget {
                 ? DateTime.now() : snapshot?.data as DateTime;
             final _controller = TextEditingController.fromValue(
               TextEditingValue(
-                text: _dateTimeToString(data) ?? '',
+                text: dateTimeToString(data) ?? '',
               ),
             );
             return Row(
@@ -196,10 +196,5 @@ class IconTextFieldDate extends StatelessWidget {
             );
           }),
     );
-  }
-
-  String _dateTimeToString(DateTime date) {
-    final _formatter = DateFormat('yyyy-MM-dd');
-    return _formatter.format(date);
   }
 }

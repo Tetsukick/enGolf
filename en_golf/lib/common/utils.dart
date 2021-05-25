@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:io';
 
+import 'package:intl/intl.dart';
+
 // This file has a number of platform-agnostic non-Widget utility functions.
 
 const _myListOfRandomColors = [
@@ -114,4 +116,9 @@ String getBannerAdUnitId() {
     return 'ca-app-pub-8604906384604870/4738255665';
   }
   return null;
+}
+
+String dateTimeToString(DateTime date) {
+  final _formatter = DateFormat('yyyy-MM-dd');
+  return _formatter.format(date);
 }
