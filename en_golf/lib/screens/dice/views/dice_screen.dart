@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:engolf/common/color_config.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class DiceScreen extends StatelessWidget {
     final diceBloc = Provider.of<DiceBloc>(context);
 
     return Scaffold(
+      backgroundColor: ColorConfig.bgGreenPrimary,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
@@ -78,11 +80,14 @@ class DiceScreen extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         _range.start.round().toString(),
-                        style: const TextStyle(fontSize: 30),
+                        style: const TextStyle(
+                          fontSize: 30,
+                          color: Colors.white
+                        ),
                       ),
                       SliderTheme(
                         data: SliderThemeData(
-                          activeTrackColor: Colors.lightGreen,
+                          activeTrackColor: ColorConfig.greenPrimary,
                           showValueIndicator: ShowValueIndicator.always,
                         ),
                         child: RangeSlider(
@@ -98,7 +103,10 @@ class DiceScreen extends StatelessWidget {
                       ),
                       Text(
                         _range.end.round().toString(),
-                        style: const TextStyle(fontSize: 30),
+                        style: const TextStyle(
+                          fontSize: 30,
+                          color: Colors.white
+                        ),
                       ),
                     ],
                   ),
@@ -139,7 +147,7 @@ class DiceScreen extends StatelessWidget {
                     Icons.delete_forever,
                     color: Colors.white,
                   ),
-                  color: Colors.lightGreen,
+                  color: ColorConfig.greenPrimary,
                   shape: const CircleBorder(),
                   onPressed: () {
                     diceBloc.reset();
@@ -150,7 +158,7 @@ class DiceScreen extends StatelessWidget {
                     Icons.undo,
                     color: Colors.white,
                   ),
-                  color: Colors.lightGreen,
+                  color: ColorConfig.greenPrimary,
                   shape: CircleBorder(),
                   onPressed: () {
                     diceBloc.undo();
@@ -248,7 +256,7 @@ class DiceScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Checkbox(
-                  activeColor: Colors.lightGreen,
+                  activeColor: ColorConfig.greenPrimary,
                   value: _isAllowed ?? true,
                   onChanged: (value) {
                     print('change');
@@ -259,7 +267,7 @@ class DiceScreen extends StatelessWidget {
                   AppLocalizations.of(context).allowDuplicateNumber,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ],
