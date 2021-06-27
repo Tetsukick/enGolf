@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/shared_preference.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/common/utils.dart';
@@ -48,6 +49,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
           ),
         ),
         body: Container(
+          color: ColorConfig.bgGreenPrimary,
           child: Column(
             children: <Widget>[
               Padding(

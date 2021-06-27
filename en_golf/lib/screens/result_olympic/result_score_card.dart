@@ -1,3 +1,4 @@
+import 'package:engolf/common/color_config.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,6 +26,7 @@ class ResultScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: ColorConfig.bgDarkGreen,
       elevation: 1.5,
       margin: const EdgeInsets.fromLTRB(6, 12, 6, 0),
       shape: RoundedRectangleBorder(
