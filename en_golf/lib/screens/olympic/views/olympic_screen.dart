@@ -26,64 +26,71 @@ class OlympicScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(SizeConfig.mediumMargin),
       color: ColorConfig.bgGreenPrimary,
-      child: Stack(
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
+      child: SingleChildScrollView(
+        child: Container(
+          height: 550,
+          child: Stack(
             children: [
-              header(context),
-              Expanded(
-                child: StreamBuilder(
-                    stream: olympicBloc.players,
-                    builder: (context, snapshot) {
-                      if (snapshot.data == null) {
-                        return Container();
-                      } else {
-                        final players = snapshot.data as List<Player>;
-                        return AnimationLimiter(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 55),
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: players.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return AnimationConfiguration.staggeredList(
-                                  position: index,
-                                  duration: const Duration(milliseconds: 375),
-                                  child: SlideAnimation(
-                                    horizontalOffset: 50.0,
-                                    child: FadeInAnimation(
-                                      child: SafeArea(
-                                          top: false,
-                                          bottom: true,
-                                          child: ScoreCard(color: Constants.colors[players[index].rank], player: players[index],)
-                                      ),
-                                    ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  header(context),
+                  Expanded(
+                    child: StreamBuilder(
+                        stream: olympicBloc.players,
+                        builder: (context, snapshot) {
+                          if (snapshot.data == null) {
+                            return Container();
+                          } else {
+                            final players = snapshot.data as List<Player>;
+                            return AnimationLimiter(
+                              child: Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 55),
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: players.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return AnimationConfiguration.staggeredList(
+                                        position: index,
+                                        duration: const Duration(milliseconds: 375),
+                                        child: SlideAnimation(
+                                          horizontalOffset: 50.0,
+                                          child: FadeInAnimation(
+                                            child: SafeArea(
+                                                top: false,
+                                                bottom: true,
+                                                child: ScoreCard(color: Constants.colors[players[index].rank], player: players[index],)
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      }
-                    }
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  height: 50,
+                  child: AdmobBanner(
+                    adUnitId: getBannerAdUnitId(),
+                    adSize: AdmobBannerSize.LEADERBOARD,
+                  ),
                 ),
-              ),
-            ],
+              )
+            ]
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              height: 50,
-              child: AdmobBanner(
-                adUnitId: getBannerAdUnitId(),
-                adSize: AdmobBannerSize.LEADERBOARD,
-              ),
-            ),
-          )
-        ]
+        ),
       ),
     );
   }
