@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:io';
 
+import 'package:intl/intl.dart';
+
 // This file has a number of platform-agnostic non-Widget utility functions.
 
 const _myListOfRandomColors = [
@@ -48,8 +50,6 @@ class AlwaysDisabledFocusNode extends FocusNode {
 
 class MyInAppBrowser extends InAppBrowser {
 
-  /// 各関数をオーバーライドしてお好みの処理を記述する。
-  /// 以下はgithubの例そのままです。
   @override
   Future onBrowserCreated() async {
     print("\n\nBrowser Created!\n\n");
@@ -116,4 +116,9 @@ String getBannerAdUnitId() {
     return 'ca-app-pub-8604906384604870/4738255665';
   }
   return null;
+}
+
+String dateTimeToString(DateTime date) {
+  final _formatter = DateFormat('yyyy-MM-dd');
+  return _formatter.format(date);
 }

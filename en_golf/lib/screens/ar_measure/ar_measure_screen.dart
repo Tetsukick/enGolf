@@ -1,4 +1,5 @@
 import 'package:arkit_plugin/arkit_plugin.dart';
+import 'package:engolf/common/color_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
@@ -23,6 +24,7 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
   @override
   Widget build(BuildContext context){
     return Platform.isIOS ? Scaffold(
+      backgroundColor: ColorConfig.bgGreenPrimary,
       body: Container(
         child: ARKitSceneView(
           enableTapRecognizer: true,
@@ -42,10 +44,13 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
       ),
     ) :
     Scaffold(
+      backgroundColor: ColorConfig.bgGreenPrimary,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Center(
-          child: Text(AppLocalizations.of(context).noServiceMessage),
+          child: Text(AppLocalizations.of(context).noServiceMessage,
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ),
     );

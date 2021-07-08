@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:engolf/common/color_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -13,8 +14,10 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorConfig.bgGreenPrimary,
       appBar: AppBar(
         title: Text('Settings'),
+        backgroundColor: ColorConfig.bgDarkGreen,
       ),
       body: Stack(
         children: [
@@ -24,7 +27,7 @@ class MenuScreen extends StatelessWidget {
                 AppLocalizations.of(context).feedback,
                 Icon(
                   Icons.comment,
-                  color: Colors.grey,
+                  color: Colors.white,
                 ),
                 onTap: () {
                   setBrowserPage("https://forms.gle/xR5f875pD27v9k4U7");
@@ -34,7 +37,7 @@ class MenuScreen extends StatelessWidget {
                 AppLocalizations.of(context).privacyPolicy,
                 Icon(
                   Icons.security,
-                  color: Colors.grey,
+                  color: Colors.white,
                 ),
                 onTap: () {
                   setBrowserPage("https://qiita.com/tetsukick/items/a3c844940064e15f0dac");
@@ -48,7 +51,7 @@ class MenuScreen extends StatelessWidget {
                       "version",
                       Icon(
                         Icons.settings,
-                        color: Colors.grey,
+                        color: Colors.white,
                       ),
                     );
                   }
@@ -58,7 +61,7 @@ class MenuScreen extends StatelessWidget {
                       "version $version $buildVersion",
                       Icon(
                         Icons.settings,
-                        color: Colors.grey,
+                        color: Colors.white,
                       ),
                   );
                 },
@@ -97,7 +100,7 @@ class MenuScreen extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                    color:Colors.black,
+                    color:Colors.white,
                     fontSize: 18.0
                 ),
               ),

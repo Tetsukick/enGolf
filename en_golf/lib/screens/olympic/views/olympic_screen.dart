@@ -1,9 +1,16 @@
+import 'package:engolf/common/color_config.dart';
+import 'package:engolf/common/size_config.dart';
+import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
+import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:engolf/screens/olympic/views/score_card.dart';
+import 'package:engolf/screens/olympic/views/text_fields.dart';
+import 'package:engolf/screens/result_olympic/result_olympic_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:provider/provider.dart';
 
@@ -16,130 +23,137 @@ class OlympicScreen extends StatelessWidget {
   @override
   Widget build(context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
-    final size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        CustomScrollView(slivers: <Widget>[
-        SliverAppBar(
-          pinned: true,
-          expandedHeight: 150,
-          collapsedHeight: 100,
-          flexibleSpace: FlexibleSpaceBar(
-            titlePadding: const EdgeInsets.all(0),
-            title: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                titleTextField(
-                    context,
-                    AppLocalizations.of(context).rate,
-                    olympicBloc.rate,
-                    olympicBloc.changeRateAction.add),
-                titleTextField(
-                    context,
-                    AppLocalizations.of(context).player,
-                    olympicBloc.playerCount,
-                    olympicBloc.changePlayerCountAction.add),
-              ],
-            ),
-            background: Image.asset('assets/top-background.jpg', fit: BoxFit.cover),
-          ),
-        ),
-        SliverFillRemaining(child:
-          CupertinoPageScaffold(
-            child: StreamBuilder(
-                    stream: olympicBloc.players,
-                    builder: (context, snapshot) {
-                      if (snapshot.data == null) {
-                        return Container();
-                      } else {
-                        final players = snapshot.data as List<Player>;
-                        return AnimationLimiter(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 55),
-                            child: ListView.builder(
-                              itemCount: players.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return AnimationConfiguration.staggeredList(
-                                  position: index,
-                                  duration: const Duration(milliseconds: 375),
-                                  child: SlideAnimation(
-                                    verticalOffset: 50.0,
-                                    child: FadeInAnimation(
-                                      child: SafeArea(
-                                          top: false,
-                                          bottom: true,
-                                          child: ScoreCard(color: Constants.colors[players[index].rank], player: players[index],)
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      }
-                    }
-                ),
-          ),
-        ),
-      ],
-      ),
-      Positioned(
-        left: 0,
-        right: 0,
-        bottom: 0,
+    return Container(
+      padding: EdgeInsets.all(SizeConfig.mediumMargin),
+      color: ColorConfig.bgGreenPrimary,
+      child: SingleChildScrollView(
         child: Container(
-          height: 50,
-          child: AdmobBanner(
-            adUnitId: getBannerAdUnitId(),
-            adSize: AdmobBannerSize.LEADERBOARD,
+          height: 550,
+          child: Stack(
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  header(context),
+                  Expanded(
+                    child: StreamBuilder(
+                        stream: olympicBloc.players,
+                        builder: (context, snapshot) {
+                          if (snapshot.data == null) {
+                            return Container();
+                          } else {
+                            final players = snapshot.data as List<Player>;
+                            return AnimationLimiter(
+                              child: Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 55),
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: players.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return AnimationConfiguration.staggeredList(
+                                        position: index,
+                                        duration: const Duration(milliseconds: 375),
+                                        child: SlideAnimation(
+                                          horizontalOffset: 50.0,
+                                          child: FadeInAnimation(
+                                            child: SafeArea(
+                                                top: false,
+                                                bottom: true,
+                                                child: ScoreCard(color: Constants.colors[players[index].rank], player: players[index],)
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  height: 50,
+                  child: AdmobBanner(
+                    adUnitId: getBannerAdUnitId(),
+                    adSize: AdmobBannerSize.LEADERBOARD,
+                  ),
+                ),
+              )
+            ]
           ),
         ),
-      )
-    ]
+      ),
     );
   }
 
-  Widget titleTextField(
-      BuildContext context,
-      String labelTitle,
-      Stream<int> stream,
-      Function(int) function) {
-    final size = MediaQuery.of(context).size;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      width: size.width / 3,
-      child: StreamBuilder(
-          stream: stream,
-          builder: (context, snapshot) {
-            final _controller = TextEditingController.fromValue(
-              TextEditingValue(
-                text: snapshot?.data?.toString() ?? "",
-                selection: TextSelection.collapsed(
-                    offset: snapshot?.data?.toString()?.length ?? 0),
-              ),
-            );
-            return TextFormField(
-              controller: _controller,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: labelTitle,
-                labelStyle: TextStyle(color: Colors.white),
-              ),
-              style: TextStyle(color: Colors.white),
-              onChanged: (text) {
-                try {
-                  final value = int.parse(text);
-                  function(value);
-                }
-                on Exception catch(e) {
-                  print(e);
-                }
+  Widget header(BuildContext context) {
+    final olympicBloc = Provider.of<OlympicBloc>(context);
+    return Column(
+      children: [
+        SizedBox(height: SizeConfig.smallestMargin),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(SizeConfig.smallMargin),
+              child: SvgPicture.asset('assets/engolf_logo_only.svg'),
+            ),
+            RaisedButton.icon(
+              icon: SvgPicture.asset('assets/tolophy_dark_green.svg'),
+              label: const Text('結果を表示'),
+              onPressed: () async {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<ResultOlympicScreen>(
+                        builder: (BuildContext context) {
+                          return ResultOlympicScreen();
+                        },
+                        fullscreenDialog: true));
               },
-            );
-          }),
+              color: Colors.green,
+              textColor: Colors.white,
+            ),
+          ],
+        ),
+        IconTextField(
+          'assets/golf_course.svg',
+          AppLocalizations.of(context).cupName,
+          olympicBloc.gameName,
+          olympicBloc.changeGameNameAction.add,
+        ),
+        SizedBox(height: SizeConfig.smallMargin),
+        IconTextFieldDate(
+          'assets/calendar.svg',
+          '',
+          olympicBloc.date,
+          olympicBloc.changeDateAction.add,
+        ),
+        SizedBox(height: SizeConfig.smallMargin),
+        Row(
+          children: [
+            IconStreamTextField(
+                'assets/people.svg',
+                AppLocalizations.of(context).player,
+                olympicBloc.playerCount,
+                olympicBloc.changePlayerCountAction.add),
+            const SizedBox(width: SizeConfig.smallMargin),
+            IconStreamTextField(
+                'assets/money.svg',
+                AppLocalizations.of(context).rate,
+                olympicBloc.rate,
+                olympicBloc.changeRateAction.add),
+          ],
+        ),
+      ],
     );
   }
 }

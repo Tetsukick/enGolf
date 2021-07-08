@@ -11,6 +11,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:provider/provider.dart';
 
+import 'common/color_config.dart';
 import 'screens/menu/menu_screen.dart';
 import 'common/utils.dart';
 import 'screens/olympic/model/olympic_bloc.dart';
@@ -76,6 +77,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Scaffold(
+            backgroundColor: ColorConfig.bgGreenPrimary,
             bottomNavigationBar: FloatingBottomBar(
               controller: _controller,
               items: [
@@ -84,7 +86,9 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 FloatingBottomBarItem(Icons.fullscreen, label: 'Measure'),
                 FloatingBottomBarItem(Icons.list, label: 'Settings'),
               ],
-              activeItemColor: Colors.lightGreen,
+              color: ColorConfig.bgDarkGreen,
+              itemColor: Colors.white,
+              activeItemColor: ColorConfig.greenPrimary,
               enableIconRotation: true,
               onTap: (index) {
                 print('Tapped: item $index');
