@@ -128,12 +128,12 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.ios_share),
-          onPressed: () {
-            _doCapture();
-          },
-        ),
+//        floatingActionButton: FloatingActionButton(
+//          child: const Icon(Icons.ios_share),
+//          onPressed: () {
+//            _doCapture();
+//          },
+//        ),
       ),
     );
   }

@@ -33,8 +33,6 @@ class ResultScoreCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
       child: InkWell(
-        // Make it splash on Android. It would happen automatically if this
-        // was a real card but this is just a demo. Skip the splash on iOS.
         onTap: defaultTargetPlatform == TargetPlatform.iOS ? null : () {},
         child: Padding(
           padding: const EdgeInsets.all(12.0),
