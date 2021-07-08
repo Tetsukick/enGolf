@@ -57,8 +57,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Positioned(
-                      left: 0,
+                    Expanded(
                       child: Text(
                         dateTimeToString(_gameDate ?? DateTime.now()),
                         style: TextStyle(

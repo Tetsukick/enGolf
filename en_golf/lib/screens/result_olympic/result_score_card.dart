@@ -28,14 +28,14 @@ class ResultScoreCard extends StatelessWidget {
     return Card(
       color: ColorConfig.bgDarkGreen,
       elevation: 1.5,
-      margin: const EdgeInsets.fromLTRB(6, 12, 6, 0),
+      margin: const EdgeInsets.fromLTRB(6, 8, 6, 0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
       ),
       child: InkWell(
         onTap: defaultTargetPlatform == TargetPlatform.iOS ? null : () {},
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
