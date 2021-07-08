@@ -37,7 +37,7 @@ class ScoreCard extends StatelessWidget {
       color: ColorConfig.bgDarkGreen,
       elevation: 1.5,
       margin: const EdgeInsets.symmetric(
-          vertical: SizeConfig.mediumMargin,
+          vertical: SizeConfig.mediumSmallMargin,
           horizontal: SizeConfig.smallestMargin),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(SizeConfig.smallestMargin),

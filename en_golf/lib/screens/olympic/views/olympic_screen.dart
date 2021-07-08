@@ -28,7 +28,7 @@ class OlympicScreen extends StatelessWidget {
       color: ColorConfig.bgGreenPrimary,
       child: SingleChildScrollView(
         child: Container(
-          height: 550,
+          height: 530,
           child: Stack(
             children: [
               Column(
@@ -46,7 +46,7 @@ class OlympicScreen extends StatelessWidget {
                             return AnimationLimiter(
                               child: Container(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 55),
+                                  padding: const EdgeInsets.only(bottom: 50),
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: players.length,
