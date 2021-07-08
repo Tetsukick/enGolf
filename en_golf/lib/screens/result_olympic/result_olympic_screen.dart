@@ -45,7 +45,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
       Scaffold(
         appBar: AppBar(
           title: Text(
-            _gameName ?? 'engolf',
+            _gameName == null || _gameName.isEmpty ? 'engolf' : _gameName,
           ),
         ),
         body: Container(
