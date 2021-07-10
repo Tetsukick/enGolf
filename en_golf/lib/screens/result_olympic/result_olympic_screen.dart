@@ -45,7 +45,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
       Scaffold(
         appBar: AppBar(
           title: Text(
-            _gameName ?? 'engolf',
+            _gameName == null || _gameName.isEmpty ? 'engolf' : _gameName,
           ),
         ),
         body: Container(
@@ -57,8 +57,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Positioned(
-                      left: 0,
+                    Expanded(
                       child: Text(
                         dateTimeToString(_gameDate ?? DateTime.now()),
                         style: TextStyle(

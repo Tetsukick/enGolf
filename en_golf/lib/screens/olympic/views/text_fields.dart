@@ -82,6 +82,10 @@ class IconTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _controller = TextEditingController();
+    _controller.addListener(() {
+      function(_controller.text);
+    });
     final size = MediaQuery.of(context).size;
     return Container(
       decoration: const BoxDecoration(
@@ -95,13 +99,6 @@ class IconTextField extends StatelessWidget {
       child: StreamBuilder(
           stream: stream,
           builder: (context, snapshot) {
-            final _controller = TextEditingController.fromValue(
-              TextEditingValue(
-                text: snapshot?.data?.toString() ?? '',
-                selection: TextSelection.collapsed(
-                    offset: snapshot?.data?.toString()?.length ?? 0),
-              ),
-            );
             return Row(
               children: [
                 Padding(
@@ -117,13 +114,8 @@ class IconTextField extends StatelessWidget {
                       hintStyle: const TextStyle(color: ColorConfig.textGreenDark),
                     ),
                     style: const TextStyle(color: ColorConfig.textGreenLight),
-                    onChanged: (text) {
-                      try {
-                        function(text);
-                      }
-                      on Exception catch(e) {
-                        print(e);
-                      }
+                    onEditingComplete: () {
+                      function(_controller.text);
                     },
                   ),
                 ),

@@ -37,7 +37,7 @@ class ScoreCard extends StatelessWidget {
       color: ColorConfig.bgDarkGreen,
       elevation: 1.5,
       margin: const EdgeInsets.symmetric(
-          vertical: SizeConfig.mediumMargin,
+          vertical: SizeConfig.mediumSmallMargin,
           horizontal: SizeConfig.smallestMargin),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(SizeConfig.smallestMargin),
@@ -45,9 +45,12 @@ class ScoreCard extends StatelessWidget {
       child: InkWell(
         onTap: defaultTargetPlatform == TargetPlatform.iOS ? null : () {},
         child: Padding(
-          padding: const EdgeInsets.all(SizeConfig.mediumSmallMargin),
+          padding: const EdgeInsets.symmetric(
+            horizontal: SizeConfig.smallMargin,
+            vertical: SizeConfig.mediumSmallMargin
+          ),
           child: Container(
-            width: 60,
+            width: 62,
             height: 250,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +97,7 @@ class ScoreCard extends StatelessWidget {
                 const SizedBox(height: SizeConfig.smallMargin),
                 Expanded(
                   child: Container(
-                    width: 40,
+                    width: 50,
                     child: CupertinoPicker(
                       scrollController: FixedExtentScrollController(initialItem: _scoreItems.indexOf(player.score)),
                       itemExtent: 26,
