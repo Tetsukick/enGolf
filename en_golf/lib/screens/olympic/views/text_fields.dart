@@ -13,8 +13,9 @@ class IconStreamTextField extends StatelessWidget {
   String labelTitle;
   Stream<int> stream;
   Function(int) function;
+  FocusNode node;
 
-  IconStreamTextField([this.icon, this.labelTitle, this.stream, this.function]);
+  IconStreamTextField([this.icon, this.labelTitle, this.stream, this.function, this.node]);
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,7 @@ class IconStreamTextField extends StatelessWidget {
                 SizedBox(width: SizeConfig.mediumMargin),
                 Expanded(
                   child: TextFormField(
+                    focusNode: node,
                     controller: _controller,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -116,6 +118,9 @@ class IconTextField extends StatelessWidget {
                     style: const TextStyle(color: ColorConfig.textGreenLight),
                     onEditingComplete: () {
                       function(_controller.text);
+                    },
+                    onFieldSubmitted: (text) {
+                      FocusScope.of(context).unfocus();
                     },
                   ),
                 ),

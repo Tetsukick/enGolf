@@ -37,7 +37,10 @@ class DiceScreen extends StatelessWidget {
                 if (_histories == null || _histories.isEmpty) {
                   return Text(
                     AppLocalizations.of(context).shake,
-                    style: TextStyle(fontSize: 30),
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white
+                    ),
                   );
                 } else {
                   golfBallAnimationController.play('start');

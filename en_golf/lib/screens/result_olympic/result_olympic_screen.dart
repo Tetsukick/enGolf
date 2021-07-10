@@ -139,6 +139,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   Future<void> getPlayers() async {
     _players = await SharedPreferenceManager().getPlayers();
+    _players.sort((a,b) => a.rank.compareTo(b.rank));
     setState(() {});
   }
 
