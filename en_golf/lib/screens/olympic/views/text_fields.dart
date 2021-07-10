@@ -117,6 +117,9 @@ class IconTextField extends StatelessWidget {
                     onEditingComplete: () {
                       function(_controller.text);
                     },
+                    onFieldSubmitted: (text) {
+                      FocusScope.of(context).unfocus();
+                    },
                   ),
                 ),
               ],
