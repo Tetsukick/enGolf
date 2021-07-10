@@ -118,6 +118,15 @@ String getBannerAdUnitId() {
   return null;
 }
 
+String getInterstitialAdUnitId() {
+  if (Platform.isIOS) {
+    return 'ca-app-pub-8604906384604870/8693607305';
+  } else if (Platform.isAndroid) {
+    return 'ca-app-pub-8604906384604870/3333469410';
+  }
+  return null;
+}
+
 String dateTimeToString(DateTime date) {
   final _formatter = DateFormat('yyyy-MM-dd');
   return _formatter.format(date);

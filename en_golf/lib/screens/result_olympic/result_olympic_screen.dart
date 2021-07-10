@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:io';
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/shared_preference.dart';
@@ -32,12 +33,14 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
   List<Player> _players;
   String _gameName;
   DateTime _gameDate;
+  AdmobInterstitial interstitialAd;
 
   @override
   void initState() {
     getPlayers();
     getGameName();
     getDate();
+    loadInterstitialAd();
     super.initState();
   }
 
@@ -137,7 +140,8 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
             child: FloatingActionButton(
               heroTag: 'shareBtn',
               child: const Icon(Icons.ios_share),
-              onPressed: () {
+              onPressed: () async {
+                await showInterstitialAd();
                 shareImageAndText();
               },
             ),
@@ -251,6 +255,26 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
       applicationDocumentsFile.delete();
     } catch (error) {
       print(error);
+    }
+  }
+
+  Future<void> loadInterstitialAd() async {
+    interstitialAd = AdmobInterstitial(
+      adUnitId: getInterstitialAdUnitId(),
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) {
+          shareImageAndText();
+        } else if (event == AdmobAdEvent.completed) {
+          shareImageAndText();
+        }
+      }
+    );
+    await interstitialAd.load();
+  }
+
+  Future<void> showInterstitialAd() async {
+    if (await interstitialAd.isLoaded) {
+      await interstitialAd.show();
     }
   }
 }
