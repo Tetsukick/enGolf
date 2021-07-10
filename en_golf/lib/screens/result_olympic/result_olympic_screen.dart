@@ -153,6 +153,13 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
       child: Stack(
         children: [
           Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(SizeConfig.mediumSmallMargin),
+              child: SvgPicture.asset('assets/engolf_logo_only.svg'),
+            ),
+          ),
+          Align(
             alignment: Alignment.center,
             child: SvgPicture.asset('assets/ranking_title_bg.svg')),
           Align(
@@ -166,8 +173,11 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AutoSizeText(
-                      _gameName == null || _gameName.isEmpty ? 'engolf' : _gameName,
+                      _gameName == null || _gameName.isEmpty ?
+                        dateTimeToString(_gameDate ?? DateTime.now()) + ' CUP'
+                        : _gameName,
                       style: TextStyle(fontSize: 30, color: Colors.white),
+                      textAlign: TextAlign.center,
                       maxLines: 2,
                       minFontSize: 16,
                     ),
