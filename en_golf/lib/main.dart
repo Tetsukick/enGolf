@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 
 import 'package:provider/provider.dart';
 
@@ -74,41 +75,38 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             dispose: (context, bloc) => bloc.dispose(),
           ),
         ],
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Scaffold(
-            backgroundColor: ColorConfig.bgGreenPrimary,
-            bottomNavigationBar: FloatingBottomBar(
+        child: Scaffold(
+          backgroundColor: ColorConfig.bgGreenPrimary,
+          bottomNavigationBar: FloatingBottomBar(
+            controller: _controller,
+            items: [
+              FloatingBottomBarItem(Icons.monetization_on, label: 'Calculator'),
+              FloatingBottomBarItem(Icons.casino, label: 'Dice'),
+              FloatingBottomBarItem(Icons.fullscreen, label: 'Measure'),
+              FloatingBottomBarItem(Icons.list, label: 'Settings'),
+            ],
+            color: ColorConfig.bgDarkGreen,
+            itemColor: Colors.white,
+            activeItemColor: ColorConfig.greenPrimary,
+            enableIconRotation: true,
+            onTap: (index) {
+              print('Tapped: item $index');
+              _controller.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeOut,
+              );
+            },
+          ),
+          body: SafeArea(
+            child: PageView(
               controller: _controller,
-              items: [
-                FloatingBottomBarItem(Icons.monetization_on, label: 'Calculator'),
-                FloatingBottomBarItem(Icons.casino, label: 'Dice'),
-                FloatingBottomBarItem(Icons.fullscreen, label: 'Measure'),
-                FloatingBottomBarItem(Icons.list, label: 'Settings'),
+              children: <Widget> [
+                OlympicScreen(),
+                DiceScreen(),
+                ARMeasureScreen(),
+                MenuScreen()
               ],
-              color: ColorConfig.bgDarkGreen,
-              itemColor: Colors.white,
-              activeItemColor: ColorConfig.greenPrimary,
-              enableIconRotation: true,
-              onTap: (index) {
-                print('Tapped: item $index');
-                _controller.animateToPage(
-                  index,
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.easeOut,
-                );
-              },
-            ),
-            body: SafeArea(
-              child: PageView(
-                controller: _controller,
-                children: <Widget> [
-                  OlympicScreen(),
-                  DiceScreen(),
-                  ARMeasureScreen(),
-                  MenuScreen()
-                ],
-              ),
             ),
           ),
         ),

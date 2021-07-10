@@ -11,6 +11,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 
 import 'package:provider/provider.dart';
 
@@ -19,76 +20,83 @@ import '../model/olympic_bloc.dart';
 import '../../../common/constants.dart' as Constants;
 
 class OlympicScreen extends StatelessWidget {
+  FocusNode _playerCountNode = FocusNode();
+  FocusNode _rateNode = FocusNode();
 
   @override
   Widget build(context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
-    return Container(
-      padding: EdgeInsets.all(SizeConfig.mediumMargin),
-      color: ColorConfig.bgGreenPrimary,
-      child: SingleChildScrollView(
-        child: Container(
-          height: 530,
-          child: Stack(
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  header(context),
-                  Expanded(
-                    child: StreamBuilder(
-                        stream: olympicBloc.players,
-                        builder: (context, snapshot) {
-                          if (snapshot.data == null) {
-                            return Container();
-                          } else {
-                            final players = snapshot.data as List<Player>;
-                            return AnimationLimiter(
-                              child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 50),
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: players.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return AnimationConfiguration.staggeredList(
-                                        position: index,
-                                        duration: const Duration(milliseconds: 375),
-                                        child: SlideAnimation(
-                                          horizontalOffset: 50.0,
-                                          child: FadeInAnimation(
-                                            child: SafeArea(
-                                                top: false,
-                                                bottom: true,
-                                                child: ScoreCard(color: Constants.colors[players[index].rank], player: players[index],)
+    return KeyboardActions(
+      autoScroll: true,
+      tapOutsideToDismiss: true,
+      config: _buildConfig(context),
+      child: Container(
+        padding: EdgeInsets.all(SizeConfig.mediumMargin),
+        color: ColorConfig.bgGreenPrimary,
+        child: SingleChildScrollView(
+          child: Container(
+            height: 530,
+            child: Stack(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    header(context),
+                    Expanded(
+                      child: StreamBuilder(
+                          stream: olympicBloc.players,
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null) {
+                              return Container();
+                            } else {
+                              final players = snapshot.data as List<Player>;
+                              return AnimationLimiter(
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 50),
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: players.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return AnimationConfiguration.staggeredList(
+                                          position: index,
+                                          duration: const Duration(milliseconds: 375),
+                                          child: SlideAnimation(
+                                            horizontalOffset: 50.0,
+                                            child: FadeInAnimation(
+                                              child: SafeArea(
+                                                  top: false,
+                                                  bottom: true,
+                                                  child: ScoreCard(color: Constants.colors[players[index].rank], player: players[index],)
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
+                              );
+                            }
                           }
-                        }
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    height: 50,
+                    child: AdmobBanner(
+                      adUnitId: getBannerAdUnitId(),
+                      adSize: AdmobBannerSize.LEADERBOARD,
                     ),
                   ),
-                ],
-              ),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  height: 50,
-                  child: AdmobBanner(
-                    adUnitId: getBannerAdUnitId(),
-                    adSize: AdmobBannerSize.LEADERBOARD,
-                  ),
-                ),
-              )
-            ]
+                )
+              ]
+            ),
           ),
         ),
       ),
@@ -144,13 +152,63 @@ class OlympicScreen extends StatelessWidget {
                 'assets/people.svg',
                 AppLocalizations.of(context).player,
                 olympicBloc.playerCount,
-                olympicBloc.changePlayerCountAction.add),
+                olympicBloc.changePlayerCountAction.add,
+                _playerCountNode
+            ),
             const SizedBox(width: SizeConfig.smallMargin),
             IconStreamTextField(
                 'assets/money.svg',
                 AppLocalizations.of(context).rate,
                 olympicBloc.rate,
-                olympicBloc.changeRateAction.add),
+                olympicBloc.changeRateAction.add,
+                _rateNode
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  KeyboardActionsConfig _buildConfig(BuildContext context) {
+    return KeyboardActionsConfig(
+      keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
+      keyboardBarColor: ColorConfig.bgDarkGreen,
+      nextFocus: false,
+      actions: [
+        KeyboardActionsItem(
+          focusNode: _playerCountNode,
+          toolbarButtons: [
+              (node) {
+              return GestureDetector(
+                onTap: () => node.unfocus(),
+                child: Container(
+                  color: ColorConfig.bgDarkGreen,
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "DONE",
+                    style: TextStyle(color: ColorConfig.textGreenLight),
+                  ),
+                ),
+              );
+            }
+          ],
+        ),
+        KeyboardActionsItem(
+          focusNode: _rateNode,
+          toolbarButtons: [
+              (node) {
+              return GestureDetector(
+                onTap: () => node.unfocus(),
+                child: Container(
+                  color: ColorConfig.bgDarkGreen,
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "DONE",
+                    style: TextStyle(color: ColorConfig.textGreenLight),
+                  ),
+                ),
+              );
+            }
           ],
         ),
       ],
