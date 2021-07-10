@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/shared_preference.dart';
 import 'package:engolf/common/size_config.dart';
@@ -12,6 +13,7 @@ import 'package:engolf/screens/result_olympic/result_score_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_extend/share_extend.dart';
 
@@ -49,18 +51,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
           child: Column(
             children: <Widget>[
               SizedBox(height: 30,),
-              Text(
-                _gameName == null || _gameName.isEmpty ? 'engolf' : _gameName,
-                style: TextStyle(fontSize: 30, color: Colors.white),
-              ),
-              Text(
-                dateTimeToString(_gameDate ?? DateTime.now()),
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              titleWidget(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: SizeConfig.smallestMargin, horizontal: SizeConfig.mediumMargin),
                 child: Row(
@@ -153,6 +144,50 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
           ),
         ],
       )
+    );
+  }
+
+  Widget titleWidget() {
+    return SizedBox(
+      height: 160,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: SvgPicture.asset('assets/ranking_title_bg.svg')),
+          Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: 200,
+              height: 160,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 32),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AutoSizeText(
+                      _gameName == null || _gameName.isEmpty ? 'engolf' : _gameName,
+                      style: TextStyle(fontSize: 30, color: Colors.white),
+                      maxLines: 2,
+                      minFontSize: 16,
+                    ),
+                    AutoSizeText(
+                      dateTimeToString(_gameDate ?? DateTime.now()),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 1,
+                      minFontSize: 11,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
