@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'dart:io';
 
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/shared_preference.dart';
@@ -11,6 +12,8 @@ import 'package:engolf/screens/result_olympic/result_score_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_extend/share_extend.dart';
 
 import '../../common/constants.dart' as Constants;
 
@@ -127,12 +130,12 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
             ],
           ),
         ),
-//        floatingActionButton: FloatingActionButton(
-//          child: const Icon(Icons.ios_share),
-//          onPressed: () {
-//            _doCapture();
-//          },
-//        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.ios_share),
+          onPressed: () {
+            shareImageAndText();
+          },
+        ),
       ),
     );
   }
@@ -153,25 +156,40 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
     setState(() {});
   }
 
-  Future<void> _doCapture() async {
-    var image  = await _convertWidgetToImage();
+  Future<File> getApplicationDocumentsFile(List<int> imageData) async {
+    final directory = await getApplicationDocumentsDirectory();
 
-    setState(() {
-      _image = image;
-    });
+    final exportFile = File('${directory.path}/engolf_result.png');
+    if (!await exportFile.exists()) {
+      await exportFile.create(recursive: true);
+    }
+    final file = await exportFile.writeAsBytes(imageData);
+    return file;
   }
 
-  Future<Image> _convertWidgetToImage() async {
-    try {
-      RenderRepaintBoundary boundary = _globalKey.currentContext.findRenderObject();
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      var pngBytes = byteData.buffer.asUint8List();
-      return Image.memory(pngBytes);
+  Future<ByteData> exportToImage() async {
+    final boundary =
+      _globalKey.currentContext.findRenderObject() as RenderRepaintBoundary;
+    final image = await boundary.toImage(
+      pixelRatio: 3,
+    );
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData;
+  }
 
-    } catch (e) {
-      print(e);
-      return null;
+  void shareImageAndText() async {
+    try {
+      final bytes = await exportToImage();
+      final widgetImageBytes =
+      bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+      final applicationDocumentsFile =
+      await getApplicationDocumentsFile(widgetImageBytes);
+
+      final path = applicationDocumentsFile.path;
+      await ShareExtend.share(path, "image");
+      applicationDocumentsFile.delete();
+    } catch (error) {
+      print(error);
     }
   }
 }

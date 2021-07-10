@@ -43,6 +43,8 @@ dependencies:
   flutter_svg:
   shared_preferences:
   keyboard_actions:
+  share_extend:
+  path_provider:
   flutter_localizations:
     sdk: flutter
   intl:
