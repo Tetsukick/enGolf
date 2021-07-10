@@ -30,7 +30,6 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
   List<Player> _players;
   String _gameName;
   DateTime _gameDate;
-  Image _image;
 
   @override
   void initState() {
@@ -42,34 +41,31 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      key: _globalKey,
-      child:
-      Scaffold(
-        appBar: AppBar(
-          title: Text(
-            _gameName == null || _gameName.isEmpty ? 'engolf' : _gameName,
-          ),
-        ),
-        body: Container(
+    return Scaffold(
+      body: RepaintBoundary(
+        key: _globalKey,
+        child: Container(
           color: ColorConfig.bgGreenPrimary,
           child: Column(
             children: <Widget>[
+              SizedBox(height: 30,),
+              Text(
+                _gameName == null || _gameName.isEmpty ? 'engolf' : _gameName,
+                style: TextStyle(fontSize: 30, color: Colors.white),
+              ),
+              Text(
+                dateTimeToString(_gameDate ?? DateTime.now()),
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: SizeConfig.smallestMargin, horizontal: SizeConfig.mediumMargin),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        dateTimeToString(_gameDate ?? DateTime.now()),
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
                     SizedBox(
                       width: 64,
                       child: Center(
@@ -102,8 +98,10 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
               Expanded(
                 child: AnimationLimiter(
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 55),
+                    padding:
+                      const EdgeInsets.only(bottom: SizeConfig.smallestMargin),
                     child: ListView.builder(
+                      padding: EdgeInsets.zero,
                       itemCount: _players?.length ?? 0,
                       itemBuilder: (BuildContext context, int index) {
                         return AnimationConfiguration.staggeredList(
@@ -112,13 +110,9 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
                           child: SlideAnimation(
                             verticalOffset: 50.0,
                             child: FadeInAnimation(
-                              child: SafeArea(
-                                  top: false,
-                                  bottom: true,
-                                  child: ResultScoreCard(
-                                      color: Constants.colors[_players[index].rank],
-                                      player: _players[index])
-                              ),
+                              child: ResultScoreCard(
+                                  color: Constants.colors[_players[index].rank],
+                                  player: _players[index]),
                             ),
                           ),
                         );
@@ -130,13 +124,35 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.ios_share),
-          onPressed: () {
-            shareImageAndText();
-          },
-        ),
       ),
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, top: 40),
+              child: FloatingActionButton(
+                heroTag: 'closeBtn',
+                backgroundColor: ColorConfig.bgDarkGreen,
+                child: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              heroTag: 'shareBtn',
+              child: const Icon(Icons.ios_share),
+              onPressed: () {
+                shareImageAndText();
+              },
+            ),
+          ),
+        ],
+      )
     );
   }
 
