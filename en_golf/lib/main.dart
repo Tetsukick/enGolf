@@ -20,7 +20,8 @@ import 'screens/olympic/views/olympic_screen.dart';
 import 'common/views/floating_bottom_bar.dart';
 
 void main() {
-
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   Admob.initialize(testDeviceIds: [getAppId()]);
 
   runApp(const HomeScreen());

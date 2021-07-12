@@ -56,21 +56,6 @@ class MyInAppBrowser extends InAppBrowser {
   }
 
   @override
-  Future onLoadStart(String url) async {
-    print("\n\nStarted $url\n\n");
-  }
-
-  @override
-  Future onLoadStop(String url) async {
-    print("\n\nStopped $url\n\n");
-  }
-
-  @override
-  void onLoadError(String url, int code, String message) {
-    print("Can't load $url.. Error: $message");
-  }
-
-  @override
   void onProgressChanged(int progress) {
     print("Progress: $progress");
   }
@@ -78,16 +63,6 @@ class MyInAppBrowser extends InAppBrowser {
   @override
   void onExit() {
     print("\n\nBrowser closed!\n\n");
-  }
-
-  @override
-  void onLoadResource(LoadedResource response) {
-    print("Started at: " +
-        response.startTime.toString() +
-        "ms ---> duration: " +
-        response.duration.toString() +
-        "ms " +
-        response.url);
   }
 
   @override
