@@ -252,7 +252,6 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
       final path = applicationDocumentsFile.path;
       await ShareExtend.share(path, "image");
-      applicationDocumentsFile.delete();
     } catch (error) {
       print(error);
     }
