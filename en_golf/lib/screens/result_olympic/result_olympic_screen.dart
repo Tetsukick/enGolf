@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'dart:io';
 
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/shared_preference.dart';
 import 'package:engolf/common/size_config.dart';
@@ -11,6 +14,9 @@ import 'package:engolf/screens/result_olympic/result_score_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_extend/share_extend.dart';
 
 import '../../common/constants.dart' as Constants;
 
@@ -27,46 +33,33 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
   List<Player> _players;
   String _gameName;
   DateTime _gameDate;
-  Image _image;
+  AdmobInterstitial interstitialAd;
 
   @override
   void initState() {
     getPlayers();
     getGameName();
     getDate();
+    loadInterstitialAd();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      key: _globalKey,
-      child:
-      Scaffold(
-        appBar: AppBar(
-          title: Text(
-            _gameName == null || _gameName.isEmpty ? 'engolf' : _gameName,
-          ),
-        ),
-        body: Container(
+    return Scaffold(
+      body: RepaintBoundary(
+        key: _globalKey,
+        child: Container(
           color: ColorConfig.bgGreenPrimary,
           child: Column(
             children: <Widget>[
+              SizedBox(height: 30,),
+              titleWidget(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: SizeConfig.smallestMargin, horizontal: SizeConfig.mediumMargin),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        dateTimeToString(_gameDate ?? DateTime.now()),
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
                     SizedBox(
                       width: 64,
                       child: Center(
@@ -99,8 +92,10 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
               Expanded(
                 child: AnimationLimiter(
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 55),
+                    padding:
+                      const EdgeInsets.only(bottom: SizeConfig.smallestMargin),
                     child: ListView.builder(
+                      padding: EdgeInsets.zero,
                       itemCount: _players?.length ?? 0,
                       itemBuilder: (BuildContext context, int index) {
                         return AnimationConfiguration.staggeredList(
@@ -109,13 +104,9 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
                           child: SlideAnimation(
                             verticalOffset: 50.0,
                             child: FadeInAnimation(
-                              child: SafeArea(
-                                  top: false,
-                                  bottom: true,
-                                  child: ResultScoreCard(
-                                      color: Constants.colors[_players[index].rank],
-                                      player: _players[index])
-                              ),
+                              child: ResultScoreCard(
+                                  color: Constants.colors[_players[index].rank],
+                                  player: _players[index]),
                             ),
                           ),
                         );
@@ -127,12 +118,89 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
             ],
           ),
         ),
-//        floatingActionButton: FloatingActionButton(
-//          child: const Icon(Icons.ios_share),
-//          onPressed: () {
-//            _doCapture();
-//          },
-//        ),
+      ),
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, top: 40),
+              child: FloatingActionButton(
+                heroTag: 'closeBtn',
+                backgroundColor: ColorConfig.bgDarkGreen,
+                child: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              heroTag: 'shareBtn',
+              child: const Icon(Icons.ios_share),
+              onPressed: () async {
+                await showInterstitialAd();
+                shareImageAndText();
+              },
+            ),
+          ),
+        ],
+      )
+    );
+  }
+
+  Widget titleWidget() {
+    return SizedBox(
+      height: 160,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(SizeConfig.mediumSmallMargin),
+              child: SvgPicture.asset('assets/engolf_logo_only.svg'),
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: SvgPicture.asset('assets/ranking_title_bg.svg')),
+          Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: 200,
+              height: 160,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 32),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AutoSizeText(
+                      _gameName == null || _gameName.isEmpty ?
+                        dateTimeToString(_gameDate ?? DateTime.now()) + ' CUP'
+                        : _gameName,
+                      style: TextStyle(fontSize: 30, color: Colors.white),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      minFontSize: 16,
+                    ),
+                    AutoSizeText(
+                      dateTimeToString(_gameDate ?? DateTime.now()),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 1,
+                      minFontSize: 11,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -153,25 +221,60 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
     setState(() {});
   }
 
-  Future<void> _doCapture() async {
-    var image  = await _convertWidgetToImage();
+  Future<File> getApplicationDocumentsFile(List<int> imageData) async {
+    final directory = await getApplicationDocumentsDirectory();
 
-    setState(() {
-      _image = image;
-    });
+    final exportFile = File('${directory.path}/engolf_result.png');
+    if (!await exportFile.exists()) {
+      await exportFile.create(recursive: true);
+    }
+    final file = await exportFile.writeAsBytes(imageData);
+    return file;
   }
 
-  Future<Image> _convertWidgetToImage() async {
-    try {
-      RenderRepaintBoundary boundary = _globalKey.currentContext.findRenderObject();
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      var pngBytes = byteData.buffer.asUint8List();
-      return Image.memory(pngBytes);
+  Future<ByteData> exportToImage() async {
+    final boundary =
+      _globalKey.currentContext.findRenderObject() as RenderRepaintBoundary;
+    final image = await boundary.toImage(
+      pixelRatio: 3,
+    );
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData;
+  }
 
-    } catch (e) {
-      print(e);
-      return null;
+  void shareImageAndText() async {
+    try {
+      final bytes = await exportToImage();
+      final widgetImageBytes =
+      bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+      final applicationDocumentsFile =
+      await getApplicationDocumentsFile(widgetImageBytes);
+
+      final path = applicationDocumentsFile.path;
+      await ShareExtend.share(path, "image");
+      applicationDocumentsFile.delete();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> loadInterstitialAd() async {
+    interstitialAd = AdmobInterstitial(
+      adUnitId: getInterstitialAdUnitId(),
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) {
+          shareImageAndText();
+        } else if (event == AdmobAdEvent.completed) {
+          shareImageAndText();
+        }
+      }
+    );
+    await interstitialAd.load();
+  }
+
+  Future<void> showInterstitialAd() async {
+    if (await interstitialAd.isLoaded) {
+      await interstitialAd.show();
     }
   }
 }

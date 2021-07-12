@@ -56,5 +56,7 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+    <string>計算結果をSNSにシェアするために使用します。</string>
 </dict>
 </plist>
