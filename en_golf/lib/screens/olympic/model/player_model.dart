@@ -16,7 +16,7 @@ class Player {
   );
 
   Map<String, dynamic> toJson() =>
-      {
+      <String, dynamic>{
         'id': id,
         'rank': rank,
         'name': name,

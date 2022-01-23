@@ -30,7 +30,7 @@ dependencies:
   rxdart: ^0.27.1
   english_words: ^4.0.0
   flutter_lorem: ^2.0.0
-  admob_flutter: ^2.0.0-nullsafety.1
+  admob_flutter: ^2.0.0
   arkit_plugin: ^1.0.1
   flutter_staggered_animations: ^1.0.0
   pedantic_mono: ^1.13.0+3
@@ -49,6 +49,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
+  lottie: ^1.2.1
 
 dev_dependencies:
   flutter_test:
