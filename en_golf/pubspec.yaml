@@ -67,9 +67,8 @@ flutter_icons:
   image_path: "assets/icon/icon.png"
 
 flutter_native_splash:
-  branding: "assets/icon/logo_engolf_v2_512.png"
-  color: "#50C27C"
-  branding_mode: center
+  image: "assets/icon/logo_engolf_v2_512.png"
+  color: "#151A13"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
