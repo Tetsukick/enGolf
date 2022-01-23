@@ -1,3 +1,4 @@
+import 'package:engolf/common/admob.dart';
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
@@ -9,8 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 import 'package:provider/provider.dart';
@@ -89,10 +90,7 @@ class OlympicScreen extends StatelessWidget {
                   bottom: 0,
                   child: Container(
                     height: 50,
-                    child: AdmobBanner(
-                      adUnitId: getBannerAdUnitId(),
-                      adSize: AdmobBannerSize.LEADERBOARD,
-                    ),
+                    child: const AdmobBanner(),
                   ),
                 )
               ]

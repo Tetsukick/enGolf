@@ -7,22 +7,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:admob_flutter/admob_flutter.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:provider/provider.dart';
 
 import 'common/color_config.dart';
 import 'screens/menu/menu_screen.dart';
-import 'common/utils.dart';
 import 'screens/olympic/model/olympic_bloc.dart';
 import 'screens/olympic/views/olympic_screen.dart';
 import 'common/views/floating_bottom_bar.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  Admob.initialize(testDeviceIds: [getAppId()]);
 
   runApp(const HomeScreen());
 }
