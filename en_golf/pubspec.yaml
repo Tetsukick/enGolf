@@ -55,11 +55,17 @@ dev_dependencies:
     sdk: flutter
 
   flutter_launcher_icons: ^0.9.0
+  flutter_native_splash: ^1.2.0
+
 
 flutter_icons:
   android: true
   ios: true
   image_path: "assets/icon/icon.png"
+
+flutter_native_splash:
+  image: "assets/icon/logo_engolf_v2_512.png"
+  color: "151A13"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
