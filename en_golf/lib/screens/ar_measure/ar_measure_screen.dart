@@ -77,7 +77,7 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
     );
     final material = ARKitMaterial(
         lightingModelName: ARKitLightingModel.constant,
-        diffuse: ARKitMaterialProperty(color: Colors.blue));
+        diffuse: ARKitMaterialProperty.color(Colors.blue));
     final sphere = ARKitSphere(
       radius: 0.006,
       materials: [material],
@@ -122,7 +122,7 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
       extrusionDepth: 1,
       materials: [
         ARKitMaterial(
-          diffuse: ARKitMaterialProperty(color: Colors.red),
+          diffuse: ARKitMaterialProperty.color(Colors.red),
         )
       ],
     );

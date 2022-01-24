@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:engolf/common/admob.dart';
 import 'package:engolf/common/color_config.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:provider/provider.dart';
 
@@ -51,10 +51,7 @@ class DiceScreen extends StatelessWidget {
           _createSubmitButton(context: context),
           Container(
             height: 50,
-            child: AdmobBanner(
-              adUnitId: getBannerAdUnitId(),
-              adSize: AdmobBannerSize.LEADERBOARD,
-            ),
+            child: const AdmobBanner(),
           ),
         ],
       ),

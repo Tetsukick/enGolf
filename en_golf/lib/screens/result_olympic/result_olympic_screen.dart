@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:io';
 
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/shared_preference.dart';
@@ -15,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_extend/share_extend.dart';
 
@@ -33,7 +33,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
   List<Player> _players;
   String _gameName;
   DateTime _gameDate;
-  AdmobInterstitial interstitialAd;
+  InterstitialAd interstitialAd;
 
   @override
   void initState() {
@@ -258,21 +258,23 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
   }
 
   Future<void> loadInterstitialAd() async {
-    interstitialAd = AdmobInterstitial(
-      adUnitId: getInterstitialAdUnitId(),
-      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-        if (event == AdmobAdEvent.closed) {
-          shareImageAndText();
-        } else if (event == AdmobAdEvent.completed) {
-          shareImageAndText();
-        }
-      }
-    );
-    await interstitialAd.load();
+
+    await InterstitialAd.load(
+        adUnitId: getInterstitialAdUnitId(),
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            // Keep a reference to the ad so you can show it later.
+            interstitialAd = ad;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error');
+          },
+        ));
   }
 
   Future<void> showInterstitialAd() async {
-    if (await interstitialAd.isLoaded) {
+    if (interstitialAd != null) {
       await interstitialAd.show();
     }
   }

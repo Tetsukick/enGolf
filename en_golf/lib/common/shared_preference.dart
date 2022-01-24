@@ -10,34 +10,36 @@ class SharedPreferenceManager {
   String gameDateId = 'gameDateId';
   
   Future<List<Player>> getPlayers() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<dynamic> dynamicList = json.decode(prefs.getString(playersId)) as List<dynamic>;
-    return List<Player>.from(dynamicList.map((x) => Player.fromJson(x)));
+    final prefs = await SharedPreferences.getInstance();
+    final dynamicList = json.decode(prefs.getString(playersId))
+      as List<dynamic>;
+    return List<Player>.from(dynamicList.map<dynamic>((dynamic x) =>
+        Player.fromJson(x)));
   }
 
   Future<void> savePlayers(List<Player> players) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final List<Map<String, dynamic>> dynamicList = players.map((e) => e.toJson()).toList();
-    prefs.setString(playersId, json.encode(dynamicList));
+    final prefs = await SharedPreferences.getInstance();
+    final dynamicList = players.map((e) => e.toJson()).toList();
+    await prefs.setString(playersId, json.encode(dynamicList));
   }
 
   Future<String> getGameName() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     return prefs.getString(gameNameId);
   }
 
   Future<void> setGameName(String gameName) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(gameNameId, gameName);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(gameNameId, gameName);
   }
 
   Future<DateTime> getGameDate() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     return DateTime.parse(prefs.getString(gameDateId));
   }
 
   Future<void> setGameDate(DateTime gameDate) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(gameDateId, dateTimeToString(gameDate));
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(gameDateId, dateTimeToString(gameDate));
   }
 }
