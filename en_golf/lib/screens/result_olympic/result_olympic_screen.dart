@@ -246,9 +246,9 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
     try {
       final bytes = await exportToImage();
       final widgetImageBytes =
-      bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
       final applicationDocumentsFile =
-      await getApplicationDocumentsFile(widgetImageBytes);
+        await getApplicationDocumentsFile(widgetImageBytes);
 
       final path = applicationDocumentsFile.path;
       await ShareExtend.share(path, "image");
