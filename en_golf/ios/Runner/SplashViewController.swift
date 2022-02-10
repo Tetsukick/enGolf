@@ -26,6 +26,7 @@ public class SplashViewController: UIViewController {
         flutterViewController.modalPresentationStyle = .custom
         flutterViewController.modalTransitionStyle = .crossDissolve
         
+        UIApplication.shared.keyWindow?.rootViewController = flutterViewController
         present(flutterViewController, animated: true, completion: nil)
     }
 }
