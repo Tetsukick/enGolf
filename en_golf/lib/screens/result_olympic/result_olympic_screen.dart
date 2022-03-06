@@ -47,75 +47,77 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RepaintBoundary(
-        key: _globalKey,
-        child: Container(
-          color: ColorConfig.bgGreenPrimary,
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 30,),
-              titleWidget(),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: SizeConfig.smallestMargin, horizontal: SizeConfig.mediumMargin),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    SizedBox(
-                      width: 64,
-                      child: Center(
-                        child: Text(
-                          'score',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 64,
-                      child: Center(
-                        child: Text(
-                          'result',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: AnimationLimiter(
-                  child: Padding(
-                    padding:
-                      const EdgeInsets.only(bottom: SizeConfig.smallestMargin),
-                    child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: _players?.length ?? 0,
-                      itemBuilder: (BuildContext context, int index) {
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 375),
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: ResultScoreCard(
-                                  color: Constants.colors[_players[index].rank],
-                                  player: _players[index]),
+      body: SafeArea(
+        child: RepaintBoundary(
+          key: _globalKey,
+          child: Container(
+            color: ColorConfig.bgGreenPrimary,
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 30,),
+                titleWidget(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: SizeConfig.smallestMargin, horizontal: SizeConfig.mediumMargin),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      SizedBox(
+                        width: 64,
+                        child: Center(
+                          child: Text(
+                            'score',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                        );
-                      },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 64,
+                        child: Center(
+                          child: Text(
+                            'result',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: AnimationLimiter(
+                    child: Padding(
+                      padding:
+                        const EdgeInsets.only(bottom: SizeConfig.smallestMargin),
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: _players?.length ?? 0,
+                        itemBuilder: (BuildContext context, int index) {
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: ResultScoreCard(
+                                    color: Constants.colors[_players[index].rank],
+                                    player: _players[index]),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -124,7 +126,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
-              padding: const EdgeInsets.only(left: 20, top: 40),
+              padding: const EdgeInsets.only(left: 20, top: 80),
               child: FloatingActionButton(
                 heroTag: 'closeBtn',
                 backgroundColor: ColorConfig.bgDarkGreen,
