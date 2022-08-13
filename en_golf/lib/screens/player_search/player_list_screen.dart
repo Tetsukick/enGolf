@@ -1,3 +1,4 @@
+import 'package:engolf/common/size_config.dart';
 import 'package:engolf/config/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -86,21 +87,26 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
 
   Widget _playerListView() {
       return ListView.builder(
-        padding: EdgeInsets.all(36.0),
+        padding: EdgeInsets.symmetric(vertical: SizeConfig.smallMargin, horizontal: SizeConfig.smallestMargin),
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
         itemCount: playerList.length + 1,
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
+            final _title = searchWord.isEmpty ? '新規追加' : '${searchWord} を追加';
             return Container(
               child: GestureDetector(
                 onTap: () {
-                  database?.playerDao.insertPlayer(Player(
-                    name: searchWord
-                  ));
+                  if (searchWord.isEmpty) {
+
+                  } else {
+                    final _player = Player(name: searchWord);
+                    database?.playerDao.insertPlayer(_player);
+                    Navigator.pop<Player>(context, _player);
+                  }
                 },
                 child: Text(
-                  '${searchWord} を追加',
+                  _title,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 25.0),
                 ),
