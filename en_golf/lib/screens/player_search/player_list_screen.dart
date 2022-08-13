@@ -18,11 +18,19 @@ class PlayerListScreen extends StatefulWidget {
 class _PlayerListScreenState extends State<PlayerListScreen> {
   AppDatabase? database;
   List<Player> playerList = [];
+  String searchWord = '';
+  TextEditingController searchWordController = TextEditingController();
 
   @override
   void initState() {
     initializeDB();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    searchWordController.dispose();
+    super.dispose();
   }
 
   void initializeDB() async {
@@ -49,11 +57,57 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            buildFloatingSearchBar(),
+            searchBar(),
+            _playerListView(),
           ],
         ),
       ),
     );
+  }
+
+  Widget searchBar() {
+    return TextFormField(
+        controller: searchWordController,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          isDense: true,
+          filled: true,
+          fillColor: Theme.of(context).primaryColorLight,
+        ),
+        onFieldSubmitted: (word) {
+          setState(() {
+            searchWord = searchWordController.text;
+          });
+        }
+    );
+  }
+
+  Widget _playerListView() {
+      return ListView.builder(
+        padding: EdgeInsets.all(36.0),
+        shrinkWrap: true,
+        itemCount: playerList.length + 1,
+        itemBuilder: (BuildContext context, int index) {
+          if (index == 0) {
+            return Container(
+              child: GestureDetector(
+                onTap: () {
+                  database?.playerDao.insertPlayer(Player(
+                    name: searchWord
+                  ));
+                },
+                child: Text(
+                  '${searchWord} を追加',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 25.0),
+                ),
+              ),
+            );
+          } else {
+            return playerCard(playerList[index - 1]);
+          }
+        },
+      );
   }
 
   Widget buildFloatingSearchBar() {
@@ -118,7 +172,7 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        'test player name',
+                        player.name ?? '',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 16,
