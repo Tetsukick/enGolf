@@ -33,10 +33,10 @@ class DiceScreen extends StatelessWidget {
           StreamBuilder(
               stream: diceBloc.histories,
               builder: (context, snapshot) {
-                final _histories = snapshot.data as List<int>;
+                final _histories = snapshot.data as List<int>?;
                 if (_histories == null || _histories.isEmpty) {
                   return Text(
-                    AppLocalizations.of(context).shake,
+                    AppLocalizations.of(context)!.shake,
                     style: TextStyle(
                       fontSize: 30,
                       color: Colors.white
@@ -118,7 +118,7 @@ class DiceScreen extends StatelessWidget {
     );
   }
 
-  Widget _createHistoryParts({BuildContext context, ScrollController controller}) {
+  Widget _createHistoryParts({required BuildContext context, ScrollController? controller}) {
     final diceBloc = Provider.of<DiceBloc>(context);
 
     return Column(
@@ -129,13 +129,13 @@ class DiceScreen extends StatelessWidget {
     );
   }
 
-  Widget _createButtons ({BuildContext context}) {
+  Widget _createButtons ({required BuildContext context}) {
     final diceBloc = Provider.of<DiceBloc>(context);
 
     return StreamBuilder(
         stream: diceBloc.histories,
         builder: (context, snapshot) {
-          final _histories = snapshot.data as List<int>;
+          final _histories = snapshot.data as List<int>?;
           if (_histories == null || _histories.isEmpty) {
             return Container();
           } else {
@@ -172,13 +172,13 @@ class DiceScreen extends StatelessWidget {
     );
   }
 
-  Widget _createHistoryView({BuildContext context, ScrollController controller}) {
+  Widget _createHistoryView({required BuildContext context, ScrollController? controller}) {
     final diceBloc = Provider.of<DiceBloc>(context);
 
     return StreamBuilder(
         stream: diceBloc.histories,
         builder: (context, snapshot) {
-          final _histories = snapshot.data as List<int>;
+          final _histories = snapshot.data as List<int>?;
           if (_histories == null || _histories.isEmpty) {
             return Container();
           } else {
@@ -199,7 +199,7 @@ class DiceScreen extends StatelessWidget {
     );
   }
 
-  Widget _createGolfBallView({int num, double height, double width}) {
+  Widget _createGolfBallView({int? num, required double height, double? width}) {
     return Container(
       height: height,
       width: width,
@@ -218,7 +218,7 @@ class DiceScreen extends StatelessWidget {
     );
   }
 
-  Widget _createAnimationGolfBallView({int num, double height, double width}) {
+  Widget _createAnimationGolfBallView({int? num, required double height, double? width}) {
     return Container(
       height: height,
       width: width,
@@ -242,7 +242,7 @@ class DiceScreen extends StatelessWidget {
     );
   }
 
-  Widget _createSubmitButton({BuildContext context}) {
+  Widget _createSubmitButton({required BuildContext context}) {
     final diceBloc = Provider.of<DiceBloc>(context);
 
     return Column(
@@ -251,7 +251,7 @@ class DiceScreen extends StatelessWidget {
         StreamBuilder(
           stream: diceBloc.isAllowed,
           builder: (context, snapshot) {
-            final _isAllowed = snapshot.data as bool;
+            final _isAllowed = snapshot.data as bool?;
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -264,7 +264,7 @@ class DiceScreen extends StatelessWidget {
                   },
                 ),
                 Text(
-                  AppLocalizations.of(context).allowDuplicateNumber,
+                  AppLocalizations.of(context)!.allowDuplicateNumber,
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -278,7 +278,7 @@ class DiceScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Text(
-              AppLocalizations.of(context).shake,
+              AppLocalizations.of(context)!.shake,
               style: TextStyle(
                 fontSize: 30,
                 color: Colors.white,

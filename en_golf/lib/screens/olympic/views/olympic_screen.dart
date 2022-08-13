@@ -50,7 +50,7 @@ class OlympicScreen extends StatelessWidget {
                             if (snapshot.data == null) {
                               return Container();
                             } else {
-                              final players = snapshot.data as List<Player>;
+                              final players = snapshot.data as List<PlayerResult>;
                               return AnimationLimiter(
                                 child: Container(
                                   child: Padding(
@@ -68,7 +68,7 @@ class OlympicScreen extends StatelessWidget {
                                               child: SafeArea(
                                                   top: false,
                                                   bottom: true,
-                                                  child: ScoreCard(color: Constants.colors[players[index].rank], player: players[index],)
+                                                  child: ScoreCard(color: Constants.colors[players[index].rank!], player: players[index],)
                                               ),
                                             ),
                                           ),
@@ -132,23 +132,23 @@ class OlympicScreen extends StatelessWidget {
         ),
         IconTextField(
           'assets/golf_course.svg',
-          AppLocalizations.of(context).cupName,
+          AppLocalizations.of(context)!.cupName,
           olympicBloc.gameName,
           olympicBloc.changeGameNameAction.add,
         ),
         SizedBox(height: SizeConfig.smallMargin),
         IconTextFieldDate(
-          'assets/calendar.svg',
-          '',
-          olympicBloc.date,
-          olympicBloc.changeDateAction.add,
+          icon: 'assets/calendar.svg',
+          labelTitle: '',
+          stream: olympicBloc.date,
+          function: olympicBloc.changeDateAction.add,
         ),
         SizedBox(height: SizeConfig.smallMargin),
         Row(
           children: [
             IconStreamTextField(
                 'assets/people.svg',
-                AppLocalizations.of(context).player,
+                AppLocalizations.of(context)!.player,
                 olympicBloc.playerCount,
                 olympicBloc.changePlayerCountAction.add,
                 _playerCountNode
@@ -156,7 +156,7 @@ class OlympicScreen extends StatelessWidget {
             const SizedBox(width: SizeConfig.smallMargin),
             IconStreamTextField(
                 'assets/money.svg',
-                AppLocalizations.of(context).rate,
+                AppLocalizations.of(context)!.rate,
                 olympicBloc.rate,
                 olympicBloc.changeRateAction.add,
                 _rateNode

@@ -14,14 +14,14 @@ class FloatingBottomBarItem {
   const FloatingBottomBarItem(this.iconData, {this.label});
 
   final IconData iconData;
-  final String label;
+  final String? label;
 }
 
 class FloatingBottomBar extends StatefulWidget {
   const FloatingBottomBar({
-    @required this.controller,
-    @required this.items,
-    @required this.onTap,
+    required this.controller,
+    required this.items,
+    required this.onTap,
     this.color,
     this.itemColor,
     this.activeItemColor,
@@ -31,17 +31,17 @@ class FloatingBottomBar extends StatefulWidget {
   final PageController controller;
   final List<FloatingBottomBarItem> items;
   final ValueChanged<int> onTap;
-  final Color color;
-  final Color itemColor;
-  final Color activeItemColor;
-  final bool enableIconRotation;
+  final Color? color;
+  final Color? itemColor;
+  final Color? activeItemColor;
+  final bool? enableIconRotation;
 
   @override
   _FloatingBottomBarState createState() => _FloatingBottomBarState();
 }
 
 class _FloatingBottomBarState extends State<FloatingBottomBar> {
-  double _screenWidth;
+  late double _screenWidth;
 
   @override
   void didChangeDependencies() {
@@ -63,8 +63,7 @@ class _FloatingBottomBarState extends State<FloatingBottomBar> {
         final currentIndex = (page + 0.5).toInt();
 
         return Stack(
-          overflow: Overflow.visible,
-          children: <Widget>[
+          clipBehavior: Clip.none, children: <Widget>[
             CustomPaint(
               size: Size(width, height),
               painter: _Painter(
@@ -133,10 +132,10 @@ class _Item extends StatelessWidget {
   const _Item(this.index, {this.iconData, this.label, this.color, this.onTap});
 
   final int index;
-  final IconData iconData;
-  final String label;
-  final Color color;
-  final ValueChanged<int> onTap;
+  final IconData? iconData;
+  final String? label;
+  final Color? color;
+  final ValueChanged<int>? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +157,7 @@ class _Item extends StatelessWidget {
               if (label != null) ...[
                 const SizedBox(height: 3.0),
                 Text(
-                  label,
+                  label!,
                   style: TextStyle(
                     color: color ?? Colors.grey.shade700,
                     fontSize: 12.0,
@@ -167,7 +166,7 @@ class _Item extends StatelessWidget {
               ],
             ],
           ),
-          onPressed: () => onTap(index),
+          onPressed: () => onTap!(index),
         ),
       ),
     );
@@ -185,11 +184,11 @@ class _ActiveItem extends StatelessWidget {
       });
 
   final int index;
-  final IconData iconData;
-  final Color color;
-  final double scrollPosition;
-  final bool enableRotation;
-  final ValueChanged<int> onTap;
+  final IconData? iconData;
+  final Color? color;
+  final double? scrollPosition;
+  final bool? enableRotation;
+  final ValueChanged<int>? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -204,18 +203,18 @@ class _ActiveItem extends StatelessWidget {
         size: const Size(_kCircleRadius * 2, _kCircleRadius * 2),
         child: enableRotation ?? false
             ? Transform.rotate(
-          angle: _kPi * 2 * (scrollPosition % 1),
+          angle: _kPi * 2 * (scrollPosition! % 1),
           child: icon,
         )
             : icon,
       ),
-      onTap: () => onTap(index),
+      onTap: () => onTap!(index),
     );
   }
 }
 
 class _Painter extends CustomPainter {
-  _Painter({@required this.x, this.color})
+  _Painter({required this.x, this.color})
       : _paint = Paint()
     ..color = color ?? Colors.white
     ..isAntiAlias = true,
@@ -223,7 +222,7 @@ class _Painter extends CustomPainter {
         kIsWeb ? Colors.grey.shade600 : Colors.grey.withOpacity(0.4);
 
   final double x;
-  final Color color;
+  final Color? color;
   final Paint _paint;
   final Color _shadowColor;
 

@@ -5,7 +5,7 @@ import 'utils.dart';
 
 class Admob {
   static BannerAd smallBanner = BannerAd(
-    adUnitId: getBannerAdUnitId(),
+    adUnitId: getBannerAdUnitId()!,
     size: AdSize.banner,
     request: AdRequest(),
     listener: BannerAdListener()
@@ -13,7 +13,7 @@ class Admob {
 }
 
 class AdmobBanner extends StatelessWidget {
-  const AdmobBanner({Key key}) : super(key: key);
+  const AdmobBanner({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

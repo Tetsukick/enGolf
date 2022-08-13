@@ -27,8 +27,8 @@ class OlympicBloc {
   Sink<int> get changePlayerCountAction => _playerCountController.sink;
   Stream<int> get playerCount => _playerCountController.stream;
   
-  final _playerController = BehaviorSubject<Player>();
-  Sink<Player> get changePlayerAction => _playerController.sink;
+  final _playerController = BehaviorSubject<PlayerResult?>();
+  Sink<PlayerResult?> get changePlayerAction => _playerController.sink;
 
   final _gameNameController = BehaviorSubject<String>();
   Sink<String> get changeGameNameAction => _gameNameController.sink;
@@ -39,17 +39,17 @@ class OlympicBloc {
   Stream<DateTime> get date => _dateController.stream;
 
   //output
-  final _playersController = BehaviorSubject<List<Player>>();
-  Stream<List<Player>> get players => _playersController.stream;
+  final BehaviorSubject<List<PlayerResult?>> _playersController = BehaviorSubject<List<PlayerResult>>();
+  Stream<List<PlayerResult?>> get players => _playersController.stream;
 
   int _playerCount = 4;
   int _rate = 1;
   DateTime _date = DateTime.now();
-  List<Player> _players = [
-    Player(id: 0, name: 'Player1', score: 0),
-    Player(id: 1, name: 'Player2', score: 0),
-    Player(id: 2, name: 'Player3', score: 0),
-    Player(id: 3, name: 'Player4', score: 0),
+  List<PlayerResult> _players = [
+    PlayerResult(id: 0, name: 'Player1', score: 0),
+    PlayerResult(id: 1, name: 'Player2', score: 0),
+    PlayerResult(id: 2, name: 'Player3', score: 0),
+    PlayerResult(id: 3, name: 'Player4', score: 0),
   ];
 
   void listenRate() {
@@ -62,7 +62,7 @@ class OlympicBloc {
 
   void listenPlayer() {
     _playerController.stream.listen((player) {
-      _players[player.id] = player;
+      _players[player!.id!] = player;
 
       updatePlayer();
     });
@@ -80,7 +80,7 @@ class OlympicBloc {
         for (var i = 1; i <= diff; i++) {
           currentNum++;
           final name = 'Player$currentNum';
-          _players.add(Player(id: currentNum - 1, name: name, score: 0));
+          _players.add(PlayerResult(id: currentNum - 1, name: name, score: 0));
         }
       } else if (diff < 0) {
         for (var i = 0; i > diff; i--) {
@@ -104,14 +104,14 @@ class OlympicBloc {
   
   void recalculate() {
     _players = _players.map((player) {
-      player.result = formulaOlympic(player.id);
+      player!.result = formulaOlympic(player.id!);
       return player;
     }).toList();
   }
 
   void setRank() {
     final sortPlayers = _players.map((player) => player).toList()
-      ..sort((a,b) => b.score - a.score);
+      ..sort((a,b) => b!.score! - a!.score!);
 
     var rank = 1;
     final targetIndex = _players.indexOf(sortPlayers[0]);
@@ -120,7 +120,7 @@ class OlympicBloc {
     _players[targetIndex] = targetPlayer;
 
     for (var i = 1; i < _players.length; i++) {
-      if (sortPlayers[i].score != sortPlayers[i-1].score) {
+      if (sortPlayers[i]!.score != sortPlayers[i-1]!.score) {
         rank = i + 1;
       }
       final _targetIndex = _players.indexOf(sortPlayers[i]);
@@ -131,8 +131,8 @@ class OlympicBloc {
   }
 
   int formulaOlympic(int index) {
-    final playerScore = _players[index].score;
-    final int totalScore = _players.fold(0, (curr, next) => curr + next.score);
+    final playerScore = _players[index]!.score!;
+    final int totalScore = _players.fold(0, (curr, next) => curr + next!.score!);
     return ((playerScore * (_players.length - 1)) - (totalScore - playerScore)) * _rate;
   }
 

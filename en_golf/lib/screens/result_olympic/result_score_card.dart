@@ -8,13 +8,13 @@ import 'package:provider/provider.dart';
 
 class ResultScoreCard extends StatelessWidget {
   const ResultScoreCard({
-    Key key,
+    Key? key,
     this.color,
     this.player,
   }) : super(key: key);
 
-  final Color color;
-  final Player player;
+  final Color? color;
+  final PlayerResult? player;
 
   Widget _pickerItem(int str) {
     return Text(
@@ -42,7 +42,7 @@ class ResultScoreCard extends StatelessWidget {
               CircleAvatar(
                 backgroundColor: color,
                 child: Text(
-                  player.rank.toString(),
+                  player!.rank.toString(),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -55,7 +55,7 @@ class ResultScoreCard extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        player.name,
+                        player!.name!,
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 16,
@@ -67,7 +67,7 @@ class ResultScoreCard extends StatelessWidget {
                       width: 64,
                       child: Center(
                         child: Text(
-                          player.score.toString(),
+                          player!.score.toString(),
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -80,7 +80,7 @@ class ResultScoreCard extends StatelessWidget {
                       width: 64,
                       child: Center(
                         child: Text(
-                          player.result.toString(),
+                          player!.result.toString(),
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,

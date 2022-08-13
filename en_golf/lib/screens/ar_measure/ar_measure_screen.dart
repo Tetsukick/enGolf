@@ -1,4 +1,5 @@
 import 'package:arkit_plugin/arkit_plugin.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:engolf/common/color_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,8 +13,8 @@ class ARMeasureScreen extends StatefulWidget {
 }
 
 class _ARMeasureScreen extends State<ARMeasureScreen> {
-  ARKitController arkitController;
-  vector.Vector3 lastPosition;
+  late ARKitController arkitController;
+  vector.Vector3? lastPosition;
 
   @override
   void dispose() {
@@ -48,7 +49,7 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Center(
-          child: Text(AppLocalizations.of(context).noServiceMessage,
+          child: Text(AppLocalizations.of(context)!.noServiceMessage,
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -58,10 +59,9 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
 
   void onARKitViewCreated(ARKitController arkitController) {
     this.arkitController = arkitController;
-    this.arkitController.onARTap = (ar) {
-      final point = ar.firstWhere(
+    this.arkitController!.onARTap = (ar) {
+      final point = ar.firstWhereOrNull(
             (o) => o.type == ARKitHitTestResultType.featurePoint,
-        orElse: () => null,
       );
       if (point != null) {
         _onARTapHandler(point);
@@ -87,21 +87,21 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
       geometry: sphere,
       position: position,
     );
-    arkitController.add(node);
+    arkitController!.add(node);
 
     if (lastPosition != null) {
       final line = ARKitLine(
-        fromVector: lastPosition,
+        fromVector: lastPosition!,
         toVector: position,
       );
       final lineNode = ARKitNode(
           name: 'line',
           geometry: line
       );
-      arkitController.add(lineNode);
+      arkitController!.add(lineNode);
 
-      final distance = _calculateDistanceBetweenPoints(position, lastPosition);
-      final point = _getMiddleVector(position, lastPosition);
+      final distance = _calculateDistanceBetweenPoints(position, lastPosition!);
+      final point = _getMiddleVector(position, lastPosition!);
       _drawText(distance, point);
     }
     lastPosition = position;
@@ -134,6 +134,6 @@ class _ARMeasureScreen extends State<ARMeasureScreen> {
       position: point,
       scale: vectorScale,
     );
-    arkitController.add(node);
+    arkitController!.add(node);
   }
 }

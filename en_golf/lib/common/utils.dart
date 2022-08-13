@@ -75,7 +75,7 @@ class MyInAppBrowser extends InAppBrowser {
   }
 }
 
-String getAppId() {
+String? getAppId() {
   if (Platform.isIOS) {
     return 'ca-app-pub-8604906384604870~8704941903';
   } else if (Platform.isAndroid) {
@@ -84,7 +84,7 @@ String getAppId() {
   return null;
 }
 
-String getBannerAdUnitId() {
+String? getBannerAdUnitId() {
   if (Platform.isIOS) {
     return 'ca-app-pub-8604906384604870/8136991267';
   } else if (Platform.isAndroid) {
@@ -93,7 +93,7 @@ String getBannerAdUnitId() {
   return null;
 }
 
-String getInterstitialAdUnitId() {
+String? getInterstitialAdUnitId() {
   if (Platform.isIOS) {
     return 'ca-app-pub-8604906384604870/8693607305';
   } else if (Platform.isAndroid) {

@@ -24,7 +24,7 @@ class MenuScreen extends StatelessWidget {
           ListView(
             children: [
               _menuItem(
-                AppLocalizations.of(context).feedback,
+                AppLocalizations.of(context)!.feedback,
                 Icon(
                   Icons.comment,
                   color: Colors.white,
@@ -34,7 +34,7 @@ class MenuScreen extends StatelessWidget {
                 },
               ),
               _menuItem(
-                AppLocalizations.of(context).privacyPolicy,
+                AppLocalizations.of(context)!.privacyPolicy,
                 Icon(
                   Icons.security,
                   color: Colors.white,
@@ -55,8 +55,8 @@ class MenuScreen extends StatelessWidget {
                       ),
                     );
                   }
-                  String version = snapshot.data.version ?? '';
-                  String buildVersion = snapshot.data.buildNumber ?? '';
+                  String version = snapshot.data!.version ?? '';
+                  String buildVersion = snapshot.data!.buildNumber ?? '';
                   return _menuItem(
                       "version $version $buildVersion",
                       Icon(
@@ -81,7 +81,7 @@ class MenuScreen extends StatelessWidget {
     );
   }
 
-  Widget _menuItem(String title, Icon icon, {GestureTapCallback onTap}) {
+  Widget _menuItem(String title, Icon icon, {GestureTapCallback? onTap}) {
     return GestureDetector(
       child:Container(
           padding: EdgeInsets.all(8.0),
@@ -105,7 +105,7 @@ class MenuScreen extends StatelessWidget {
           )
       ),
       onTap: () {
-        onTap();
+        onTap!();
       },
     );
   }

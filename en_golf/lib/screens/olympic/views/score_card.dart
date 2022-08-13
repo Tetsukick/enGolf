@@ -1,7 +1,9 @@
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/size_config.dart';
+import 'package:engolf/model/floor/entity/player.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
+import 'package:engolf/screens/player_search/player_list_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +13,17 @@ import '../../../common/utils.dart';
 
 class ScoreCard extends StatelessWidget {
   const ScoreCard({
-    Key key,
+    Key? key,
     this.color,
-    this.player,
+    required this.player,
   }) : super(key: key);
 
-  final Color color;
-  final Player player;
+  final Color? color;
+  final PlayerResult player;
 
-  static final List<int> _scoreItems = List.generate(201, (i) => i - 100);
+  static final List<int?> _scoreItems = List.generate(201, (i) => i - 100);
 
-  Widget _pickerItem(int str) {
+  Widget _pickerItem(int? str) {
     return Center(
       child: Text(
         str.toString(),
@@ -58,7 +60,7 @@ class ScoreCard extends StatelessWidget {
                 CircleAvatar(
                   backgroundColor: color,
                   child: Text(
-                    player.rank.toString(),
+                    player!.rank.toString(),
                     style: const TextStyle(
                       color: ColorConfig.textGreenLight,
                       fontSize: 16,
@@ -67,7 +69,7 @@ class ScoreCard extends StatelessWidget {
                 ),
                 const SizedBox(height: SizeConfig.smallMargin),
                 Text(
-                  player.result.toString(),
+                  player!.result.toString(),
                   style: const TextStyle(
                     color: ColorConfig.textGreenLight,
                     fontSize: SizeConfig.mediumLargeMargin,
@@ -77,7 +79,7 @@ class ScoreCard extends StatelessWidget {
                 const SizedBox(height: SizeConfig.smallMargin),
                 TextFormField(
                   textAlign: TextAlign.center,
-                  controller: TextEditingController(text: player.name),
+                  controller: TextEditingController(text: player!.name),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                     enabledBorder: const OutlineInputBorder(
@@ -88,6 +90,18 @@ class ScoreCard extends StatelessWidget {
                     color: ColorConfig.textGreenLight,
                     fontSize: 16,
                   ),
+                  onTap: () async {
+                    final tempPlayerName = await Navigator.push(
+                        context,
+                        MaterialPageRoute<PlayerListScreen>(
+                            builder: (BuildContext context) {
+                              return PlayerListScreen();
+                            },
+                            fullscreenDialog: true)) as Player?;
+                    final tempPlayer = player
+                      ..name = tempPlayerName?.name ?? player.name;
+                    olympicBloc.changePlayerAction.add(tempPlayer);
+                  },
                   onFieldSubmitted: (text) {
                     final tempPlayer = player
                       ..name = text;
@@ -99,11 +113,11 @@ class ScoreCard extends StatelessWidget {
                   child: Container(
                     width: 50,
                     child: CupertinoPicker(
-                      scrollController: FixedExtentScrollController(initialItem: _scoreItems.indexOf(player.score)),
+                      scrollController: FixedExtentScrollController(initialItem: _scoreItems.indexOf(player!.score)),
                       itemExtent: 26,
                       children: _scoreItems.map(_pickerItem).toList(),
                       onSelectedItemChanged: (pickerIndex) {
-                        player.score = _scoreItems[pickerIndex];
+                        player!.score = _scoreItems[pickerIndex];
                         olympicBloc.changePlayerAction.add(player);
                       },
                     ),

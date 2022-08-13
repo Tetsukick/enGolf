@@ -30,10 +30,10 @@ class ResultOlympicScreen extends StatefulWidget {
 class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   GlobalKey _globalKey = GlobalKey();
-  List<Player> _players;
-  String _gameName;
-  DateTime _gameDate;
-  InterstitialAd interstitialAd;
+  List<PlayerResult>? _players;
+  String? _gameName;
+  DateTime? _gameDate;
+  InterstitialAd? interstitialAd;
 
   @override
   void initState() {
@@ -106,8 +106,8 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
                               verticalOffset: 50.0,
                               child: FadeInAnimation(
                                 child: ResultScoreCard(
-                                    color: Constants.colors[_players[index].rank],
-                                    player: _players[index]),
+                                    color: Constants.colors[_players![index].rank!],
+                                    player: _players![index]),
                               ),
                             ),
                           );
@@ -179,9 +179,9 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AutoSizeText(
-                      _gameName == null || _gameName.isEmpty ?
+                      _gameName == null || _gameName!.isEmpty ?
                         dateTimeToString(_gameDate ?? DateTime.now()) + ' CUP'
-                        : _gameName,
+                        : _gameName!,
                       style: TextStyle(fontSize: 30, color: Colors.white),
                       textAlign: TextAlign.center,
                       maxLines: 2,
@@ -209,7 +209,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   Future<void> getPlayers() async {
     _players = await SharedPreferenceManager().getPlayers();
-    _players.sort((a,b) => a.rank.compareTo(b.rank));
+    _players!.sort((a,b) => a.rank!.compareTo(b.rank!));
     setState(() {});
   }
 
@@ -234,9 +234,9 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
     return file;
   }
 
-  Future<ByteData> exportToImage() async {
+  Future<ByteData?> exportToImage() async {
     final boundary =
-      _globalKey.currentContext.findRenderObject() as RenderRepaintBoundary;
+      _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     final image = await boundary.toImage(
       pixelRatio: 3,
     );
@@ -246,7 +246,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   void shareImageAndText() async {
     try {
-      final bytes = await exportToImage();
+      final bytes = await (exportToImage() as FutureOr<ByteData>);
       final widgetImageBytes =
         bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
       final applicationDocumentsFile =
@@ -262,7 +262,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
   Future<void> loadInterstitialAd() async {
 
     await InterstitialAd.load(
-        adUnitId: getInterstitialAdUnitId(),
+        adUnitId: getInterstitialAdUnitId()!,
         request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
@@ -277,7 +277,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   Future<void> showInterstitialAd() async {
     if (interstitialAd != null) {
-      await interstitialAd.show();
+      await interstitialAd!.show();
     }
   }
 }
