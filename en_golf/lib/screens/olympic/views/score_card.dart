@@ -4,6 +4,7 @@ import 'package:engolf/model/floor/entity/player.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:engolf/screens/player_search/player_list_screen.dart';
+import 'package:engolf/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -93,19 +94,15 @@ class ScoreCard extends StatelessWidget {
                   onTap: () async {
                     final tempPlayerName = await Navigator.push(
                         context,
-                        MaterialPageRoute<PlayerListScreen>(
+                        MaterialPageRoute<Player>(
                             builder: (BuildContext context) {
                               return PlayerListScreen();
                             },
-                            fullscreenDialog: true)) as Player?;
+                            fullscreenDialog: true));
                     final tempPlayer = player
                       ..name = tempPlayerName?.name ?? player.name;
                     olympicBloc.changePlayerAction.add(tempPlayer);
-                  },
-                  onFieldSubmitted: (text) {
-                    final tempPlayer = player
-                      ..name = text;
-                    olympicBloc.changePlayerAction.add(tempPlayer);
+                    FocusScope.of(context).unfocus();
                   },
                 ),
                 const SizedBox(height: SizeConfig.smallMargin),

@@ -159,7 +159,7 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.pop(context, player);
+          Navigator.pop<Player>(context, player);
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
