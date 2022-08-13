@@ -70,19 +70,23 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
   }
 
   Widget searchBar() {
-    return TextFormField(
-        controller: searchWordController,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          isDense: true,
-          filled: true,
-          fillColor: Theme.of(context).primaryColorLight,
-        ),
-        onFieldSubmitted: (word) {
-          setState(() {
-            searchWord = searchWordController.text;
-          });
-        }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: SizeConfig.smallestMargin, vertical: SizeConfig.smallMargin),
+      child: TextFormField(
+          controller: searchWordController,
+          decoration: InputDecoration(
+            hintText: 'Search Player Name',
+            contentPadding: EdgeInsets.symmetric(horizontal: SizeConfig.smallMargin, vertical: SizeConfig.smallestMargin),
+            border: const OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white, width: 0.0),
+            ),
+          ),
+          onFieldSubmitted: (word) {
+            setState(() {
+              searchWord = searchWordController.text;
+            });
+          }
+      ),
     );
   }
 
