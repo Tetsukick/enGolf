@@ -74,6 +74,10 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
       padding: const EdgeInsets.symmetric(horizontal: SizeConfig.smallestMargin, vertical: SizeConfig.smallMargin),
       child: TextFormField(
           controller: searchWordController,
+          style: TextStyle(
+            color: ColorConfig.textGreenLight,
+            fontSize: 16,
+          ),
           decoration: InputDecoration(
             hintText: 'Search Player Name',
             contentPadding: EdgeInsets.symmetric(horizontal: SizeConfig.smallMargin, vertical: SizeConfig.smallestMargin),
@@ -81,11 +85,11 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
               borderSide: const BorderSide(color: Colors.white, width: 0.0),
             ),
           ),
-          onFieldSubmitted: (word) {
+          onChanged: (word) {
             setState(() {
               searchWord = searchWordController.text;
             });
-          }
+          },
       ),
     );
   }
