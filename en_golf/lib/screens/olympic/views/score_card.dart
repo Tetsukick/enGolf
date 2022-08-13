@@ -105,19 +105,7 @@ class ScoreCard extends StatelessWidget {
   Widget _playerNameTextField(BuildContext context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
     final _textEditingController = TextEditingController(text: player.name);
-    return TextFormField(
-      textAlign: TextAlign.center,
-      controller: _textEditingController,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.white, width: 0.0),
-        ),
-      ),
-      style: TextStyle(
-        color: ColorConfig.textGreenLight,
-        fontSize: 16,
-      ),
+    return GestureDetector(
       onTap: () async {
         final tempPlayerName = await Navigator.push(
             context,
@@ -129,11 +117,22 @@ class ScoreCard extends StatelessWidget {
         final tempPlayer = player
           ..name = tempPlayerName?.name ?? player.name;
         olympicBloc.changePlayerAction.add(tempPlayer);
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
       },
+      child: TextFormField(
+        enabled: false,
+        textAlign: TextAlign.center,
+        controller: _textEditingController,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          disabledBorder: const OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white, width: 0.0),
+          ),
+        ),
+        style: TextStyle(
+          color: ColorConfig.textGreenLight,
+          fontSize: 16,
+        ),
+      ),
     );
   }
 }
