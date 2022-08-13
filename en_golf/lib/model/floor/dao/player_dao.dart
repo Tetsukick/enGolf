@@ -16,4 +16,7 @@ abstract class PlayerDao {
 
   @insert
   Future<void> insertPlayer(Player player);
+
+  @delete
+  Future<void> deletePlayer(Player player);
 }

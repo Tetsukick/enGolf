@@ -83,7 +83,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Player` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `Player` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `isMainUser` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -103,14 +103,29 @@ class _$PlayerDao extends PlayerDao {
         _playerInsertionAdapter = InsertionAdapter(
             database,
             'Player',
-            (Player item) =>
-                <String, Object?>{'id': item.id, 'name': item.name}),
+            (Player item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'isMainUser': item.isMainUser ? 1 : 0
+                }),
         _playerUpdateAdapter = UpdateAdapter(
             database,
             'Player',
             ['id'],
-            (Player item) =>
-                <String, Object?>{'id': item.id, 'name': item.name});
+            (Player item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'isMainUser': item.isMainUser ? 1 : 0
+                }),
+        _playerDeletionAdapter = DeletionAdapter(
+            database,
+            'Player',
+            ['id'],
+            (Player item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'isMainUser': item.isMainUser ? 1 : 0
+                });
 
   final sqflite.DatabaseExecutor database;
 
@@ -122,19 +137,25 @@ class _$PlayerDao extends PlayerDao {
 
   final UpdateAdapter<Player> _playerUpdateAdapter;
 
+  final DeletionAdapter<Player> _playerDeletionAdapter;
+
   @override
   Future<List<Player>?> findAllPlayers() async {
     return _queryAdapter.queryList('SELECT * FROM Player',
-        mapper: (Map<String, Object?> row) =>
-            Player(id: row['id'] as int?, name: row['name'] as String?));
+        mapper: (Map<String, Object?> row) => Player(
+            id: row['id'] as int?,
+            name: row['name'] as String?,
+            isMainUser: (row['isMainUser'] as int) != 0));
   }
 
   @override
   Future<List<Player>?> findPlayers(String name) async {
     return _queryAdapter.queryList(
         'SELECT * FROM Player WHERE name LIKE \"%?1%\"',
-        mapper: (Map<String, Object?> row) =>
-            Player(id: row['id'] as int?, name: row['name'] as String?),
+        mapper: (Map<String, Object?> row) => Player(
+            id: row['id'] as int?,
+            name: row['name'] as String?,
+            isMainUser: (row['isMainUser'] as int) != 0),
         arguments: [name]);
   }
 
@@ -146,5 +167,10 @@ class _$PlayerDao extends PlayerDao {
   @override
   Future<void> updatePlayer(Player player) async {
     await _playerUpdateAdapter.update(player, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> deletePlayer(Player player) async {
+    await _playerDeletionAdapter.delete(player);
   }
 }
