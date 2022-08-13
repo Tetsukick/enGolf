@@ -78,33 +78,7 @@ class ScoreCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: SizeConfig.smallMargin),
-                TextFormField(
-                  textAlign: TextAlign.center,
-                  controller: TextEditingController(text: player!.name),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white, width: 0.0),
-                    ),
-                  ),
-                  style: TextStyle(
-                    color: ColorConfig.textGreenLight,
-                    fontSize: 16,
-                  ),
-                  onTap: () async {
-                    final tempPlayerName = await Navigator.push(
-                        context,
-                        MaterialPageRoute<Player>(
-                            builder: (BuildContext context) {
-                              return PlayerListScreen();
-                            },
-                            fullscreenDialog: true));
-                    final tempPlayer = player
-                      ..name = tempPlayerName?.name ?? player.name;
-                    olympicBloc.changePlayerAction.add(tempPlayer);
-                    FocusScope.of(context).unfocus();
-                  },
-                ),
+                _playerNameTextField(context),
                 const SizedBox(height: SizeConfig.smallMargin),
                 Expanded(
                   child: Container(
@@ -125,6 +99,41 @@ class ScoreCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _playerNameTextField(BuildContext context) {
+    final olympicBloc = Provider.of<OlympicBloc>(context);
+    final _textEditingController = TextEditingController(text: player.name);
+    return TextFormField(
+      textAlign: TextAlign.center,
+      controller: _textEditingController,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white, width: 0.0),
+        ),
+      ),
+      style: TextStyle(
+        color: ColorConfig.textGreenLight,
+        fontSize: 16,
+      ),
+      onTap: () async {
+        final tempPlayerName = await Navigator.push(
+            context,
+            MaterialPageRoute<Player>(
+                builder: (BuildContext context) {
+                  return PlayerListScreen();
+                },
+                fullscreenDialog: true));
+        final tempPlayer = player
+          ..name = tempPlayerName?.name ?? player.name;
+        olympicBloc.changePlayerAction.add(tempPlayer);
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
     );
   }
 }

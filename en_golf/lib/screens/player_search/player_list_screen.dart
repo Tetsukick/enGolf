@@ -55,11 +55,13 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
         backgroundColor: ColorConfig.bgDarkGreen,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            searchBar(),
-            _playerListView(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              searchBar(),
+              _playerListView(),
+            ],
+          ),
         ),
       ),
     );
@@ -86,6 +88,7 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
       return ListView.builder(
         padding: EdgeInsets.all(36.0),
         shrinkWrap: true,
+        physics: ClampingScrollPhysics(),
         itemCount: playerList.length + 1,
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
