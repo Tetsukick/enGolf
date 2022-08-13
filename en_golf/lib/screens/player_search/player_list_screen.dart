@@ -51,6 +51,7 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorConfig.bgGreenPrimary,
       appBar: AppBar(
         title: Text('Player List'),
         backgroundColor: ColorConfig.bgDarkGreen,
