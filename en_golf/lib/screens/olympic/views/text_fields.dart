@@ -8,12 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
+const _textFieldIconSize = 28.0;
+
 class IconStreamTextField extends StatelessWidget {
-  String icon;
-  String labelTitle;
-  Stream<int> stream;
-  Function(int) function;
-  FocusNode node;
+  String? icon;
+  String? labelTitle;
+  Stream<int>? stream;
+  Function(int)? function;
+  FocusNode? node;
 
   IconStreamTextField([this.icon, this.labelTitle, this.stream, this.function, this.node]);
 
@@ -34,18 +36,18 @@ class IconStreamTextField extends StatelessWidget {
           builder: (context, snapshot) {
             final _controller = TextEditingController.fromValue(
               TextEditingValue(
-                text: snapshot?.data?.toString() ?? '',
+                text: snapshot.data?.toString() ?? '',
                 selection: TextSelection.collapsed(
-                    offset: snapshot?.data?.toString()?.length ?? 0),
+                    offset: snapshot.data?.toString().length ?? 0,),
               ),
             );
             return Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(SizeConfig.smallMargin),
-                  child: SvgPicture.asset(icon),
+                  padding: EdgeInsets.all(SizeConfig.smallestMargin),
+                  child: Image.asset(icon!, width: _textFieldIconSize,),
                 ),
-                SizedBox(width: SizeConfig.mediumMargin),
+                SizedBox(width: SizeConfig.smallMargin),
                 Expanded(
                   child: TextFormField(
                     focusNode: node,
@@ -59,7 +61,7 @@ class IconStreamTextField extends StatelessWidget {
                     onChanged: (text) {
                       try {
                         final value = int.parse(text);
-                        function(value);
+                        function!(value);
                       }
                       on Exception catch(e) {
                         print(e);
@@ -75,10 +77,10 @@ class IconStreamTextField extends StatelessWidget {
 }
 
 class IconTextField extends StatelessWidget {
-  String icon;
-  String labelTitle;
-  Stream<String> stream;
-  Function(String) function;
+  String? icon;
+  String? labelTitle;
+  Stream<String>? stream;
+  Function(String)? function;
 
   IconTextField([this.icon, this.labelTitle, this.stream, this.function]);
 
@@ -86,7 +88,7 @@ class IconTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final _controller = TextEditingController();
     _controller.addListener(() {
-      function(_controller.text);
+      function!(_controller.text);
     });
     final size = MediaQuery.of(context).size;
     return Container(
@@ -104,10 +106,10 @@ class IconTextField extends StatelessWidget {
             return Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(SizeConfig.smallMargin),
-                  child: SvgPicture.asset(icon),
+                  padding: const EdgeInsets.all(SizeConfig.smallestMargin),
+                  child: Image.asset(icon!, width: _textFieldIconSize,),
                 ),
-                SizedBox(width: SizeConfig.mediumMargin),
+                const SizedBox(width: SizeConfig.smallMargin),
                 Expanded(
                   child: TextFormField(
                     controller: _controller,
@@ -117,7 +119,7 @@ class IconTextField extends StatelessWidget {
                     ),
                     style: const TextStyle(color: ColorConfig.textGreenLight),
                     onEditingComplete: () {
-                      function(_controller.text);
+                      function!(_controller.text);
                     },
                     onFieldSubmitted: (text) {
                       FocusScope.of(context).unfocus();
@@ -133,11 +135,11 @@ class IconTextField extends StatelessWidget {
 
 class IconTextFieldDate extends StatelessWidget {
   String icon;
-  String labelTitle;
-  Stream<DateTime> stream;
+  String? labelTitle;
+  Stream<DateTime>? stream;
   Function(DateTime) function;
 
-  IconTextFieldDate([this.icon, this.labelTitle, this.stream, this.function]);
+  IconTextFieldDate({required this.icon, this.labelTitle, this.stream, required this.function});
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +156,8 @@ class IconTextFieldDate extends StatelessWidget {
       child: StreamBuilder(
           stream: stream,
           builder: (context, snapshot) {
-            final data = snapshot?.data == null
-                ? DateTime.now() : snapshot?.data as DateTime;
+            final data = snapshot.data == null
+                ? DateTime.now() : (snapshot.data as DateTime?)!;
             final _controller = TextEditingController.fromValue(
               TextEditingValue(
                 text: dateTimeToString(data) ?? '',
@@ -164,10 +166,10 @@ class IconTextFieldDate extends StatelessWidget {
             return Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(SizeConfig.smallMargin),
-                  child: SvgPicture.asset(icon),
+                  padding: EdgeInsets.all(SizeConfig.smallestMargin),
+                  child: Image.asset(icon, width: _textFieldIconSize,),
                 ),
-                SizedBox(width: SizeConfig.mediumMargin),
+                SizedBox(width: SizeConfig.smallMargin),
                 Expanded(
                   child: TextFormField(
                     focusNode: AlwaysDisabledFocusNode(),
@@ -184,7 +186,7 @@ class IconTextFieldDate extends StatelessWidget {
                         firstDate: DateTime(2019, 1),
                         lastDate: DateTime(2021, 12),
                       ).then((pickedDate) {
-                        function(pickedDate);
+                        function!(pickedDate!);
                       });
                     },
                   ),

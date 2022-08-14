@@ -5,19 +5,41 @@ import 'utils.dart';
 
 class Admob {
   static BannerAd smallBanner = BannerAd(
-    adUnitId: getBannerAdUnitId(),
+    adUnitId: getBannerAdUnitId()!,
     size: AdSize.banner,
     request: AdRequest(),
     listener: BannerAdListener()
   );
+
+  static late InterstitialAd? interstitialAd;
+
+  static Future<void> loadInterstitialAd() async {
+    await InterstitialAd.load(
+        adUnitId: getInterstitialAdUnitId()!,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            interstitialAd = ad;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error');
+          },
+        ));
+  }
+
+  static Future<void> showInterstitialAd() async {
+    if (interstitialAd != null) {
+      await interstitialAd!.show();
+    }
+  }
 }
 
 class AdmobBanner extends StatelessWidget {
-  const AdmobBanner({Key key}) : super(key: key);
+  const AdmobBanner({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Admob.smallBanner.load();
-    return AdWidget(ad: Admob.smallBanner);
+    return new AdWidget(ad: Admob.smallBanner);
   }
 }

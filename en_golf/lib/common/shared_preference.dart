@@ -9,21 +9,21 @@ class SharedPreferenceManager {
   String gameNameId = 'gameNameId';
   String gameDateId = 'gameDateId';
   
-  Future<List<Player>> getPlayers() async {
+  Future<List<PlayerResult>> getPlayers() async {
     final prefs = await SharedPreferences.getInstance();
-    final dynamicList = json.decode(prefs.getString(playersId))
+    final dynamicList = json.decode(prefs.getString(playersId)!)
       as List<dynamic>;
-    return List<Player>.from(dynamicList.map<dynamic>((dynamic x) =>
-        Player.fromJson(x)));
+    return List<PlayerResult>.from(dynamicList.map<dynamic>((x) =>
+        PlayerResult.fromJson(x)));
   }
 
-  Future<void> savePlayers(List<Player> players) async {
+  Future<void> savePlayers(List<PlayerResult?> players) async {
     final prefs = await SharedPreferences.getInstance();
-    final dynamicList = players.map((e) => e.toJson()).toList();
+    final dynamicList = players.map((e) => e!.toJson()).toList();
     await prefs.setString(playersId, json.encode(dynamicList));
   }
 
-  Future<String> getGameName() async {
+  Future<String?> getGameName() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(gameNameId);
   }
@@ -35,7 +35,7 @@ class SharedPreferenceManager {
 
   Future<DateTime> getGameDate() async {
     final prefs = await SharedPreferences.getInstance();
-    return DateTime.parse(prefs.getString(gameDateId));
+    return DateTime.parse(prefs.getString(gameDateId)!);
   }
 
   Future<void> setGameDate(DateTime gameDate) async {

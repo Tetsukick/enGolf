@@ -17,13 +17,13 @@ class DiceBloc {
   final _historyController = BehaviorSubject<List<int>>.seeded([]);
   Stream<List<int>> get histories => _historyController.stream;
 
-  final _isAllowedDuplicationController = BehaviorSubject<bool>.seeded(true);
-  Sink<bool> get changeIsAllowedAction => _isAllowedDuplicationController.sink;
-  Stream<bool> get isAllowed => _isAllowedDuplicationController.stream;
+  final _isAllowedDuplicationController = BehaviorSubject<bool?>.seeded(true);
+  Sink<bool?> get changeIsAllowedAction => _isAllowedDuplicationController.sink;
+  Stream<bool?> get isAllowed => _isAllowedDuplicationController.stream;
 
   RangeValues _range = const RangeValues(1, 18);
   List<int> _histories = [];
-  bool _isAllowed = true;
+  bool? _isAllowed = true;
 
   void _listenRange() {
     range.listen((newRange) {
@@ -40,7 +40,7 @@ class DiceBloc {
   void createRandomNumber() {
     final numOfRange = _range.end.round() - _range.start.round() + 1;
     List<int> numbers = List.generate(numOfRange, (i) => i + _range.start.round());
-    if (!_isAllowed) {
+    if (!_isAllowed!) {
       for (final history in _histories) {
         numbers.removeWhere((number) => number == history);
       }

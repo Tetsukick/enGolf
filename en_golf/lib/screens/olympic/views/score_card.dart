@@ -1,7 +1,10 @@
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/size_config.dart';
+import 'package:engolf/model/floor/entity/player.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
+import 'package:engolf/screens/player_search/player_list_screen.dart';
+import 'package:engolf/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +14,17 @@ import '../../../common/utils.dart';
 
 class ScoreCard extends StatelessWidget {
   const ScoreCard({
-    Key key,
+    Key? key,
     this.color,
-    this.player,
+    required this.player,
   }) : super(key: key);
 
-  final Color color;
-  final Player player;
+  final Color? color;
+  final PlayerResult player;
 
-  static final List<int> _scoreItems = List.generate(201, (i) => i - 100);
+  static final List<int?> _scoreItems = List.generate(201, (i) => i - 100);
 
-  Widget _pickerItem(int str) {
+  Widget _pickerItem(int? str) {
     return Center(
       child: Text(
         str.toString(),
@@ -33,6 +36,7 @@ class ScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
+    final size = MediaQuery.of(context).size;
     return Card(
       color: ColorConfig.bgDarkGreen,
       elevation: 1.5,
@@ -50,21 +54,12 @@ class ScoreCard extends StatelessWidget {
             vertical: SizeConfig.mediumSmallMargin
           ),
           child: Container(
-            width: 62,
+            width: 59,
             height: 250,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  backgroundColor: color,
-                  child: Text(
-                    player.rank.toString(),
-                    style: const TextStyle(
-                      color: ColorConfig.textGreenLight,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
+                _rankWidget(),
                 const SizedBox(height: SizeConfig.smallMargin),
                 Text(
                   player.result.toString(),
@@ -75,25 +70,7 @@ class ScoreCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: SizeConfig.smallMargin),
-                TextFormField(
-                  textAlign: TextAlign.center,
-                  controller: TextEditingController(text: player.name),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white, width: 0.0),
-                    ),
-                  ),
-                  style: TextStyle(
-                    color: ColorConfig.textGreenLight,
-                    fontSize: 16,
-                  ),
-                  onFieldSubmitted: (text) {
-                    final tempPlayer = player
-                      ..name = text;
-                    olympicBloc.changePlayerAction.add(tempPlayer);
-                  },
-                ),
+                _playerNameTextField(context),
                 const SizedBox(height: SizeConfig.smallMargin),
                 Expanded(
                   child: Container(
@@ -103,7 +80,7 @@ class ScoreCard extends StatelessWidget {
                       itemExtent: 26,
                       children: _scoreItems.map(_pickerItem).toList(),
                       onSelectedItemChanged: (pickerIndex) {
-                        player.score = _scoreItems[pickerIndex];
+                        player.score = _scoreItems[pickerIndex]!;
                         olympicBloc.changePlayerAction.add(player);
                       },
                     ),
@@ -112,6 +89,63 @@ class ScoreCard extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _rankWidget() {
+
+    const rankIconSize = 40.0;
+    if (player.rank == 1) {
+      return Image.asset('assets/gold-cup_128.png', width: rankIconSize,);
+    } else if (player.rank == 2) {
+      return Image.asset('assets/silver-cup_128.png', width: rankIconSize,);
+    } else if (player.rank == 3) {
+      return Image.asset('assets/bronze-cup_128.png', width: rankIconSize,);
+    }
+
+    return CircleAvatar(
+      backgroundColor: color,
+      child: Text(
+        player.rank.toString(),
+        style: const TextStyle(
+          color: ColorConfig.textGreenLight,
+          fontSize: 16,
+        ),
+      ),
+    );
+  }
+
+  Widget _playerNameTextField(BuildContext context) {
+    final olympicBloc = Provider.of<OlympicBloc>(context);
+    final _textEditingController = TextEditingController(text: player.name);
+    return GestureDetector(
+      onTap: () async {
+        final tempPlayerName = await Navigator.push(
+            context,
+            MaterialPageRoute<Player>(
+                builder: (BuildContext context) {
+                  return PlayerListScreen();
+                },
+                fullscreenDialog: true,),);
+        final tempPlayer = player
+          ..name = tempPlayerName?.name ?? player.name;
+        olympicBloc.changePlayerAction.add(tempPlayer);
+      },
+      child: TextFormField(
+        enabled: false,
+        textAlign: TextAlign.center,
+        controller: _textEditingController,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          disabledBorder: const OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white, width: 0.0),
+          ),
+        ),
+        style: TextStyle(
+          color: ColorConfig.textGreenLight,
+          fontSize: 16,
         ),
       ),
     );

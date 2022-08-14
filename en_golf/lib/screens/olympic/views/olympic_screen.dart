@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:engolf/common/admob.dart';
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/size_config.dart';
@@ -27,6 +28,12 @@ class OlympicScreen extends StatelessWidget {
   @override
   Widget build(context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
+    Admob.loadInterstitialAd();
+    final size = MediaQuery.of(context).size;
+    if (size.width <= 0) {
+      return Container();
+    }
+
     return KeyboardActions(
       autoScroll: true,
       tapOutsideToDismiss: true,
@@ -50,7 +57,7 @@ class OlympicScreen extends StatelessWidget {
                             if (snapshot.data == null) {
                               return Container();
                             } else {
-                              final players = snapshot.data as List<Player>;
+                              final players = snapshot.data as List<PlayerResult>;
                               return AnimationLimiter(
                                 child: Container(
                                   child: Padding(
@@ -68,7 +75,7 @@ class OlympicScreen extends StatelessWidget {
                                               child: SafeArea(
                                                   top: false,
                                                   bottom: true,
-                                                  child: ScoreCard(color: Constants.colors[players[index].rank], player: players[index],)
+                                                  child: ScoreCard(color: Constants.colors[players[index].rank!], player: players[index],)
                                               ),
                                             ),
                                           ),
@@ -90,7 +97,7 @@ class OlympicScreen extends StatelessWidget {
                   bottom: 0,
                   child: Container(
                     height: 50,
-                    child: const AdmobBanner(),
+                    child: new AdmobBanner(),
                   ),
                 )
               ]
@@ -113,10 +120,17 @@ class OlympicScreen extends StatelessWidget {
               padding: const EdgeInsets.all(SizeConfig.smallMargin),
               child: SvgPicture.asset('assets/engolf_logo_only.svg'),
             ),
-            RaisedButton.icon(
-              icon: SvgPicture.asset('assets/tolophy_dark_green.svg'),
+            ElevatedButton.icon(
+              icon: Image.asset('assets/trophy_128.png',
+                width: 24,
+              ),
               label: const Text('結果を表示'),
               onPressed: () async {
+                var rand = new math.Random();
+                int lottery = rand.nextInt(3);
+                if (lottery == 0) {
+                  await Admob.showInterstitialAd();
+                }
                 Navigator.push(
                     context,
                     MaterialPageRoute<ResultOlympicScreen>(
@@ -125,38 +139,40 @@ class OlympicScreen extends StatelessWidget {
                         },
                         fullscreenDialog: true));
               },
-              color: Colors.green,
-              textColor: Colors.white,
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.green,
+              ),
             ),
           ],
         ),
         IconTextField(
-          'assets/golf_course.svg',
-          AppLocalizations.of(context).cupName,
+          'assets/golf-pin_128.png',
+          AppLocalizations.of(context)!.cupName,
           olympicBloc.gameName,
           olympicBloc.changeGameNameAction.add,
         ),
         SizedBox(height: SizeConfig.smallMargin),
         IconTextFieldDate(
-          'assets/calendar.svg',
-          '',
-          olympicBloc.date,
-          olympicBloc.changeDateAction.add,
+          icon: 'assets/calendar_128.png',
+          labelTitle: '',
+          stream: olympicBloc.date,
+          function: olympicBloc.changeDateAction.add,
         ),
         SizedBox(height: SizeConfig.smallMargin),
         Row(
           children: [
             IconStreamTextField(
-                'assets/people.svg',
-                AppLocalizations.of(context).player,
+                'assets/multi-person_128.png',
+                AppLocalizations.of(context)!.player,
                 olympicBloc.playerCount,
                 olympicBloc.changePlayerCountAction.add,
                 _playerCountNode
             ),
             const SizedBox(width: SizeConfig.smallMargin),
             IconStreamTextField(
-                'assets/money.svg',
-                AppLocalizations.of(context).rate,
+                'assets/casino-chip-money_128.png',
+                AppLocalizations.of(context)!.rate,
                 olympicBloc.rate,
                 olympicBloc.changeRateAction.add,
                 _rateNode
