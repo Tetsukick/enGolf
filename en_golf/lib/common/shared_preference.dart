@@ -12,7 +12,7 @@ class SharedPreferenceManager {
   Future<List<PlayerResult>> getPlayers() async {
     final prefs = await SharedPreferences.getInstance();
     final dynamicList = json.decode(prefs.getString(playersId)!)
-      as List<Map<String, dynamic>>;
+      as List<dynamic>;
     return List<PlayerResult>.from(dynamicList.map<dynamic>((x) =>
         PlayerResult.fromJson(x)));
   }
