@@ -2,17 +2,17 @@ class PlayerResult {
   int? id;
   int? rank = 1;
   String? name;
-  int? score;
-  int? result = 0;
+  int score = 0;
+  int result = 0;
 
-  PlayerResult({this.id, this.rank, this.name, this.score, this.result});
+  PlayerResult({this.id, this.rank, this.name, this.score = 0, this.result = 0});
 
   factory PlayerResult.fromJson(Map<String, dynamic> json) => PlayerResult(
     id: json['id'] as int?,
     rank: json['rank'] as int?,
     name: json['name'].toString(),
-    score: json['score'] as int?,
-    result: json['result'] as int?,
+    score: (json['score'] ?? 0) as int,
+    result: (json['result'] ?? 0) as int,
   );
 
   Map<String, dynamic> toJson() =>

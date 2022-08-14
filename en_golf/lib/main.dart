@@ -17,10 +17,11 @@ import 'screens/olympic/model/olympic_bloc.dart';
 import 'screens/olympic/views/olympic_screen.dart';
 import 'common/views/floating_bottom_bar.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
 
   runApp(const HomeScreen());
 }

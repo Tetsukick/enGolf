@@ -51,7 +51,7 @@ class DiceScreen extends StatelessWidget {
           _createSubmitButton(context: context),
           Container(
             height: 50,
-            child: const AdmobBanner(),
+            child: new AdmobBanner(),
           ),
         ],
       ),
@@ -142,24 +142,28 @@ class DiceScreen extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                RaisedButton(
+                ElevatedButton(
                   child: Icon(
                     Icons.delete_forever,
                     color: Colors.white,
                   ),
-                  color: ColorConfig.greenPrimary,
-                  shape: const CircleBorder(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorConfig.greenPrimary,
+                    shape: const CircleBorder(),
+                  ),
                   onPressed: () {
                     diceBloc.reset();
                   },
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Icon(
                     Icons.undo,
                     color: Colors.white,
                   ),
-                  color: ColorConfig.greenPrimary,
-                  shape: CircleBorder(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorConfig.greenPrimary,
+                    shape: const CircleBorder(),
+                  ),
                   onPressed: () {
                     diceBloc.undo();
                     Timer(const Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
@@ -274,7 +278,7 @@ class DiceScreen extends StatelessWidget {
             );
           },
         ),
-        RaisedButton(
+        ElevatedButton(
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Text(
@@ -285,8 +289,10 @@ class DiceScreen extends StatelessWidget {
               ),
             ),
           ),
-          color: Colors.lightGreen,
-          shape: const StadiumBorder(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.lightGreen,
+            shape: const StadiumBorder(),
+          ),
           onPressed: () {
             diceBloc.createRandomNumber();
             Timer(const Duration(milliseconds: 500), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));

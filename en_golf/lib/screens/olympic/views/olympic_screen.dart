@@ -28,7 +28,12 @@ class OlympicScreen extends StatelessWidget {
   @override
   Widget build(context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
-    // Admob.loadInterstitialAd();
+    Admob.loadInterstitialAd();
+    final size = MediaQuery.of(context).size;
+    if (size.width <= 0) {
+      return Container();
+    }
+
     return KeyboardActions(
       autoScroll: true,
       tapOutsideToDismiss: true,
@@ -92,7 +97,7 @@ class OlympicScreen extends StatelessWidget {
                   bottom: 0,
                   child: Container(
                     height: 50,
-                    child: const AdmobBanner(),
+                    child: new AdmobBanner(),
                   ),
                 )
               ]
@@ -115,7 +120,7 @@ class OlympicScreen extends StatelessWidget {
               padding: const EdgeInsets.all(SizeConfig.smallMargin),
               child: SvgPicture.asset('assets/engolf_logo_only.svg'),
             ),
-            RaisedButton.icon(
+            ElevatedButton.icon(
               icon: Image.asset('assets/trophy_128.png',
                 width: 24,
               ),
@@ -124,9 +129,8 @@ class OlympicScreen extends StatelessWidget {
                 var rand = new math.Random();
                 int lottery = rand.nextInt(3);
                 if (lottery == 0) {
-                  // await Admob.showInterstitialAd();
+                  await Admob.showInterstitialAd();
                 }
-
                 Navigator.push(
                     context,
                     MaterialPageRoute<ResultOlympicScreen>(
@@ -135,8 +139,10 @@ class OlympicScreen extends StatelessWidget {
                         },
                         fullscreenDialog: true));
               },
-              color: Colors.green,
-              textColor: Colors.white,
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.green,
+              ),
             ),
           ],
         ),

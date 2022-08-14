@@ -36,6 +36,7 @@ class ScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
+    final size = MediaQuery.of(context).size;
     return Card(
       color: ColorConfig.bgDarkGreen,
       elevation: 1.5,
@@ -53,7 +54,7 @@ class ScoreCard extends StatelessWidget {
             vertical: SizeConfig.mediumSmallMargin
           ),
           child: Container(
-            width: 58,
+            width: 59,
             height: 250,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -79,7 +80,7 @@ class ScoreCard extends StatelessWidget {
                       itemExtent: 26,
                       children: _scoreItems.map(_pickerItem).toList(),
                       onSelectedItemChanged: (pickerIndex) {
-                        player.score = _scoreItems[pickerIndex];
+                        player.score = _scoreItems[pickerIndex]!;
                         olympicBloc.changePlayerAction.add(player);
                       },
                     ),

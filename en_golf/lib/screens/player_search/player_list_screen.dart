@@ -272,9 +272,11 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
               decoration: const InputDecoration(hintText: "Input Player Name"),
             ),
             actions: <Widget>[
-              FlatButton(
-                color: Colors.green,
-                textColor: Colors.white,
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
                 child: Text('Cancel'),
                 onPressed: () {
                   setState(() {
@@ -282,9 +284,11 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
                   });
                 },
               ),
-              FlatButton(
-                color: Colors.green,
-                textColor: Colors.white,
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
                 child: Text('Add'),
                 onPressed: () {
                   setState(() {

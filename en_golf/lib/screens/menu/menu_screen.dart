@@ -74,7 +74,7 @@ class MenuScreen extends StatelessWidget {
           bottom: 0,
           child: Container(
             height: 50,
-            child: const AdmobBanner(),
+            child: new AdmobBanner(),
           ),
         )
       ]),
