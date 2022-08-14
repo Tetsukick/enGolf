@@ -53,21 +53,12 @@ class ScoreCard extends StatelessWidget {
             vertical: SizeConfig.mediumSmallMargin
           ),
           child: Container(
-            width: 62,
+            width: 58,
             height: 250,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  backgroundColor: color,
-                  child: Text(
-                    player!.rank.toString(),
-                    style: const TextStyle(
-                      color: ColorConfig.textGreenLight,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
+                _rankWidget(),
                 const SizedBox(height: SizeConfig.smallMargin),
                 Text(
                   player!.result.toString(),
@@ -97,6 +88,29 @@ class ScoreCard extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _rankWidget() {
+
+    const rankIconSize = 40.0;
+    if (player.rank == 1) {
+      return Image.asset('assets/gold-cup_128.png', width: rankIconSize,);
+    } else if (player.rank == 2) {
+      return Image.asset('assets/silver-cup_128.png', width: rankIconSize,);
+    } else if (player.rank == 3) {
+      return Image.asset('assets/bronze-cup_128.png', width: rankIconSize,);
+    }
+
+    return CircleAvatar(
+      backgroundColor: color,
+      child: Text(
+        player.rank.toString(),
+        style: const TextStyle(
+          color: ColorConfig.textGreenLight,
+          fontSize: 16,
         ),
       ),
     );
