@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
+const _textFieldIconSize = 28.0;
+
 class IconStreamTextField extends StatelessWidget {
   String? icon;
   String? labelTitle;
@@ -42,8 +44,8 @@ class IconStreamTextField extends StatelessWidget {
             return Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(SizeConfig.smallMargin),
-                  child: Image.asset(icon!, width: 24,),
+                  padding: EdgeInsets.all(SizeConfig.smallestMargin),
+                  child: Image.asset(icon!, width: _textFieldIconSize,),
                 ),
                 SizedBox(width: SizeConfig.smallMargin),
                 Expanded(
@@ -104,8 +106,8 @@ class IconTextField extends StatelessWidget {
             return Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(SizeConfig.smallMargin),
-                  child: Image.asset(icon!, width: 24,),
+                  padding: const EdgeInsets.all(SizeConfig.smallestMargin),
+                  child: Image.asset(icon!, width: _textFieldIconSize,),
                 ),
                 const SizedBox(width: SizeConfig.smallMargin),
                 Expanded(
@@ -164,8 +166,8 @@ class IconTextFieldDate extends StatelessWidget {
             return Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(SizeConfig.smallMargin),
-                  child: Image.asset(icon, width: 24,),
+                  padding: EdgeInsets.all(SizeConfig.smallestMargin),
+                  child: Image.asset(icon, width: _textFieldIconSize,),
                 ),
                 SizedBox(width: SizeConfig.smallMargin),
                 Expanded(
