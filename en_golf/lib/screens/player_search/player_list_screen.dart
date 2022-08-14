@@ -208,6 +208,10 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(padding: EdgeInsets.only(left: 8)),
+              Image.asset('assets/player_128.png',
+                width: 24,
+              ),
+              SizedBox(width: SizeConfig.smallMargin,),
               Expanded(
                 child: Row(
                   children: <Widget>[
