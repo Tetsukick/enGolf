@@ -39,16 +39,7 @@ class ResultScoreCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(
-                backgroundColor: color,
-                child: Text(
-                  player!.rank.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
+              _rankWidget(),
               Padding(padding: EdgeInsets.only(left: 16)),
               Expanded(
                 child: Row(
@@ -94,6 +85,29 @@ class ResultScoreCard extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _rankWidget() {
+
+    const rankIconSize = 40.0;
+    if (player?.rank == 1) {
+      return Image.asset('assets/gold-cup_128.png', width: rankIconSize,);
+    } else if (player?.rank == 2) {
+      return Image.asset('assets/silver-cup_128.png', width: rankIconSize,);
+    } else if (player?.rank == 3) {
+      return Image.asset('assets/bronze-cup_128.png', width: rankIconSize,);
+    }
+
+    return CircleAvatar(
+      backgroundColor: color,
+      child: Text(
+        player?.rank.toString() ?? '',
+        style: const TextStyle(
+          color: ColorConfig.textGreenLight,
+          fontSize: 16,
         ),
       ),
     );

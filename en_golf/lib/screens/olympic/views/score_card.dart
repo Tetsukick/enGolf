@@ -127,7 +127,7 @@ class ScoreCard extends StatelessWidget {
                 builder: (BuildContext context) {
                   return PlayerListScreen();
                 },
-                fullscreenDialog: true));
+                fullscreenDialog: true,),);
         final tempPlayer = player
           ..name = tempPlayerName?.name ?? player.name;
         olympicBloc.changePlayerAction.add(tempPlayer);
