@@ -86,6 +86,7 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
             ),
           ),
           onChanged: (word) {
+            search(word);
             setState(() {
               searchWord = searchWordController.text;
             });
@@ -96,28 +97,35 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
 
   Widget _playerListView() {
       return ListView.builder(
-        padding: EdgeInsets.symmetric(vertical: SizeConfig.smallMargin, horizontal: SizeConfig.smallestMargin),
+        padding: const EdgeInsets.symmetric(vertical: SizeConfig.smallMargin, horizontal: SizeConfig.smallestMargin),
         shrinkWrap: true,
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         itemCount: playerList.length + 1,
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
-            final _title = searchWord.isEmpty ? '新規追加' : '${searchWord} を追加';
+            final title = searchWord.isEmpty ? '新規追加' : '$searchWord を追加';
             return Container(
-              child: GestureDetector(
+              child: InkWell(
                 onTap: () {
                   if (searchWord.isEmpty) {
-
+                    _showNewPlayerDialog(context);
                   } else {
-                    final _player = Player(name: searchWord);
-                    database?.playerDao.insertPlayer(_player);
-                    Navigator.pop<Player>(context, _player);
+                    _registerNewPlayer(searchWord);
                   }
                 },
-                child: Text(
-                  _title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/add-user_128.png',
+                      width: 24,
+                    ),
+                    const SizedBox(width: SizeConfig.smallMargin),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -126,6 +134,12 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
           }
         },
       );
+  }
+
+  void _registerNewPlayer(String playerName) {
+    final _player = Player(name: playerName);
+    database?.playerDao.insertPlayer(_player);
+    Navigator.pop<Player>(context, _player);
   }
 
   Widget buildFloatingSearchBar() {
@@ -167,6 +181,15 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
     );
   }
 
+  Future<void> search(String search) async {
+    final _playerList = await database?.playerDao.findAllPlayers();
+    final searchPlayerList = _playerList?.where((player) {
+        return player.name!.contains(search);
+      }).toList();
+
+    setState(() => playerList = searchPlayerList ?? []);
+  }
+
   Widget playerCard(Player player) {
     return Card(
       color: ColorConfig.bgDarkGreen,
@@ -201,10 +224,55 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
                   ],
                 ),
               ),
+              const Icon(Icons.arrow_forward_ios_sharp,
+                color: Colors.white,
+                size: 16),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _showNewPlayerDialog(BuildContext context) async {
+    final _newPlayerTextEditingController = TextEditingController();
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('新規Playerの追加'),
+            content: TextField(
+              controller: _newPlayerTextEditingController,
+              decoration: const InputDecoration(hintText: "Input Player Name"),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: Text('Cancel'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              FlatButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: Text('Add'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                    if (_newPlayerTextEditingController.text.isNotEmpty) {
+                      _registerNewPlayer(_newPlayerTextEditingController.text);
+                    }
+                  });
+                },
+              ),
+            ],
+          );
+        },
+      );
   }
 }
