@@ -43,9 +43,9 @@ class IconStreamTextField extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.all(SizeConfig.smallMargin),
-                  child: SvgPicture.asset(icon!),
+                  child: Image.asset(icon!, width: 24,),
                 ),
-                SizedBox(width: SizeConfig.mediumMargin),
+                SizedBox(width: SizeConfig.smallMargin),
                 Expanded(
                   child: TextFormField(
                     focusNode: node,
@@ -104,10 +104,10 @@ class IconTextField extends StatelessWidget {
             return Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(SizeConfig.smallMargin),
-                  child: SvgPicture.asset(icon!),
+                  padding: const EdgeInsets.all(SizeConfig.smallMargin),
+                  child: Image.asset(icon!, width: 24,),
                 ),
-                SizedBox(width: SizeConfig.mediumMargin),
+                const SizedBox(width: SizeConfig.smallMargin),
                 Expanded(
                   child: TextFormField(
                     controller: _controller,
@@ -165,9 +165,9 @@ class IconTextFieldDate extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.all(SizeConfig.smallMargin),
-                  child: SvgPicture.asset(icon!),
+                  child: Image.asset(icon, width: 24,),
                 ),
-                SizedBox(width: SizeConfig.mediumMargin),
+                SizedBox(width: SizeConfig.smallMargin),
                 Expanded(
                   child: TextFormField(
                     focusNode: AlwaysDisabledFocusNode(),

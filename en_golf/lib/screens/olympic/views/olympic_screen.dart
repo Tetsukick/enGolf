@@ -114,7 +114,9 @@ class OlympicScreen extends StatelessWidget {
               child: SvgPicture.asset('assets/engolf_logo_only.svg'),
             ),
             RaisedButton.icon(
-              icon: SvgPicture.asset('assets/tolophy_dark_green.svg'),
+              icon: Image.asset('assets/trophy_128.png',
+                width: 24,
+              ),
               label: const Text('結果を表示'),
               onPressed: () async {
                 Navigator.push(
@@ -131,14 +133,14 @@ class OlympicScreen extends StatelessWidget {
           ],
         ),
         IconTextField(
-          'assets/golf_course.svg',
+          'assets/golf-pin_128.png',
           AppLocalizations.of(context)!.cupName,
           olympicBloc.gameName,
           olympicBloc.changeGameNameAction.add,
         ),
         SizedBox(height: SizeConfig.smallMargin),
         IconTextFieldDate(
-          icon: 'assets/calendar.svg',
+          icon: 'assets/calendar_128.png',
           labelTitle: '',
           stream: olympicBloc.date,
           function: olympicBloc.changeDateAction.add,
@@ -147,7 +149,7 @@ class OlympicScreen extends StatelessWidget {
         Row(
           children: [
             IconStreamTextField(
-                'assets/people.svg',
+                'assets/multi-person_128.png',
                 AppLocalizations.of(context)!.player,
                 olympicBloc.playerCount,
                 olympicBloc.changePlayerCountAction.add,
@@ -155,7 +157,7 @@ class OlympicScreen extends StatelessWidget {
             ),
             const SizedBox(width: SizeConfig.smallMargin),
             IconStreamTextField(
-                'assets/money.svg',
+                'assets/casino-chip-money_128.png',
                 AppLocalizations.of(context)!.rate,
                 olympicBloc.rate,
                 olympicBloc.changeRateAction.add,
