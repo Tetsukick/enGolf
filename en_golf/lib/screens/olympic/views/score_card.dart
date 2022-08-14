@@ -61,7 +61,7 @@ class ScoreCard extends StatelessWidget {
                 _rankWidget(),
                 const SizedBox(height: SizeConfig.smallMargin),
                 Text(
-                  player!.result.toString(),
+                  player.result.toString(),
                   style: const TextStyle(
                     color: ColorConfig.textGreenLight,
                     fontSize: SizeConfig.mediumLargeMargin,
@@ -75,11 +75,11 @@ class ScoreCard extends StatelessWidget {
                   child: Container(
                     width: 50,
                     child: CupertinoPicker(
-                      scrollController: FixedExtentScrollController(initialItem: _scoreItems.indexOf(player!.score)),
+                      scrollController: FixedExtentScrollController(initialItem: _scoreItems.indexOf(player.score)),
                       itemExtent: 26,
                       children: _scoreItems.map(_pickerItem).toList(),
                       onSelectedItemChanged: (pickerIndex) {
-                        player!.score = _scoreItems[pickerIndex];
+                        player.score = _scoreItems[pickerIndex];
                         olympicBloc.changePlayerAction.add(player);
                       },
                     ),

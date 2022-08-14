@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:english_words/english_words.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 // ignore: implementation_imports
 import 'package:flutter/material.dart';
@@ -86,18 +87,18 @@ String? getAppId() {
 
 String? getBannerAdUnitId() {
   if (Platform.isIOS) {
-    return 'ca-app-pub-8604906384604870/8136991267';
+    return kDebugMode ? 'ca-app-pub-3940256099942544/2934735716' : 'ca-app-pub-8604906384604870/8136991267';
   } else if (Platform.isAndroid) {
-    return 'ca-app-pub-8604906384604870/4738255665';
+    return kDebugMode ? 'ca-app-pub-3940256099942544/6300978111' : 'ca-app-pub-8604906384604870/4738255665';
   }
   return null;
 }
 
 String? getInterstitialAdUnitId() {
   if (Platform.isIOS) {
-    return 'ca-app-pub-8604906384604870/8693607305';
+    return kDebugMode ? 'ca-app-pub-3940256099942544/5135589807' : 'ca-app-pub-8604906384604870/8693607305';
   } else if (Platform.isAndroid) {
-    return 'ca-app-pub-8604906384604870/3333469410';
+    return kDebugMode ? 'ca-app-pub-3940256099942544/8691691433' : 'ca-app-pub-8604906384604870/3333469410';
   }
   return null;
 }

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/config/config.dart';
 import 'package:flutter/foundation.dart';
@@ -136,10 +137,30 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
       );
   }
 
-  void _registerNewPlayer(String playerName) {
-    final _player = Player(name: playerName);
-    database?.playerDao.insertPlayer(_player);
-    Navigator.pop<Player>(context, _player);
+  Future<void> _registerNewPlayer(String playerName) async {
+    final _currentPlayers = await database?.playerDao.findAllPlayers();
+
+    if (_currentPlayers != null
+        && _currentPlayers.any((player) => player.name == playerName)) {
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.ERROR,
+        animType: AnimType.RIGHSLIDE,
+        headerAnimationLoop: false,
+        title: 'Error',
+        desc:
+        '$playerName is already registered.',
+        btnOkOnPress: () {
+          // Navigator.pop(context);
+        },
+        btnOkIcon: Icons.cancel,
+        btnOkColor: Colors.red,
+      ).show();
+    } else {
+      final _player = Player(name: playerName);
+      database?.playerDao.insertPlayer(_player);
+      Navigator.pop<Player>(context, _player);
+    }
   }
 
   Widget buildFloatingSearchBar() {

@@ -36,9 +36,9 @@ class IconStreamTextField extends StatelessWidget {
           builder: (context, snapshot) {
             final _controller = TextEditingController.fromValue(
               TextEditingValue(
-                text: snapshot?.data?.toString() ?? '',
+                text: snapshot.data?.toString() ?? '',
                 selection: TextSelection.collapsed(
-                    offset: snapshot?.data?.toString()?.length ?? 0),
+                    offset: snapshot.data?.toString().length ?? 0,),
               ),
             );
             return Row(
@@ -156,8 +156,8 @@ class IconTextFieldDate extends StatelessWidget {
       child: StreamBuilder(
           stream: stream,
           builder: (context, snapshot) {
-            final data = snapshot?.data == null
-                ? DateTime.now() : (snapshot?.data as DateTime?)!;
+            final data = snapshot.data == null
+                ? DateTime.now() : (snapshot.data as DateTime?)!;
             final _controller = TextEditingController.fromValue(
               TextEditingValue(
                 text: dateTimeToString(data) ?? '',

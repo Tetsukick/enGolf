@@ -10,6 +10,28 @@ class Admob {
     request: AdRequest(),
     listener: BannerAdListener()
   );
+
+  // static late InterstitialAd? interstitialAd;
+  //
+  // static Future<void> loadInterstitialAd() async {
+  //   await InterstitialAd.load(
+  //       adUnitId: getInterstitialAdUnitId()!,
+  //       request: AdRequest(),
+  //       adLoadCallback: InterstitialAdLoadCallback(
+  //         onAdLoaded: (InterstitialAd ad) {
+  //           interstitialAd = ad;
+  //         },
+  //         onAdFailedToLoad: (LoadAdError error) {
+  //           print('InterstitialAd failed to load: $error');
+  //         },
+  //       ));
+  // }
+  //
+  // static Future<void> showInterstitialAd() async {
+  //   if (interstitialAd != null) {
+  //     await interstitialAd!.show();
+  //   }
+  // }
 }
 
 class AdmobBanner extends StatelessWidget {

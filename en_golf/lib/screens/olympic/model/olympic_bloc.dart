@@ -104,14 +104,14 @@ class OlympicBloc {
   
   void recalculate() {
     _players = _players.map((player) {
-      player!.result = formulaOlympic(player.id!);
+      player.result = formulaOlympic(player.id!);
       return player;
     }).toList();
   }
 
   void setRank() {
     final sortPlayers = _players.map((player) => player).toList()
-      ..sort((a,b) => b!.score! - a!.score!);
+      ..sort((a,b) => b.score! - a.score!);
 
     var rank = 1;
     final targetIndex = _players.indexOf(sortPlayers[0]);
@@ -120,7 +120,7 @@ class OlympicBloc {
     _players[targetIndex] = targetPlayer;
 
     for (var i = 1; i < _players.length; i++) {
-      if (sortPlayers[i]!.score != sortPlayers[i-1]!.score) {
+      if (sortPlayers[i].score != sortPlayers[i-1].score) {
         rank = i + 1;
       }
       final _targetIndex = _players.indexOf(sortPlayers[i]);
@@ -131,8 +131,8 @@ class OlympicBloc {
   }
 
   int formulaOlympic(int index) {
-    final playerScore = _players[index]!.score!;
-    final int totalScore = _players.fold(0, (curr, next) => curr + next!.score!);
+    final playerScore = _players[index].score!;
+    final int totalScore = _players.fold(0, (curr, next) => curr + next.score!);
     return ((playerScore * (_players.length - 1)) - (totalScore - playerScore)) * _rate;
   }
 

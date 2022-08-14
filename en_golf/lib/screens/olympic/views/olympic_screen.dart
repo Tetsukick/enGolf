@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:engolf/common/admob.dart';
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/size_config.dart';
@@ -27,6 +28,7 @@ class OlympicScreen extends StatelessWidget {
   @override
   Widget build(context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
+    // Admob.loadInterstitialAd();
     return KeyboardActions(
       autoScroll: true,
       tapOutsideToDismiss: true,
@@ -119,6 +121,12 @@ class OlympicScreen extends StatelessWidget {
               ),
               label: const Text('結果を表示'),
               onPressed: () async {
+                var rand = new math.Random();
+                int lottery = rand.nextInt(3);
+                if (lottery == 0) {
+                  // await Admob.showInterstitialAd();
+                }
+
                 Navigator.push(
                     context,
                     MaterialPageRoute<ResultOlympicScreen>(

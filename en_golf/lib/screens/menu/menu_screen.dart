@@ -55,7 +55,7 @@ class MenuScreen extends StatelessWidget {
                       ),
                     );
                   }
-                  String version = snapshot.data!.version ?? '';
+                  String version = snapshot.data?.version ?? '';
                   String buildVersion = snapshot.data!.buildNumber ?? '';
                   return _menuItem(
                       "version $version $buildVersion",
