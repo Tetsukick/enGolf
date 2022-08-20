@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:engolf/common/shared_preference.dart';
+import 'package:engolf/config/config.dart';
+import 'package:engolf/model/floor/db/database.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -10,6 +12,8 @@ class OlympicBloc {
     _playerCountController.add(_playerCount);
     _rateController.add(_rate);
     _dateController.add(_date);
+
+    _initData();
 
     listenRate();
     listenPlayerCount();
@@ -51,6 +55,54 @@ class OlympicBloc {
     PlayerResult(id: 2, name: 'Player3', score: 0),
     PlayerResult(id: 3, name: 'Player4', score: 0),
   ];
+  AppDatabase? _database;
+
+  Future<void> _initData() async {
+    await _initiateDatabase();
+    await _initiatePlayers();
+  }
+
+  Future<void> _initiateDatabase() async {
+    _database = await $FloorAppDatabase
+        .databaseBuilder(Config.dbName)
+        .build();
+  }
+
+  Future<void> _initiatePlayers() async {
+    final previousPlayers = await SharedPreferenceManager().getPlayers();
+
+    if (previousPlayers.isNotEmpty) {
+      _players = previousPlayers;
+    } else {
+      final mainPlayer = await _database?.playerDao.findMainPlayers();
+      if (mainPlayer != null) {
+        _players[0] = PlayerResult(id: 0, name: mainPlayer.name, score: 0);
+      }
+    }
+    _playerCount = _players.length;
+    _playerCountController.add(_playerCount);
+    updatePlayer();
+  }
+
+  Future<void> resetData() async {
+    _playerCount = 4;
+    _rate = 1;
+    _date = DateTime.now();
+    _players = [
+      PlayerResult(id: 0, name: 'Player1', score: 0),
+      PlayerResult(id: 1, name: 'Player2', score: 0),
+      PlayerResult(id: 2, name: 'Player3', score: 0),
+      PlayerResult(id: 3, name: 'Player4', score: 0),
+    ];
+    final mainPlayer = await _database?.playerDao.findMainPlayers();
+    if (mainPlayer != null) {
+      _players[0] = PlayerResult(id: 0, name: mainPlayer.name, score: 0);
+    }
+    _playerCountController.add(_playerCount);
+    _rateController.add(_rate);
+    _dateController.add(_date);
+    updatePlayer();
+  }
 
   void listenRate() {
     _rateController.stream.listen((newRate) {

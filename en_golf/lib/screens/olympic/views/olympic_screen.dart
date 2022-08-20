@@ -120,29 +120,42 @@ class OlympicScreen extends StatelessWidget {
               padding: const EdgeInsets.all(SizeConfig.smallMargin),
               child: SvgPicture.asset('assets/engolf_logo_only.svg'),
             ),
-            ElevatedButton.icon(
-              icon: Image.asset('assets/trophy_128.png',
-                width: 24,
-              ),
-              label: const Text('結果を表示'),
-              onPressed: () async {
-                var rand = new math.Random();
-                int lottery = rand.nextInt(3);
-                if (lottery == 0) {
-                  await Admob.showInterstitialAd();
-                }
-                Navigator.push(
-                    context,
-                    MaterialPageRoute<ResultOlympicScreen>(
-                        builder: (BuildContext context) {
-                          return ResultOlympicScreen();
-                        },
-                        fullscreenDialog: true));
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.green,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: olympicBloc.resetData,
+                  child: Image.asset('assets/reset_128.png',
+                    width: 32,
+                  ),
+                ),
+                const SizedBox(width: SizeConfig.mediumMargin,),
+                ElevatedButton.icon(
+                  icon: Image.asset('assets/trophy_128.png',
+                    width: 24,
+                  ),
+                  label: const Text('結果を表示'),
+                  onPressed: () async {
+                    var rand = new math.Random();
+                    int lottery = rand.nextInt(3);
+                    if (lottery == 0) {
+                      await Admob.showInterstitialAd();
+                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute<ResultOlympicScreen>(
+                            builder: (BuildContext context) {
+                              return ResultOlympicScreen();
+                            },
+                            fullscreenDialog: true));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.green,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

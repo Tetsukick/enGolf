@@ -54,7 +54,7 @@ class ScoreCard extends StatelessWidget {
             vertical: SizeConfig.mediumSmallMargin
           ),
           child: Container(
-            width: 59,
+            width: 60,
             height: 250,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
