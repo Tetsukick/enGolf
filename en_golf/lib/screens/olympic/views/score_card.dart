@@ -3,7 +3,7 @@ import 'package:engolf/common/size_config.dart';
 import 'package:engolf/model/floor/entity/player.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
-import 'package:engolf/screens/player_search/player_list_screen.dart';
+import 'package:engolf/screens/player_search/player_select_screen.dart';
 import 'package:engolf/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -126,7 +126,7 @@ class ScoreCard extends StatelessWidget {
             context,
             MaterialPageRoute<Player>(
                 builder: (BuildContext context) {
-                  return PlayerListScreen();
+                  return PlayerSelectScreen();
                 },
                 fullscreenDialog: true,),);
         final tempPlayer = player
