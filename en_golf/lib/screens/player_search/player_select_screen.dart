@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/config/config.dart';
+import 'package:engolf/screens/player_search/widget/player_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -131,7 +132,9 @@ class _PlayerSelectScreenState extends State<PlayerSelectScreen> {
               ),
             );
           } else {
-            return playerCard(playerList[index - 1]);
+            return PlayerCard(player: playerList[index - 1], onTap: () {
+              Navigator.pop<Player>(context, playerList[index - 1]);
+            });
           }
         },
       );
@@ -194,7 +197,9 @@ class _PlayerSelectScreenState extends State<PlayerSelectScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: playerList.map((player) {
-              return playerCard(player);
+              return PlayerCard(player: player, onTap: () {
+                Navigator.pop<Player>(context, player);
+              });
             }).toList(),
           ),
         );
@@ -209,54 +214,6 @@ class _PlayerSelectScreenState extends State<PlayerSelectScreen> {
       }).toList();
 
     setState(() => playerList = searchPlayerList ?? []);
-  }
-
-  Widget playerCard(Player player) {
-    return Card(
-      color: ColorConfig.bgDarkGreen,
-      elevation: 1.5,
-      margin: const EdgeInsets.fromLTRB(6, 8, 6, 0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: InkWell(
-        onTap: () {
-          Navigator.pop<Player>(context, player);
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(padding: EdgeInsets.only(left: 8)),
-              Image.asset('assets/player_128.png',
-                width: 24,
-              ),
-              SizedBox(width: SizeConfig.smallMargin,),
-              Expanded(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        player.name ?? '',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.arrow_forward_ios_sharp,
-                color: Colors.white,
-                size: 16),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Future<void> _showNewPlayerDialog(BuildContext context) async {
