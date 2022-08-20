@@ -14,6 +14,9 @@ abstract class PlayerDao {
   @update
   Future<void> updatePlayer(Player player);
 
+  @Query('UPDATE Player SET isMainUser = 0')
+  Future<void> updateAllPlayerIsMainOff();
+
   @insert
   Future<void> insertPlayer(Player player);
 

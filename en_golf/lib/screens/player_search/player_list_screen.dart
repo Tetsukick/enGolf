@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/config/config.dart';
+import 'package:engolf/screens/player_search/widget/add_edit_player_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -111,7 +112,7 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
                 if (searchWord.isEmpty) {
                   _showAddEditPlayerDialog(context);
                 } else {
-                  _registerNewPlayer(searchWord);
+                  _registerNewPlayer(playerName: searchWord);
                 }
               },
               child: Row(
@@ -137,27 +138,42 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
     );
   }
 
-  Future<void> _registerNewPlayer(String playerName) async {
+  Future<void> _registerNewPlayer({
+    required String playerName,
+    bool isMainUser = false,
+  }) async {
     final _currentPlayers = await database?.playerDao.findAllPlayers();
 
     if (_currentPlayers != null
         && _currentPlayers.any((player) => player.name == playerName)) {
       await _showAlertAlreadyExistPlayer(playerName: playerName);
     } else {
-      final _player = Player(name: playerName);
+      if (isMainUser) {
+        await database?.playerDao.updateAllPlayerIsMainOff();
+      }
+      final _player = Player(name: playerName, isMainUser: isMainUser);
       await database?.playerDao.insertPlayer(_player);
       initializePlayerList();
     }
   }
 
-  Future<void> _editPlayer({required String playerName, required Player player}) async {
+  Future<void> _editPlayer({
+    required String playerName,
+    required Player player,
+    bool isMainUser = false,
+  }) async {
     final _currentPlayers = await database?.playerDao.findAllPlayers();
 
     if (_currentPlayers != null
-        && _currentPlayers.any((player) => player.name == playerName)) {
+        && _currentPlayers.any((_player) => (_player.name == playerName && _player.id != player.id))) {
       await _showAlertAlreadyExistPlayer(playerName: playerName);
     } else {
-      final _player = player..name = playerName;
+      final _player = player
+        ..name = playerName
+        ..isMainUser = isMainUser;
+      if (isMainUser) {
+        await database?.playerDao.updateAllPlayerIsMainOff();
+      }
       await database?.playerDao.updatePlayer(_player);
       initializePlayerList();
     }
@@ -276,53 +292,21 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
     );
   }
 
-  Future<void> _showAddEditPlayerDialog(BuildContext context, {Player? player}) async {
-    final _playerNameTextEditingController = TextEditingController();
+  void onEditPlayer({required String playerName, required bool isMainUser, Player? player}) {
     final isEdit = player != null;
 
+    if (isEdit) {
+      _editPlayer(playerName: playerName, player: player!, isMainUser: isMainUser);
+    } else {
+      _registerNewPlayer(playerName: playerName, isMainUser: isMainUser);
+    }
+  }
+
+  Future<void> _showAddEditPlayerDialog(BuildContext context, {Player? player}) async {
     return showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text(isEdit ? '${player?.name ?? ""} を編集' : '新規Playerの追加'),
-          content: TextField(
-            controller: _playerNameTextEditingController,
-            decoration: const InputDecoration(hintText: "Input Player Name"),
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-              ),
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-              ),
-              child: Text(isEdit ? 'Edit' : 'Add'),
-              onPressed: () {
-                setState(() {
-                  Navigator.pop(context);
-                  if (_playerNameTextEditingController.text.isNotEmpty) {
-                    if (isEdit) {
-                      _editPlayer(
-                          playerName: _playerNameTextEditingController.text,
-                          player: player!,);
-                    } else {
-                      _registerNewPlayer(_playerNameTextEditingController.text);
-                    }
-                  }
-                });
-              },
-            ),
-          ],
-        );
+        return AddEditPlayerDialog(player: player, onEdit: onEditPlayer);
       },
     );
   }

@@ -160,6 +160,11 @@ class _$PlayerDao extends PlayerDao {
   }
 
   @override
+  Future<void> updateAllPlayerIsMainOff() async {
+    await _queryAdapter.queryNoReturn('UPDATE Player SET isMainUser = 0');
+  }
+
+  @override
   Future<void> insertPlayer(Player player) async {
     await _playerInsertionAdapter.insert(player, OnConflictStrategy.abort);
   }
