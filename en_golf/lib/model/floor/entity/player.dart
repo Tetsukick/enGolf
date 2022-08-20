@@ -4,8 +4,8 @@ import 'package:floor/floor.dart';
 class Player {
   @PrimaryKey(autoGenerate: true)
   int? id;
-  final String? name;
-  final bool isMainUser;
+  String? name;
+  bool isMainUser;
 
   Player({
     this.id,

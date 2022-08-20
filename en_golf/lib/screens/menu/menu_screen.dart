@@ -10,6 +10,8 @@ import 'package:engolf/common/utils.dart';
 
 import 'package:package_info/package_info.dart';
 
+import '../player_search/player_list_screen.dart';
+
 class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -24,21 +26,26 @@ class MenuScreen extends StatelessWidget {
           ListView(
             children: [
               _menuItem(
-                AppLocalizations.of(context)!.feedback,
-                Icon(
-                  Icons.comment,
-                  color: Colors.white,
-                ),
+                title: 'プレイヤー管理',
+                assetPath: 'assets/user-settings_128.png',
+                onTap: () {
+                  Navigator.of(context).push<dynamic>(
+                    MaterialPageRoute<dynamic>(builder: (context) {
+                      return PlayerListScreen();
+                    },),
+                  );
+                },
+              ),
+              _menuItem(
+                title: AppLocalizations.of(context)!.feedback,
+                assetPath: 'assets/feedback_128.png',
                 onTap: () {
                   setBrowserPage("https://forms.gle/xR5f875pD27v9k4U7");
                 },
               ),
               _menuItem(
-                AppLocalizations.of(context)!.privacyPolicy,
-                Icon(
-                  Icons.security,
-                  color: Colors.white,
-                ),
+                title: AppLocalizations.of(context)!.privacyPolicy,
+                assetPath: 'assets/privacypolicy_128.png',
                 onTap: () {
                   setBrowserPage("https://qiita.com/tetsukick/items/a3c844940064e15f0dac");
                 },
@@ -48,21 +55,15 @@ class MenuScreen extends StatelessWidget {
                 builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
                   if (!snapshot.hasData) {
                     return _menuItem(
-                      "version",
-                      Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                      ),
+                      title: 'version',
+                      assetPath: 'assets/license_128.png',
                     );
                   }
                   String version = snapshot.data?.version ?? '';
                   String buildVersion = snapshot.data!.buildNumber ?? '';
                   return _menuItem(
-                      "version $version $buildVersion",
-                      Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                      ),
+                      title: 'version $version $buildVersion',
+                      assetPath: 'assets/license_128.png',
                   );
                 },
               ),
@@ -81,7 +82,9 @@ class MenuScreen extends StatelessWidget {
     );
   }
 
-  Widget _menuItem(String title, Icon icon, {GestureTapCallback? onTap}) {
+  Widget _menuItem({required String title, required String assetPath, GestureTapCallback? onTap}) {
+    const iconWidth = 32.0;
+
     return GestureDetector(
       child:Container(
           padding: EdgeInsets.all(8.0),
@@ -92,7 +95,7 @@ class MenuScreen extends StatelessWidget {
             children: <Widget>[
               Container(
                 margin: EdgeInsets.all(10.0),
-                child:icon,
+                child: Image.asset(assetPath, width: iconWidth,),
               ),
               Text(
                 title,
@@ -105,7 +108,9 @@ class MenuScreen extends StatelessWidget {
           )
       ),
       onTap: () {
-        onTap!();
+        if (onTap != null) {
+          onTap();
+        }
       },
     );
   }

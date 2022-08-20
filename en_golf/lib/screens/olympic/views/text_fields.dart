@@ -139,7 +139,11 @@ class IconTextFieldDate extends StatelessWidget {
   Stream<DateTime>? stream;
   Function(DateTime) function;
 
-  IconTextFieldDate({required this.icon, this.labelTitle, this.stream, required this.function});
+  IconTextFieldDate({
+    required this.icon,
+    this.labelTitle,
+    this.stream,
+    required this.function});
 
   @override
   Widget build(BuildContext context) {
@@ -180,13 +184,14 @@ class IconTextFieldDate extends StatelessWidget {
                     ),
                     style: const TextStyle(color: ColorConfig.textGreenLight),
                     onTap: () {
+                      final now = DateTime.now();
                       showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
+                        initialDate: now,
                         firstDate: DateTime(2019, 1),
-                        lastDate: DateTime(2021, 12),
+                        lastDate: DateTime(now.year + 3, 12),
                       ).then((pickedDate) {
-                        function!(pickedDate!);
+                        function(pickedDate!);
                       });
                     },
                   ),

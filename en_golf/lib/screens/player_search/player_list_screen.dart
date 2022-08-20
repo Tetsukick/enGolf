@@ -1,6 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/config/config.dart';
+import 'package:engolf/screens/player_search/widget/add_edit_player_dialog.dart';
+import 'package:engolf/screens/player_search/widget/player_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -42,7 +44,7 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
     setState(() => database = _database);
     initializePlayerList();
   }
-  
+
   void initializePlayerList() async {
     List<Player> _playerList = [];
     _playerList.addAll(await database?.playerDao.findAllPlayers() ?? []);
@@ -74,93 +76,127 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: SizeConfig.smallestMargin, vertical: SizeConfig.smallMargin),
       child: TextFormField(
-          controller: searchWordController,
-          style: TextStyle(
-            color: ColorConfig.textGreenLight,
-            fontSize: 16,
+        controller: searchWordController,
+        style: TextStyle(
+          color: ColorConfig.textGreenLight,
+          fontSize: 16,
+        ),
+        decoration: InputDecoration(
+          hintText: 'Search Player Name',
+          contentPadding: EdgeInsets.symmetric(horizontal: SizeConfig.smallMargin, vertical: SizeConfig.smallestMargin),
+          border: const OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white, width: 0.0),
           ),
-          decoration: InputDecoration(
-            hintText: 'Search Player Name',
-            contentPadding: EdgeInsets.symmetric(horizontal: SizeConfig.smallMargin, vertical: SizeConfig.smallestMargin),
-            border: const OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.white, width: 0.0),
-            ),
-          ),
-          onChanged: (word) {
-            search(word);
-            setState(() {
-              searchWord = searchWordController.text;
-            });
-          },
+        ),
+        onChanged: (word) {
+          search(word);
+          setState(() {
+            searchWord = searchWordController.text;
+          });
+        },
       ),
     );
   }
 
   Widget _playerListView() {
-      return ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: SizeConfig.smallMargin, horizontal: SizeConfig.smallestMargin),
-        shrinkWrap: true,
-        physics: const ClampingScrollPhysics(),
-        itemCount: playerList.length + 1,
-        itemBuilder: (BuildContext context, int index) {
-          if (index == 0) {
-            final title = searchWord.isEmpty ? '新規追加' : '$searchWord を追加';
-            return Container(
-              child: InkWell(
-                onTap: () {
-                  if (searchWord.isEmpty) {
-                    _showNewPlayerDialog(context);
-                  } else {
-                    _registerNewPlayer(searchWord);
-                  }
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/add-user_128.png',
-                      width: 24,
-                    ),
-                    const SizedBox(width: SizeConfig.smallMargin),
-                    Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                  ],
-                ),
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: SizeConfig.smallMargin, horizontal: SizeConfig.smallestMargin),
+      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
+      itemCount: playerList.length + 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index == 0) {
+          final title = searchWord.isEmpty ? '新規追加' : '$searchWord を追加';
+          return Container(
+            child: InkWell(
+              onTap: () {
+                if (searchWord.isEmpty) {
+                  _showAddEditPlayerDialog(context);
+                } else {
+                  _registerNewPlayer(playerName: searchWord);
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/add-user_128.png',
+                    width: 24,
+                  ),
+                  const SizedBox(width: SizeConfig.smallMargin),
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ],
               ),
-            );
-          } else {
-            return playerCard(playerList[index - 1]);
-          }
-        },
-      );
+            ),
+          );
+        } else {
+          return PlayerCard(player: playerList[index - 1], onTap: () {
+            _showAddEditPlayerDialog(context, player: playerList[index - 1]);
+          });
+        }
+      },
+    );
   }
 
-  Future<void> _registerNewPlayer(String playerName) async {
+  Future<void> _registerNewPlayer({
+    required String playerName,
+    bool isMainUser = false,
+  }) async {
     final _currentPlayers = await database?.playerDao.findAllPlayers();
 
     if (_currentPlayers != null
         && _currentPlayers.any((player) => player.name == playerName)) {
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.ERROR,
-        animType: AnimType.RIGHSLIDE,
-        headerAnimationLoop: false,
-        title: 'Error',
-        desc:
-        '$playerName is already registered.',
-        btnOkOnPress: () {
-          // Navigator.pop(context);
-        },
-        btnOkIcon: Icons.cancel,
-        btnOkColor: Colors.red,
-      ).show();
+      await _showAlertAlreadyExistPlayer(playerName: playerName);
     } else {
-      final _player = Player(name: playerName);
-      database?.playerDao.insertPlayer(_player);
-      Navigator.pop<Player>(context, _player);
+      if (isMainUser) {
+        await database?.playerDao.updateAllPlayerIsMainOff();
+      }
+      final _player = Player(name: playerName, isMainUser: isMainUser);
+      await database?.playerDao.insertPlayer(_player);
+      initializePlayerList();
     }
+  }
+
+  Future<void> _editPlayer({
+    required String playerName,
+    required Player player,
+    bool isMainUser = false,
+  }) async {
+    final _currentPlayers = await database?.playerDao.findAllPlayers();
+
+    if (_currentPlayers != null
+        && _currentPlayers.any((_player) => (_player.name == playerName && _player.id != player.id))) {
+      await _showAlertAlreadyExistPlayer(playerName: playerName);
+    } else {
+      final _player = player
+        ..name = playerName
+        ..isMainUser = isMainUser;
+      if (isMainUser) {
+        await database?.playerDao.updateAllPlayerIsMainOff();
+      }
+      await database?.playerDao.updatePlayer(_player);
+      initializePlayerList();
+    }
+  }
+
+  Future<void> _showAlertAlreadyExistPlayer({required String playerName}) async {
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.ERROR,
+      animType: AnimType.RIGHSLIDE,
+      headerAnimationLoop: false,
+      title: 'Error',
+      desc:
+      '$playerName is already registered.',
+      btnOkOnPress: () {
+        // Navigator.pop(context);
+      },
+      btnOkIcon: Icons.cancel,
+      btnOkColor: Colors.red,
+    ).show();
   }
 
   Widget buildFloatingSearchBar() {
@@ -194,7 +230,9 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: playerList.map((player) {
-              return playerCard(player);
+              return PlayerCard(player: player, onTap: () {
+                _showAddEditPlayerDialog(context, player: player);
+              });
             }).toList(),
           ),
         );
@@ -205,103 +243,28 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
   Future<void> search(String search) async {
     final _playerList = await database?.playerDao.findAllPlayers();
     final searchPlayerList = _playerList?.where((player) {
-        return player.name!.contains(search);
-      }).toList();
+      return player.name!.contains(search);
+    }).toList();
 
     setState(() => playerList = searchPlayerList ?? []);
   }
 
-  Widget playerCard(Player player) {
-    return Card(
-      color: ColorConfig.bgDarkGreen,
-      elevation: 1.5,
-      margin: const EdgeInsets.fromLTRB(6, 8, 6, 0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: InkWell(
-        onTap: () {
-          Navigator.pop<Player>(context, player);
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(padding: EdgeInsets.only(left: 8)),
-              Image.asset('assets/player_128.png',
-                width: 24,
-              ),
-              SizedBox(width: SizeConfig.smallMargin,),
-              Expanded(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        player.name ?? '',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.arrow_forward_ios_sharp,
-                color: Colors.white,
-                size: 16),
-            ],
-          ),
-        ),
-      ),
-    );
+  void onEditPlayer({required String playerName, required bool isMainUser, Player? player}) {
+    final isEdit = player != null;
+
+    if (isEdit) {
+      _editPlayer(playerName: playerName, player: player!, isMainUser: isMainUser);
+    } else {
+      _registerNewPlayer(playerName: playerName, isMainUser: isMainUser);
+    }
   }
 
-  Future<void> _showNewPlayerDialog(BuildContext context) async {
-    final _newPlayerTextEditingController = TextEditingController();
-
+  Future<void> _showAddEditPlayerDialog(BuildContext context, {Player? player}) async {
     return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('新規Playerの追加'),
-            content: TextField(
-              controller: _newPlayerTextEditingController,
-              decoration: const InputDecoration(hintText: "Input Player Name"),
-            ),
-            actions: <Widget>[
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                ),
-                child: Text('Cancel'),
-                onPressed: () {
-                  setState(() {
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                ),
-                child: Text('Add'),
-                onPressed: () {
-                  setState(() {
-                    Navigator.pop(context);
-                    if (_newPlayerTextEditingController.text.isNotEmpty) {
-                      _registerNewPlayer(_newPlayerTextEditingController.text);
-                    }
-                  });
-                },
-              ),
-            ],
-          );
-        },
-      );
+      context: context,
+      builder: (context) {
+        return AddEditPlayerDialog(player: player, onEdit: onEditPlayer);
+      },
+    );
   }
 }

@@ -160,6 +160,20 @@ class _$PlayerDao extends PlayerDao {
   }
 
   @override
+  Future<Player?> findMainPlayers() async {
+    return _queryAdapter.query('SELECT * FROM Player WHERE isMainUser = 1',
+        mapper: (Map<String, Object?> row) => Player(
+            id: row['id'] as int?,
+            name: row['name'] as String?,
+            isMainUser: (row['isMainUser'] as int) != 0));
+  }
+
+  @override
+  Future<void> updateAllPlayerIsMainOff() async {
+    await _queryAdapter.queryNoReturn('UPDATE Player SET isMainUser = 0');
+  }
+
+  @override
   Future<void> insertPlayer(Player player) async {
     await _playerInsertionAdapter.insert(player, OnConflictStrategy.abort);
   }
