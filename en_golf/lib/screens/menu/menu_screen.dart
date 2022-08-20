@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:engolf/common/utils.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 import 'package:package_info/package_info.dart';
 
@@ -39,8 +40,11 @@ class MenuScreen extends StatelessWidget {
               _menuItem(
                 title: AppLocalizations.of(context)!.feedback,
                 assetPath: 'assets/feedback_128.png',
-                onTap: () {
-                  setBrowserPage("https://forms.gle/xR5f875pD27v9k4U7");
+                onTap: () async {
+                  final inAppReview = InAppReview.instance;
+                  if (await inAppReview.isAvailable()) {
+                    await inAppReview.requestReview();
+                  }
                 },
               ),
               _menuItem(
