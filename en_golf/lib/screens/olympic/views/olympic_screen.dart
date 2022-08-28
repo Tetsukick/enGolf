@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:engolf/common/admob.dart';
 import 'package:engolf/common/color_config.dart';
+import 'package:engolf/common/shared_preference.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 import 'package:provider/provider.dart';
@@ -125,7 +127,10 @@ class OlympicScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
-                  onTap: olympicBloc.resetData,
+                  onTap: () {
+                    olympicBloc.resetData();
+                    _askReview();
+                  },
                   child: Image.asset('assets/reset_128.png',
                     width: 32,
                   ),
@@ -141,6 +146,8 @@ class OlympicScreen extends StatelessWidget {
                     int lottery = rand.nextInt(3);
                     if (lottery == 0) {
                       await Admob.showInterstitialAd();
+                    } else {
+                      await _askReview();
                     }
                     Navigator.push(
                         context,
@@ -240,5 +247,18 @@ class OlympicScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _askReview() async {
+    final lastAppReviewDate = await SharedPreferenceManager().getLastAppReviewDate();
+    if (lastAppReviewDate == null) {
+      return;
+    }
+
+    final inAppReview = InAppReview.instance;
+    if (await inAppReview.isAvailable()) {
+      await inAppReview.requestReview();
+      await SharedPreferenceManager().setLastAppReviewDate(DateTime.now());
+    }
   }
 }
