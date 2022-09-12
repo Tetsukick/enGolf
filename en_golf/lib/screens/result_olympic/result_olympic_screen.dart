@@ -10,6 +10,7 @@ import 'package:engolf/common/size_config.dart';
 import 'package:engolf/common/utils.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:engolf/screens/result_olympic/result_score_card.dart';
+import 'package:engolf/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -246,7 +247,11 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   void shareImageAndText() async {
     try {
-      final bytes = await (exportToImage() as FutureOr<ByteData>);
+      final bytes = await (exportToImage() as Future<ByteData?>);
+      if (bytes == null) {
+        logger.d('export Image is null');
+        return;
+      }
       final widgetImageBytes =
         bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
       final applicationDocumentsFile =

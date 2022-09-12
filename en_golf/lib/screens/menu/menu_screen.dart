@@ -51,7 +51,7 @@ class MenuScreen extends StatelessWidget {
                 title: AppLocalizations.of(context)!.privacyPolicy,
                 assetPath: 'assets/privacypolicy_128.png',
                 onTap: () {
-                  setBrowserPage("https://qiita.com/tetsukick/items/a3c844940064e15f0dac");
+                  setBrowserPage("https://github.com/Tetsukick/application_privacy_policy/blob/main/README.md");
                 },
               ),
               FutureBuilder(
