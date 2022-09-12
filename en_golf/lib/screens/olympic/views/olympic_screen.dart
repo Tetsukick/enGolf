@@ -251,7 +251,7 @@ class OlympicScreen extends StatelessWidget {
 
   Future<void> _askReview() async {
     final lastAppReviewDate = await SharedPreferenceManager().getLastAppReviewDate();
-    if (lastAppReviewDate == null) {
+    if (lastAppReviewDate != null) {
       return;
     }
 

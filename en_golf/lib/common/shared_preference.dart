@@ -47,10 +47,7 @@ class SharedPreferenceManager {
   Future<DateTime?> getLastAppReviewDate() async {
     final prefs = await SharedPreferences.getInstance();
     final dateString = prefs.getString(lastAppReviewDate);
-    if (dateString == null) {
-      return null;
-    }
-    return DateTime.parse(dateString);
+    return dateString != null ? DateTime.parse(dateString) : null;
   }
 
   Future<void> setLastAppReviewDate(DateTime gameDate) async {
