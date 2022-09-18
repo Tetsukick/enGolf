@@ -152,6 +152,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
               tooltipBackgroundColor: FlutterFlowTheme.of(context).alternate,
               backgroundColor: FlutterFlowTheme.of(context).primaryColor,
               showBorder: false,
+              showGrid: true
             ),
             axisBounds: AxisBounds(),
             xAxisLabelInfo: AxisLabelInfo(
@@ -209,7 +210,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                               8, 0, 0, 0),
                           child: Card(
                             clipBehavior: Clip.antiAliasWithSaveLayer,
-                            color: Color(0x6639D2C0),
+                            color: ColorConfig.bgDarkGreen,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40),
                             ),
@@ -218,7 +219,9 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                                   8, 8, 8, 8),
                               child: Icon(
                                 Icons.monetization_on_rounded,
-                                color: FlutterFlowTheme.of(context)
+                                color: filteredGameResultList!.reversed.toList()[index].playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result < 0 ?
+                                FlutterFlowTheme.of(context).errorRed
+                                    : FlutterFlowTheme.of(context)
                                     .tertiaryColor,
                                 size: 24,
                               ),
@@ -228,7 +231,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                         Expanded(
                           child: Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                12, 0, 0, 0),
+                                12, 8, 0, 0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment:
@@ -238,7 +241,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    filteredGameResultList![index].name ?? dateTimeToString(filteredGameResultList![index].gameDate!),
+                                    filteredGameResultList!.reversed.toList()[index].name ?? dateTimeToString(filteredGameResultList![index].gameDate!),
                                     style: FlutterFlowTheme.of(context)
                                         .title3,
                                   ),
@@ -256,14 +259,15 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                filteredGameResultList![index].playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result.toString(),
+                                filteredGameResultList!.reversed.toList()[index].playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result.toString(),
                                 textAlign: TextAlign.end,
                                 style: FlutterFlowTheme.of(context)
                                     .subtitle2
                                     .override(
                                   fontFamily: 'Lexend',
-                                  color:
-                                  FlutterFlowTheme.of(context)
+                                  color: filteredGameResultList!.reversed.toList()[index].playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result < 0 ?
+                                  FlutterFlowTheme.of(context).errorRed
+                                  : FlutterFlowTheme.of(context)
                                       .tertiaryColor,
                                 ),
                               ),
@@ -272,7 +276,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                                     0, 4, 0, 0),
                                 child: Text(
                                   dateTimeFormat(
-                                      'MMMEd', filteredGameResultList![index].gameDate),
+                                      'MMMEd', filteredGameResultList!.reversed.toList()[index].gameDate),
                                   textAlign: TextAlign.end,
                                   style: FlutterFlowTheme.of(context)
                                       .bodyText1
