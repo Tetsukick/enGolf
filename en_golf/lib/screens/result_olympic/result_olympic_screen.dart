@@ -8,6 +8,7 @@ import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/shared_preference.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/common/utils.dart';
+import 'package:engolf/model/floor/entity/game_result.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:engolf/screens/result_olympic/result_score_card.dart';
 import 'package:engolf/utils/logger.dart';
@@ -20,6 +21,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_extend/share_extend.dart';
 
 import '../../common/constants.dart' as Constants;
+import '../../config/config.dart';
+import '../../model/floor/db/database.dart';
+import '../../model/floor/migrations/migration_v2_to_v3_add_game_result_table.dart';
 
 class ResultOlympicScreen extends StatefulWidget {
 
@@ -31,6 +35,7 @@ class ResultOlympicScreen extends StatefulWidget {
 class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   GlobalKey _globalKey = GlobalKey();
+  AppDatabase? database;
   List<PlayerResult>? _players;
   String? _gameName;
   DateTime? _gameDate;
@@ -38,9 +43,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
 
   @override
   void initState() {
-    getPlayers();
-    getGameName();
-    getDate();
+    initData();
     loadInterstitialAd();
     super.initState();
   }
@@ -208,6 +211,14 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
     );
   }
 
+  Future<void> initializeDB() async {
+    final _database = await $FloorAppDatabase
+        .databaseBuilder(Config.dbName)
+        .addMigrations([migration2to3])
+        .build();
+    setState(() => database = _database);
+  }
+
   Future<void> getPlayers() async {
     _players = await SharedPreferenceManager().getPlayers();
     _players!.sort((a,b) => a.rank!.compareTo(b.rank!));
@@ -287,6 +298,22 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
   }
 
   void saveGameResult() {
+    if (_players == null) {
+      return;
+    }
+    final gameResult = GameResult(
+      name: _gameName,
+      gameDate: dateTimeToString(_gameDate ?? DateTime.now()),
+      playerResultList: playerResultListToJson(_players!)
+    );
+    database?.gameResultDao.insertGameResult(gameResult);
+  }
 
+  Future<void> initData() async {
+    await initializeDB();
+    await getPlayers();
+    await getGameName();
+    await getDate();
+    saveGameResult();
   }
 }

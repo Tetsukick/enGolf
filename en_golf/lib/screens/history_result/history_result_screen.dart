@@ -1,13 +1,17 @@
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/utils.dart';
-import 'package:engolf/screens/history_result/views/widgets/payment_details_widget.dart';
+import 'package:engolf/utils/logger.dart';
 
+import '../../config/config.dart';
 import '../../flutter_flow/flutter_flow_charts.dart';
-import '../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../../model/floor/db/database.dart';
+import '../../model/floor/entity/game_result_object.dart';
+import '../../model/floor/migrations/migration_v2_to_v3_add_game_result_table.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HistoryResultScreen extends StatefulWidget {
   const HistoryResultScreen({
@@ -20,6 +24,14 @@ class HistoryResultScreen extends StatefulWidget {
 
 class _HistoryResultScreenState extends State<HistoryResultScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  AppDatabase? database;
+  List<GameResultObject>? gameResult;
+
+  @override
+  void initState() {
+    initializeDB();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,30 +63,6 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                       padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0, 4, 0, 0),
-                              child: Text(
-                                'TEST TITLE',
-                                style: FlutterFlowTheme.of(context)
-                                    .title1
-                                    .override(
-                                  fontFamily: 'Lexend',
-                                  color: FlutterFlowTheme.of(context)
-                                      .textColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Padding(
@@ -102,7 +90,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                             padding:
                             EdgeInsetsDirectional.fromSTEB(8, 0, 0, 4),
                             child: Text(
-                              'TEST',
+                              '合計収支',
                               style: FlutterFlowTheme.of(context)
                                   .bodyText1
                                   .override(
@@ -110,61 +98,6 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                                 color: Color(0xB3FFFFFF),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 8, 20, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            valueOrDefault<String>(
-                              dateTimeToString(DateTime.now()),
-                              '4 Days Left',
-                            ),
-                            style: FlutterFlowTheme.of(context).subtitle2,
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 0, 4, 0),
-                                child: Text(
-                                  'TEST',
-                                  textAlign: TextAlign.end,
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText2
-                                      .override(
-                                    fontFamily: 'Lexend',
-                                    color: Color(0xB3FFFFFF),
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                valueOrDefault<String>(
-                                  formatNumber(
-                                    300,
-                                    formatType: FormatType.decimal,
-                                    decimalType: DecimalType.automatic,
-                                    currency: '\$',
-                                  ),
-                                  '2,502',
-                                ),
-                                textAlign: TextAlign.end,
-                                style: FlutterFlowTheme.of(context)
-                                    .title3
-                                    .override(
-                                  fontFamily: 'Lexend',
-                                  color: FlutterFlowTheme.of(context)
-                                      .textColor,
-                                ),
-                              ),
-                            ],
                           ),
                         ],
                       ),
@@ -181,7 +114,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
               child: Center(
                 child: Container(
                   width: double.infinity,
-                  height: 250,
+                  height: 150,
                   child: FlutterFlowLineChart(
                     data: [
                       FFLineChartData(
@@ -396,5 +329,18 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> initializeDB() async {
+    final _database = await $FloorAppDatabase
+        .databaseBuilder(Config.dbName)
+        .addMigrations([migration2to3])
+        .build();
+    setState(() => database = _database);
+    final tmpGameResultList = await _database.gameResultDao.findAllGameResults();
+    final gameResultObjectList =
+      tmpGameResultList?.map((e) => GameResultObject().fromGameResult(e)).toList();
+    setState(() => gameResult = gameResultObjectList);
+    logger.d(gameResultObjectList);
   }
 }

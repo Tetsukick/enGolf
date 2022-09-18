@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/config/config.dart';
+import 'package:engolf/model/floor/migrations/migration_v2_to_v3_add_game_result_table.dart';
 import 'package:engolf/screens/player_search/widget/add_edit_player_dialog.dart';
 import 'package:engolf/screens/player_search/widget/player_card.dart';
 import 'package:flutter/foundation.dart';
@@ -40,6 +41,7 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
   void initializeDB() async {
     final _database = await $FloorAppDatabase
         .databaseBuilder(Config.dbName)
+        .addMigrations([migration2to3])
         .build();
     setState(() => database = _database);
     initializePlayerList();

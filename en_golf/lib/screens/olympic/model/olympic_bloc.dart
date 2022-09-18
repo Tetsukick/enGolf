@@ -6,6 +6,8 @@ import 'package:engolf/model/floor/db/database.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../model/floor/migrations/migration_v2_to_v3_add_game_result_table.dart';
+
 class OlympicBloc {
   OlympicBloc() {
     _playersController.add(_players);
@@ -65,6 +67,7 @@ class OlympicBloc {
   Future<void> _initiateDatabase() async {
     _database = await $FloorAppDatabase
         .databaseBuilder(Config.dbName)
+        .addMigrations([migration2to3])
         .build();
   }
 
