@@ -197,6 +197,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -309,6 +316,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.55.1"
   flare_flutter:
     dependency: "direct main"
     description:
@@ -382,6 +396,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3+1"
+  flutter_spinkit:
+    dependency: "direct main"
+    description:
+      name: flutter_spinkit
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.1.0"
   flutter_staggered_animations:
     dependency: "direct main"
     description:
@@ -406,6 +427,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  font_awesome_flutter:
+    dependency: "direct main"
+    description:
+      name: font_awesome_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "10.2.1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -420,6 +448,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  google_fonts:
+    dependency: "direct main"
+    description:
+      name: google_fonts
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
   google_mobile_ads:
     dependency: "direct main"
     description:
@@ -504,6 +539,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.5.0"
+  json_path:
+    dependency: "direct main"
+    description:
+      name: json_path
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.2"
   keyboard_actions:
     dependency: "direct main"
     description:
@@ -742,6 +784,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  rfc_6901:
+    dependency: transitive
+    description:
+      name: rfc_6901
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   rxdart:
     dependency: "direct main"
     description:
@@ -936,6 +985,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.12"
+  timeago:
+    dependency: "direct main"
+    description:
+      name: timeago
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.3.0"
   timing:
     dependency: transitive
     description:

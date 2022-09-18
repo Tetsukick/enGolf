@@ -2,6 +2,7 @@ import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:engolf/screens/ar_measure/ar_measure_screen.dart';
 import 'package:engolf/screens/dice/model/dice_bloc.dart';
 import 'package:engolf/screens/dice/views/dice_screen.dart';
+import 'package:engolf/screens/history_result/history_result_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 import 'common/color_config.dart';
+import 'flutter_flow/flutter_flow_theme.dart';
+import 'flutter_flow/internationalization.dart';
 import 'screens/menu/menu_screen.dart';
 import 'screens/olympic/model/olympic_bloc.dart';
 import 'screens/olympic/views/olympic_screen.dart';
@@ -31,10 +34,15 @@ class HomeScreen extends StatefulWidget {
 
   @override
   HomeScreenState createState() => HomeScreenState();
+
+  static HomeScreenState of(BuildContext context) =>
+      context.findAncestorStateOfType<HomeScreenState>()!;
 }
 
 class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final _controller = PageController();
+  Locale? _locale;
+  ThemeMode _themeMode = FlutterFlowTheme.themeMode;
 
   @override
   void initState() {
@@ -82,7 +90,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             items: [
               FloatingBottomBarItem(Icons.monetization_on, label: 'Calculator'),
               FloatingBottomBarItem(Icons.casino, label: 'Dice'),
-              FloatingBottomBarItem(Icons.fullscreen, label: 'Measure'),
+              FloatingBottomBarItem(Icons.fullscreen, label: 'History'),
               FloatingBottomBarItem(Icons.list, label: 'Settings'),
             ],
             color: ColorConfig.bgDarkGreen,
@@ -104,7 +112,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               children: <Widget> [
                 OlympicScreen(),
                 DiceScreen(),
-                ARMeasureScreen(),
+                HistoryResultScreen(),
                 MenuScreen()
               ],
             ),
@@ -113,6 +121,13 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     );
   }
+
+  void setLocale(String language) =>
+      setState(() => _locale = createLocale(language));
+  void setThemeMode(ThemeMode mode) => setState(() {
+    _themeMode = mode;
+    FlutterFlowTheme.saveThemeMode(mode);
+  });
 
   Future<void> confirmATTStatus() async {
     final status = await AppTrackingTransparency.requestTrackingAuthorization();
