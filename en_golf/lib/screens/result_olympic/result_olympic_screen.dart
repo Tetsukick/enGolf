@@ -285,4 +285,8 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
       await interstitialAd!.show();
     }
   }
+
+  void saveGameResult() {
+
+  }
 }
