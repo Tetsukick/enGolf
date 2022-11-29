@@ -66,8 +66,11 @@ class _$AppDatabase extends AppDatabase {
 
   GameResultDao? _gameResultDaoInstance;
 
-  Future<sqflite.Database> open(String path, List<Migration> migrations,
-      [Callback? callback]) async {
+  Future<sqflite.Database> open(
+    String path,
+    List<Migration> migrations, [
+    Callback? callback,
+  ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
       version: 3,
       onConfigure: (database) async {
@@ -107,8 +110,10 @@ class _$AppDatabase extends AppDatabase {
 }
 
 class _$PlayerDao extends PlayerDao {
-  _$PlayerDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+  _$PlayerDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
         _playerInsertionAdapter = InsertionAdapter(
             database,
             'Player',
@@ -199,8 +204,10 @@ class _$PlayerDao extends PlayerDao {
 }
 
 class _$GameResultDao extends GameResultDao {
-  _$GameResultDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+  _$GameResultDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
         _gameResultInsertionAdapter = InsertionAdapter(
             database,
             'GameResult',

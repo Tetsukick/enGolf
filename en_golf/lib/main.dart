@@ -87,10 +87,10 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           backgroundColor: ColorConfig.bgGreenPrimary,
           bottomNavigationBar: FloatingBottomBar(
             controller: _controller,
-            items: [
+            items: const [
               FloatingBottomBarItem(Icons.monetization_on, label: 'Calculator'),
               FloatingBottomBarItem(Icons.casino, label: 'Dice'),
-              FloatingBottomBarItem(Icons.fullscreen, label: 'History'),
+              FloatingBottomBarItem(Icons.timeline, label: 'History'),
               FloatingBottomBarItem(Icons.list, label: 'Settings'),
             ],
             color: ColorConfig.bgDarkGreen,

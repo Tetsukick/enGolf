@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:collection/collection.dart';
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/utils.dart';
@@ -13,7 +14,6 @@ import 'package:flutter/material.dart';
 import '../../model/floor/db/database.dart';
 import '../../model/floor/entity/game_result_object.dart';
 import '../../model/floor/migrations/migration_v2_to_v3_add_game_result_table.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class HistoryResultScreen extends StatefulWidget {
   const HistoryResultScreen({
@@ -133,7 +133,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
             data: [
               FFLineChartData(
                 xData: List<int>.generate(filteredGameResultList!.length, (index) => index + 1),
-                yData: filteredGameResultList!.map((e) => e.playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result).toList(),
+                yData: sumProfitList(),
                 settings: LineChartBarData(
                   color: Color(0xFF39D2C0),
                   barWidth: 2,
@@ -175,129 +175,136 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
   }
 
   Widget resultTable() {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: List.generate(filteredGameResultList?.length ?? 0, (index) {
-              return Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
-                child: InkWell(
-                  onTap: () {},
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.92,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context)
-                          .secondaryBackground,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 4,
-                          color: Color(0x3F14181B),
-                          offset: Offset(0, 3),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              8, 0, 0, 0),
-                          child: Card(
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            color: ColorConfig.bgDarkGreen,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  8, 8, 8, 8),
-                              child: Icon(
-                                Icons.monetization_on_rounded,
-                                color: filteredGameResultList!.reversed.toList()[index].playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result < 0 ?
-                                FlutterFlowTheme.of(context).errorRed
-                                    : FlutterFlowTheme.of(context)
-                                    .tertiaryColor,
-                                size: 24,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                12, 8, 0, 0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment:
-                              MainAxisAlignment.center,
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    filteredGameResultList!.reversed.toList()[index].name ?? dateTimeToString(filteredGameResultList![index].gameDate!),
-                                    style: FlutterFlowTheme.of(context)
-                                        .title3,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              12, 0, 12, 0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                filteredGameResultList!.reversed.toList()[index].playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result.toString(),
-                                textAlign: TextAlign.end,
-                                style: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                  fontFamily: 'Lexend',
-                                  color: filteredGameResultList!.reversed.toList()[index].playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result < 0 ?
-                                  FlutterFlowTheme.of(context).errorRed
-                                  : FlutterFlowTheme.of(context)
-                                      .tertiaryColor,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 4, 0, 0),
-                                child: Text(
-                                  dateTimeFormat(
-                                      'MMMEd', filteredGameResultList!.reversed.toList()[index].gameDate),
-                                  textAlign: TextAlign.end,
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                    fontFamily: 'Lexend',
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 24),
+      child: Column(
+        children: List.generate(filteredGameResultList?.length ?? 0, (index) {
+          return resultTableItem(index: index);
+        }),
+      ),
+    );
+  }
+
+  Widget resultTableItem({required int index}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.92,
+        height: 70,
+        decoration: BoxDecoration(
+          color: FlutterFlowTheme.of(context).secondaryBackground,
+          boxShadow: const [
+            BoxShadow(
+              blurRadius: 4,
+              color: Color(0x3F14181B),
+              offset: Offset(0, 3),
+            )
+          ],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Card(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                color: ColorConfig.bgDarkGreen,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    Icons.monetization_on_rounded,
+                    color: filteredGameResultList!.reversed.toList()[index].playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result < 0 ?
+                    FlutterFlowTheme.of(context).errorRed
+                        : FlutterFlowTheme.of(context)
+                        .tertiaryColor,
+                    size: 24,
                   ),
                 ),
-              );
-            }),
-          ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(12, 8, 0, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        filteredGameResultList!.reversed.toList()[index].name
+                            ?? dateTimeToString(filteredGameResultList![index]
+                            .gameDate!),
+                        style: FlutterFlowTheme.of(context).title3,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    filteredGameResultList!.reversed.toList()[index].playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result.toString(),
+                    textAlign: TextAlign.end,
+                    style: FlutterFlowTheme.of(context).subtitle2.override(
+                      fontFamily: 'Lexend',
+                      color: filteredGameResultList!.reversed.toList()[index].playerResultList!.firstWhere((element) => element.playerID == mainPlayer!.id).result < 0 ?
+                      FlutterFlowTheme.of(context).errorRed
+                          : FlutterFlowTheme.of(context).tertiaryColor,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      dateTimeFormat(
+                          'MMMEd',
+                          filteredGameResultList!.reversed.toList()[index]
+                              .gameDate),
+                      textAlign: TextAlign.end,
+                      style: FlutterFlowTheme.of(context).bodyText1.override(
+                        fontFamily: 'Lexend',
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: InkWell(
+                onTap: () async {
+                  await AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.WARNING,
+                      animType: AnimType.BOTTOMSLIDE,
+                      title: 'ゲームデータを削除しますか？',
+                      desc: 'この作業は取り消しできません',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {
+                        database?.gameResultDao.deleteGameResult(
+                          filteredGameResultList!.reversed.toList()[index]
+                              .toGameResult()
+                        );
+                      },
+                  ).show();
+                  await initializeDB();
+                },
+                child: const Icon(
+                  Icons.delete_forever_outlined
+                ),
+              ),
+            )
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -347,26 +354,41 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
     });
   }
 
+  List<int> sumProfitList() {
+    if (filteredGameResultList == null || filteredGameResultList!.length <= 0) {
+      return [0];
+    }
+    final tmpSumProfitList = <int>[];
+    filteredGameResultList!.forEach((element) {
+      final int currentSumProfit = tmpSumProfitList
+          .fold(0, (previousValue, element) => previousValue + element);
+      var tmpProfit = element.playerResultList!.firstWhere((e) => e.playerID == mainPlayer!.id).result;
+      tmpSumProfitList.add(currentSumProfit + tmpProfit);
+    });
+    return tmpSumProfitList;
+  }
+
   Widget error(String errorMessage) {
-    return Expanded(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/setting-error_512.png',
-              width: 128,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: 64),
+          Image.asset('assets/setting-error_512.png',
+            width: 128,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            errorMessage,
+            style: FlutterFlowTheme.of(context).title1.override(
+              fontFamily: 'Lexend',
+              color: FlutterFlowTheme.of(context).textColor,
+              fontSize: 18,
+              fontWeight: FontWeight.normal,
             ),
-            Text(
-              errorMessage,
-              style: FlutterFlowTheme.of(context).title1.override(
-                fontFamily: 'Lexend',
-                color: FlutterFlowTheme.of(context).textColor,
-                fontSize: 24,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
