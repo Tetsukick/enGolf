@@ -8,24 +8,36 @@ import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:engolf/screens/olympic/views/score_card.dart';
 import 'package:engolf/screens/olympic/views/text_fields.dart';
 import 'package:engolf/screens/result_olympic/result_olympic_screen.dart';
+import 'package:engolf/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 import 'package:provider/provider.dart';
 
 import '../../../common/utils.dart';
+import '../../../model/floor/entity/game_result_object.dart';
 import '../model/olympic_bloc.dart';
 import '../../../common/constants.dart' as Constants;
 
-class OlympicScreen extends StatelessWidget {
+class OlympicEditScreen extends StatefulWidget {
+
+  OlympicEditScreen(this.gameResult);
+  GameResultObject gameResult;
+
+  @override
+  State<OlympicEditScreen> createState() => _OlympicEditScreenState();
+}
+
+class _OlympicEditScreenState extends State<OlympicEditScreen> {
   FocusNode _playerCountNode = FocusNode();
   FocusNode _rateNode = FocusNode();
+  int playerCount = 4;
+  int rate = 1;
 
   @override
   Widget build(context) {
@@ -118,20 +130,15 @@ class OlympicScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(SizeConfig.smallMargin),
-              child: SvgPicture.asset('assets/engolf_logo_only.svg'),
-            ),
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
                   onTap: () {
-                    olympicBloc.resetData();
-                    _askReview();
+
                   },
-                  child: Image.asset('assets/reset_128.png',
+                  child: Image.asset('assets/delete_128.png',
                     width: 32,
                   ),
                 ),
@@ -140,7 +147,7 @@ class OlympicScreen extends StatelessWidget {
                   icon: Image.asset('assets/trophy_128.png',
                     width: 24,
                   ),
-                  label: const Text('結果を保存'),
+                  label: const Text('変更を保存'),
                   onPressed: () async {
                     var rand = new math.Random();
                     int lottery = rand.nextInt(3);
@@ -149,13 +156,7 @@ class OlympicScreen extends StatelessWidget {
                     } else {
                       await _askReview();
                     }
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute<ResultOlympicScreen>(
-                            builder: (BuildContext context) {
-                              return ResultOlympicScreen();
-                            },
-                            fullscreenDialog: true));
+
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
@@ -166,36 +167,44 @@ class OlympicScreen extends StatelessWidget {
             ),
           ],
         ),
-        IconTextField(
+        EditableIconTextField(
           'assets/golf-pin_128.png',
           AppLocalizations.of(context)!.cupName,
-          olympicBloc.gameName,
-          olympicBloc.changeGameNameAction.add,
+          widget.gameResult.name,
+          (newValue) {
+            logger.d(newValue);
+          },
         ),
         SizedBox(height: SizeConfig.smallMargin),
-        IconTextFieldDate(
+        EditableIconTextFieldDate(
           icon: 'assets/calendar_128.png',
           labelTitle: '',
-          stream: olympicBloc.date,
-          function: olympicBloc.changeDateAction.add,
+          initialDateTime: widget.gameResult.gameDate ?? DateTime.now(),
+          function: (newValue) {
+            logger.d(newValue);
+          },
         ),
         SizedBox(height: SizeConfig.smallMargin),
         Row(
           children: [
-            IconStreamTextField(
-                'assets/multi-person_128.png',
-                AppLocalizations.of(context)!.player,
-                olympicBloc.playerCount,
-                olympicBloc.changePlayerCountAction.add,
-                _playerCountNode
+            EditableIconIntTextField(
+                icon: 'assets/multi-person_128.png',
+                labelTitle: AppLocalizations.of(context)!.player,
+                initialValue: playerCount,
+                function: (newValue) {
+                  logger.d(newValue);
+                },
+                node: _playerCountNode
             ),
             const SizedBox(width: SizeConfig.smallMargin),
-            IconStreamTextField(
-                'assets/casino-chip-money_128.png',
-                AppLocalizations.of(context)!.rate,
-                olympicBloc.rate,
-                olympicBloc.changeRateAction.add,
-                _rateNode
+            EditableIconIntTextField(
+                icon: 'assets/casino-chip-money_128.png',
+                labelTitle: AppLocalizations.of(context)!.rate,
+                initialValue: rate,
+                function: (newValue) {
+                  logger.d(newValue);
+                },
+                node: _rateNode
             ),
           ],
         ),

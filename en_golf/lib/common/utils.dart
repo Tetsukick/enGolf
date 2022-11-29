@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:convert';
 
 import 'package:english_words/english_words.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 import 'package:intl/intl.dart';
+
+import '../screens/olympic/model/player_model.dart';
 
 // This file has a number of platform-agnostic non-Widget utility functions.
 
@@ -106,4 +109,21 @@ String? getInterstitialAdUnitId() {
 String dateTimeToString(DateTime date) {
   final _formatter = DateFormat('yyyy-MM-dd');
   return _formatter.format(date);
+}
+
+DateTime stringToDatetime(String stringDate) {
+  final _formatter = DateFormat('yyyy-MM-dd');
+  return _formatter.parse(stringDate);
+}
+
+String playerResultListToJson(List<PlayerResult?> players) {
+  final dynamicList = players.map((e) => e!.toJson()).toList();
+  return json.encode(dynamicList);
+}
+
+List<PlayerResult> playerResultListFromJson(String jsonData) {
+  final dynamicList = json.decode(jsonData)
+  as List<dynamic>;
+  return List<PlayerResult>.from(dynamicList.map<dynamic>((x) =>
+      PlayerResult.fromJson(x)));
 }

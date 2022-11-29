@@ -130,7 +130,8 @@ class ScoreCard extends StatelessWidget {
                 },
                 fullscreenDialog: true,),);
         final tempPlayer = player
-          ..name = tempPlayerName?.name ?? player.name;
+          ..name = tempPlayerName?.name ?? player.name
+          ..playerID = tempPlayerName?.id;
         olympicBloc.changePlayerAction.add(tempPlayer);
       },
       child: TextFormField(

@@ -9,6 +9,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import '../../common/color_config.dart';
 import '../../model/floor/db/database.dart';
 import '../../model/floor/entity/player.dart';
+import '../../model/floor/migrations/migration_v2_to_v3_add_game_result_table.dart';
 import '../../utils/logger.dart';
 
 class PlayerSelectScreen extends StatefulWidget {
@@ -39,6 +40,7 @@ class _PlayerSelectScreenState extends State<PlayerSelectScreen> {
   void initializeDB() async {
     final _database = await $FloorAppDatabase
         .databaseBuilder(Config.dbName)
+        .addMigrations([migration2to3])
         .build();
     setState(() => database = _database);
     initializePlayerList();
