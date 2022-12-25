@@ -8,7 +8,13 @@ class Admob {
     adUnitId: getBannerAdUnitId()!,
     size: AdSize.banner,
     request: AdRequest(),
-    listener: BannerAdListener()
+    listener: Admob.bannerAdListener,
+  );
+
+  static BannerAdListener bannerAdListener = BannerAdListener(
+    onAdFailedToLoad: (ad, error) {
+      ad.dispose();
+    },
   );
 
   static late InterstitialAd? interstitialAd;
@@ -22,9 +28,10 @@ class Admob {
             interstitialAd = ad;
           },
           onAdFailedToLoad: (LoadAdError error) {
-            print('InterstitialAd failed to load: $error');
+            loadInterstitialAd();
           },
-        ));
+        )
+    );
   }
 
   static Future<void> showInterstitialAd() async {

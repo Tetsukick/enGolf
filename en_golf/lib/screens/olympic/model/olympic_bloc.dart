@@ -99,7 +99,11 @@ class OlympicBloc {
     ];
     final mainPlayer = await _database?.playerDao.findMainPlayers();
     if (mainPlayer != null) {
-      _players[0] = PlayerResult(id: 0, name: mainPlayer.name, score: 0);
+      _players[0] = PlayerResult(
+          id: 0,
+          name: mainPlayer.name,
+          score: 0,
+          playerID: mainPlayer.id);
     }
     _playerCountController.add(_playerCount);
     _rateController.add(_rate);
