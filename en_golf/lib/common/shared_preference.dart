@@ -12,7 +12,8 @@ class SharedPreferenceManager {
   
   Future<List<PlayerResult>> getPlayers() async {
     final prefs = await SharedPreferences.getInstance();
-    return playerResultListFromJson(prefs.getString(playersId)!);
+    final jsonData = prefs.getString(playersId);
+    return jsonData != null ? playerResultListFromJson(jsonData) : [];
   }
 
   Future<void> savePlayers(List<PlayerResult?> players) async {

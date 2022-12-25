@@ -127,9 +127,9 @@ class OlympicScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
-                  onTap: () {
-                    olympicBloc.resetData();
-                    _askReview();
+                  onTap: () async {
+                    await _showAdAndAskReview();
+                    await olympicBloc.resetData();
                   },
                   child: Image.asset('assets/reset_128.png',
                     width: 32,
@@ -142,14 +142,8 @@ class OlympicScreen extends StatelessWidget {
                   ),
                   label: const Text('結果を保存'),
                   onPressed: () async {
-                    var rand = new math.Random();
-                    int lottery = rand.nextInt(3);
-                    if (lottery == 0) {
-                      await Admob.showInterstitialAd();
-                    } else {
-                      await _askReview();
-                    }
-                    Navigator.push(
+                    await _showAdAndAskReview();
+                    await Navigator.push(
                         context,
                         MaterialPageRoute<ResultOlympicScreen>(
                             builder: (BuildContext context) {
@@ -259,6 +253,16 @@ class OlympicScreen extends StatelessWidget {
     if (await inAppReview.isAvailable()) {
       await inAppReview.requestReview();
       await SharedPreferenceManager().setLastAppReviewDate(DateTime.now());
+    }
+  }
+
+  Future<void> _showAdAndAskReview() async {
+    final rand = math.Random();
+    final lottery = rand.nextInt(3);
+    if (lottery == 0) {
+      await Admob.showInterstitialAd();
+    } else {
+      await _askReview();
     }
   }
 }

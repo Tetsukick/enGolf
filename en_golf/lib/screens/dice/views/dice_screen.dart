@@ -49,9 +49,9 @@ class DiceScreen extends StatelessWidget {
               }
           ),
           _createSubmitButton(context: context),
-          Container(
+          SizedBox(
             height: 50,
-            child: new AdmobBanner(),
+            child: AdmobBanner(),
           ),
         ],
       ),

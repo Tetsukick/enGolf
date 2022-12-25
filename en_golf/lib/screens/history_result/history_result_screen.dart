@@ -48,6 +48,10 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
     );
   }
 
+  Color chartBgColor() => totalProfit() >= 0
+      ? FlutterFlowTheme.of(context).primaryColor
+      : Color(0xFFB4534B);
+
   Widget body() {
     if (gameResultList == null || gameResultList!.isEmpty) {
       return error('保存されたデータがありません。\nホーム画面の結果を保存・表示からゲームの結果を保存してください。');
@@ -71,7 +75,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).primaryColor,
+        color: chartBgColor(),
         boxShadow: [
           BoxShadow(
             blurRadius: 4,
@@ -123,7 +127,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).primaryColor,
+        color: chartBgColor(),
       ),
       child: Center(
         child: Container(
@@ -135,14 +139,14 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                 xData: List<int>.generate(filteredGameResultList!.length, (index) => index + 1),
                 yData: sumProfitList(),
                 settings: LineChartBarData(
-                  color: Color(0xFF39D2C0),
+                  color: totalProfit() >= 0 ? Color(0xFF39D2C0) : Color(0xFFF06A6A),
                   barWidth: 2,
                   isCurved: true,
                   preventCurveOverShooting: true,
                   dotData: FlDotData(show: false),
                   belowBarData: BarAreaData(
                     show: true,
-                    color: Color(0x6639D2C0),
+                    color: totalProfit() >= 0 ? Color(0x6639D2C0) : Color(0xFFF2A384),
                   ),
                 ),
               )
@@ -150,7 +154,7 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
             chartStylingInfo: ChartStylingInfo(
               enableTooltip: true,
               tooltipBackgroundColor: FlutterFlowTheme.of(context).alternate,
-              backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+              backgroundColor: chartBgColor(),
               showBorder: false,
               showGrid: true
             ),
@@ -358,12 +362,14 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
     if (filteredGameResultList == null || filteredGameResultList!.length <= 0) {
       return [0];
     }
+    final resultList = <int>[];
     final tmpSumProfitList = <int>[];
     filteredGameResultList!.forEach((element) {
-      final int currentSumProfit = tmpSumProfitList
+      final int currentSumProfit = resultList
           .fold(0, (previousValue, element) => previousValue + element);
-      var tmpProfit = element.playerResultList!.firstWhere((e) => e.playerID == mainPlayer!.id).result;
-      tmpSumProfitList.add(currentSumProfit + tmpProfit);
+      var tmpResult = element.playerResultList!.firstWhere((e) => e.playerID == mainPlayer!.id).result;
+      resultList.add(tmpResult);
+      tmpSumProfitList.add(currentSumProfit + tmpResult);
     });
     return tmpSumProfitList;
   }

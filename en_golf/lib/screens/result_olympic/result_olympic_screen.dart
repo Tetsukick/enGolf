@@ -297,8 +297,9 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
     }
   }
 
-  void saveGameResult() {
+  Future<void> saveGameResult() async {
     if (_players == null) {
+      logger.d('_players is null. failed to save data.');
       return;
     }
     final gameResult = GameResult(
@@ -307,6 +308,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
       playerResultList: playerResultListToJson(_players!)
     );
     database?.gameResultDao.insertGameResult(gameResult);
+    logger.d((await database?.gameResultDao.findAllGameResults()));
   }
 
   Future<void> initData() async {
@@ -314,6 +316,6 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
     await getPlayers();
     await getGameName();
     await getDate();
-    saveGameResult();
+    await saveGameResult();
   }
 }
