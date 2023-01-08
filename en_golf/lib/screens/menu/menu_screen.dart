@@ -73,13 +73,13 @@ class MenuScreen extends StatelessWidget {
               ),
             ]
         ),
-        Positioned(
+        const Positioned(
           left: 0,
           right: 0,
-          bottom: 0,
-          child: Container(
+          bottom: 24,
+          child: SizedBox(
             height: 50,
-            child: new AdmobBanner(),
+            child: AdmobBanner(),
           ),
         )
       ]),
