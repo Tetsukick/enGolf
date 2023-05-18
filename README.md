@@ -1,6 +1,6 @@
 # enGolf
 Golfのオリンピック計算アプリ  
-![image](https://user-images.githubusercontent.com/47769514/79771499-d5cce080-8369-11ea-8bde-c5f6bd0fffb0.png)
+<img width="808" alt="image" src="https://github.com/Tetsukick/enGolf/assets/47769514/cc4dc2c4-5ab4-4e6e-9901-874c0ff243bc">
 
 ## リリース情報
 ### iOS版
