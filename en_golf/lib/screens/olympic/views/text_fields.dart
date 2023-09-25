@@ -56,6 +56,7 @@ class IconStreamTextField extends StatelessWidget {
                     decoration: InputDecoration(
                       hintText: labelTitle,
                       hintStyle: const TextStyle(color: ColorConfig.textGreenDark),
+                      border: InputBorder.none,
                     ),
                     style: const TextStyle(color: ColorConfig.textGreenLight),
                     onChanged: (text) {
@@ -155,10 +156,6 @@ class IconTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _controller = TextEditingController();
-    _controller.addListener(() {
-      function!(_controller.text);
-    });
     final size = MediaQuery.of(context).size;
     return Container(
       decoration: const BoxDecoration(
@@ -172,6 +169,11 @@ class IconTextField extends StatelessWidget {
       child: StreamBuilder(
           stream: stream,
           builder: (context, snapshot) {
+            final _controller = TextEditingController.fromValue(
+              TextEditingValue(
+                text: snapshot.data?.toString() ?? '',
+              ),
+            );
             return Row(
               children: [
                 Padding(
@@ -185,9 +187,11 @@ class IconTextField extends StatelessWidget {
                     decoration: InputDecoration(
                       hintText: labelTitle,
                       hintStyle: const TextStyle(color: ColorConfig.textGreenDark),
+                      border: InputBorder.none,
                     ),
                     style: const TextStyle(color: ColorConfig.textGreenLight),
                     onEditingComplete: () {
+                      print(_controller.text);
                       function!(_controller.text);
                     },
                     onFieldSubmitted: (text) {
@@ -303,6 +307,7 @@ class IconTextFieldDate extends StatelessWidget {
                     decoration: InputDecoration(
                       hintText: labelTitle,
                       hintStyle: const TextStyle(color: ColorConfig.textGreenDark),
+                      border: InputBorder.none,
                     ),
                     style: const TextStyle(color: ColorConfig.textGreenLight),
                     onTap: () {

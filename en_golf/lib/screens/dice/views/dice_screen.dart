@@ -89,6 +89,7 @@ class DiceScreen extends StatelessWidget {
                         data: SliderThemeData(
                           activeTrackColor: ColorConfig.greenPrimary,
                           showValueIndicator: ShowValueIndicator.always,
+                          thumbColor: ColorConfig.greenPrimary,
                         ),
                         child: RangeSlider(
                           labels: RangeLabels(_range.start.round().toString(), _range.end.round().toString()),

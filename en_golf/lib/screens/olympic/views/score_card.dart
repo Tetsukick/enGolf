@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:engolf/common/color_config.dart';
 import 'package:engolf/common/size_config.dart';
 import 'package:engolf/model/floor/entity/player.dart';
@@ -54,20 +55,23 @@ class ScoreCard extends StatelessWidget {
             vertical: SizeConfig.mediumSmallMargin
           ),
           child: Container(
-            width: 60,
+            width: 72,
             height: 250,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _rankWidget(),
                 const SizedBox(height: SizeConfig.smallMargin),
-                Text(
+                AutoSizeText(
                   player.result.toString(),
                   style: const TextStyle(
                     color: ColorConfig.textGreenLight,
-                    fontSize: SizeConfig.mediumLargeMargin,
+                    fontSize: SizeConfig.mediumMargin,
                     fontWeight: FontWeight.w500,
                   ),
+                  minFontSize: SizeConfig.mediumSmallMargin,
+                  maxFontSize: SizeConfig.mediumMargin,
+                  maxLines: 2,
                 ),
                 const SizedBox(height: SizeConfig.smallMargin),
                 _playerNameTextField(context),

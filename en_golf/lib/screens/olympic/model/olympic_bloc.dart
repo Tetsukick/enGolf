@@ -14,6 +14,7 @@ class OlympicBloc {
     _playerCountController.add(_playerCount);
     _rateController.add(_rate);
     _dateController.add(_date);
+    _gameNameController.add(_gameName);
 
     _initData();
 
@@ -58,6 +59,7 @@ class OlympicBloc {
     PlayerResult(id: 3, name: 'Player4', score: 0),
   ];
   AppDatabase? _database;
+  String _gameName = "";
 
   Future<void> _initData() async {
     await _initiateDatabase();
@@ -97,6 +99,7 @@ class OlympicBloc {
       PlayerResult(id: 2, name: 'Player3', score: 0),
       PlayerResult(id: 3, name: 'Player4', score: 0),
     ];
+    _gameName = "";
     final mainPlayer = await _database?.playerDao.findMainPlayers();
     if (mainPlayer != null) {
       _players[0] = PlayerResult(
@@ -108,6 +111,7 @@ class OlympicBloc {
     _playerCountController.add(_playerCount);
     _rateController.add(_rate);
     _dateController.add(_date);
+    _gameNameController.add(_gameName);
     updatePlayer();
   }
 
