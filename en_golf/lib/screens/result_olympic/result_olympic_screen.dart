@@ -51,6 +51,7 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorConfig.bgGreenPrimary,
       body: SafeArea(
         child: RepaintBoundary(
           key: _globalKey,
@@ -130,11 +131,14 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
-              padding: const EdgeInsets.only(left: 20, top: 80),
+              padding: const EdgeInsets.only(left: 20, top: 100),
               child: FloatingActionButton(
                 heroTag: 'closeBtn',
                 backgroundColor: ColorConfig.bgDarkGreen,
-                child: const Icon(Icons.close),
+                child: const Icon(
+                  Icons.close,
+                  color: ColorConfig.textGreenLight,
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -145,7 +149,11 @@ class _ResultOlympicScreenState extends State<ResultOlympicScreen> {
             alignment: Alignment.bottomRight,
             child: FloatingActionButton(
               heroTag: 'shareBtn',
-              child: const Icon(Icons.ios_share),
+              backgroundColor: ColorConfig.bgDarkGreen,
+              child: const Icon(
+                Icons.ios_share,
+                color: ColorConfig.textGreenLight,
+              ),
               onPressed: () async {
                 await showInterstitialAd();
                 shareImageAndText();
