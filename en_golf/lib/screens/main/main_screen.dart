@@ -1,7 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:engolf/common/shared_preference.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/color_config.dart';
 import '../../common/remote_config.dart';
@@ -98,15 +100,26 @@ class _MainScreenState extends State<MainScreen> {
         }
       ).show();
     } else if (!isLatestVersion) {
-      await AwesomeDialog(
-        context: context,
-        dialogType: DialogType.info,
-        animType: AnimType.bottomSlide,
-        title: 'ストアで最新版がご利用可能です',
-        desc: '最新版にアップデートしてください。',
-        btnCancelOnPress: () {},
-        btnOkOnPress: openStore,
-      ).show();
+      final latestDismissVersion = await SharedPreferenceManager()
+          .getLatestDismissVersion();
+      if (latestDismissVersion != null
+        && latestDismissVersion == versionConfig.latestVersion!) {
+        return;
+      } else {
+        await AwesomeDialog(
+          context: context,
+          dialogType: DialogType.info,
+          animType: AnimType.bottomSlide,
+          title: 'ストアで最新版がご利用可能です',
+          desc: '最新版にアップデートしてください。',
+          btnCancelOnPress: () {},
+          btnOkOnPress: openStore,
+          onDismissCallback: (_) {
+            SharedPreferenceManager()
+                .setLatestDismissVersion(versionConfig.latestVersion!);
+          }
+        ).show();
+      }
     }
   }
 }
