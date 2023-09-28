@@ -9,6 +9,7 @@ class SharedPreferenceManager {
   String gameNameId = 'gameNameId';
   String gameDateId = 'gameDateId';
   String lastAppReviewDate = 'lastAppReviewDate';
+  String latestDismissVersion = 'latestDismissVersion';
   
   Future<List<PlayerResult>> getPlayers() async {
     final prefs = await SharedPreferences.getInstance();
@@ -51,5 +52,15 @@ class SharedPreferenceManager {
   Future<void> setLastAppReviewDate(DateTime gameDate) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(lastAppReviewDate, dateTimeToString(gameDate));
+  }
+
+  Future<String?> getLatestDismissVersion() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(latestDismissVersion);
+  }
+
+  Future<void> setLatestDismissVersion(String version) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(latestDismissVersion, version);
   }
 }
