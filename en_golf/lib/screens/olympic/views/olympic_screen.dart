@@ -1,8 +1,10 @@
 import 'dart:math' as math;
 import 'package:engolf/common/admob.dart';
 import 'package:engolf/common/color_config.dart';
+import 'package:engolf/common/remote_config.dart';
 import 'package:engolf/common/shared_preference.dart';
 import 'package:engolf/common/size_config.dart';
+import 'package:engolf/model/config/affiliate_ads_entity.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:engolf/screens/olympic/views/score_card.dart';
@@ -18,8 +20,10 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/utils.dart';
+import '../../../utils/logger.dart';
 import '../model/olympic_bloc.dart';
 import '../../../common/constants.dart' as Constants;
 
@@ -99,7 +103,7 @@ class OlympicScreen extends StatelessWidget {
                   bottom: 0,
                   child: Container(
                     height: 50,
-                    child: new AdmobBanner(),
+                    child: adBanner(),
                   ),
                 )
               ]
@@ -264,5 +268,35 @@ class OlympicScreen extends StatelessWidget {
     } else {
       await _askReview();
     }
+  }
+
+  Widget adBanner() {
+    final affiliateAds = RemoteConfig().getAffiliateAds();
+    if (affiliateAds.bannerAd == null || affiliateAds.bannerAd!.isEmpty) {
+      return AdmobBanner();
+    } else {
+      final rand = math.Random();
+      final lottery = rand.nextInt(4);
+      affiliateAds.bannerAd!.sort((a, b) => b.priority!.compareTo(a.priority!));
+      if (lottery == 0) {
+        return AdmobBanner();
+      } else {
+        if (lottery == 1) {
+          return affiliateBanner(affiliateAds.bannerAd!.last);
+        } else {
+          return affiliateBanner(affiliateAds.bannerAd!.first);
+        }
+      }
+    }
+
+  }
+
+  Widget affiliateBanner(AffiliateAdsBannerAd ad) {
+    return InkWell(
+      onTap: () {
+        launchUrl(Uri.parse(ad.url!));
+      },
+      child: Image.network(ad.imageUrl!)
+    );
   }
 }
