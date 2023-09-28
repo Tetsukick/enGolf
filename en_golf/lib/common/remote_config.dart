@@ -19,7 +19,8 @@ class RemoteConfig {
       fetchTimeout: const Duration(minutes: 1),
       minimumFetchInterval: const Duration(hours: 1),
     ));
-    // await setDefaults();
+    await setDefaults();
+    await remoteConfig?.fetchAndActivate();
   }
 
   Future<void> setDefaults() async {
@@ -32,13 +33,15 @@ class RemoteConfig {
     });
   }
   
-  AffiliateAdsEntity getAffiliateAds() {
+  Future<AffiliateAdsEntity> getAffiliateAds() async {
+    await remoteConfig?.fetchAndActivate();
     final json = jsonDecode(remoteConfig!.getString('affiliate_ads'))
       as Map<String, dynamic>;
     return AffiliateAdsEntity.fromJson(json);
   }
 
-  VersionEntity getVersion() {
+  Future<VersionEntity> getVersion() async {
+    await remoteConfig?.fetchAndActivate();
     final json = jsonDecode(remoteConfig!.getString('version'))
     as Map<String, dynamic>;
     return VersionEntity.fromJson(json);
