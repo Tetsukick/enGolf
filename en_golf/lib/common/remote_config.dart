@@ -19,7 +19,7 @@ class RemoteConfig {
       fetchTimeout: const Duration(minutes: 1),
       minimumFetchInterval: const Duration(hours: 1),
     ));
-    await setDefaults();
+    // await setDefaults();
   }
 
   Future<void> setDefaults() async {
@@ -39,10 +39,8 @@ class RemoteConfig {
   }
 
   VersionEntity getVersion() {
-    logger.d(remoteConfig!.getString('version'));
     final json = jsonDecode(remoteConfig!.getString('version'))
     as Map<String, dynamic>;
     return VersionEntity.fromJson(json);
   }
-
 }
