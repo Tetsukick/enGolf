@@ -1,18 +1,25 @@
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
-import 'package:engolf/screens/ar_measure/ar_measure_screen.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:engolf/common/remote_config.dart';
+import 'package:engolf/model/config/version_entity.dart';
 import 'package:engolf/screens/dice/model/dice_bloc.dart';
 import 'package:engolf/screens/dice/views/dice_screen.dart';
 import 'package:engolf/screens/history_result/history_result_screen.dart';
+import 'package:engolf/screens/main/main_screen.dart';
+import 'package:engolf/utils/logger.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:package_info/package_info.dart';
 
 import 'package:provider/provider.dart';
 
 import 'common/color_config.dart';
+import 'common/utils.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/internationalization.dart';
 import 'screens/menu/menu_screen.dart';
@@ -22,9 +29,9 @@ import 'common/views/floating_bottom_bar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
+  await MobileAds.instance.initialize();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await Firebase.initializeApp();
 
   runApp(const HomeScreen());
 }
@@ -53,6 +60,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           statusBarIconBrightness: Brightness.light),
     );
     confirmATTStatus();
+    RemoteConfig().init();
     super.initState();
   }
 
@@ -68,7 +76,6 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
-      title: '',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
@@ -83,41 +90,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             dispose: (context, bloc) => bloc.dispose(),
           ),
         ],
-        child: Scaffold(
-          backgroundColor: ColorConfig.bgGreenPrimary,
-          bottomNavigationBar: FloatingBottomBar(
-            controller: _controller,
-            items: const [
-              FloatingBottomBarItem(Icons.monetization_on, label: 'Calculator'),
-              FloatingBottomBarItem(Icons.casino, label: 'Dice'),
-              FloatingBottomBarItem(Icons.timeline, label: 'History'),
-              FloatingBottomBarItem(Icons.list, label: 'Settings'),
-            ],
-            color: ColorConfig.bgDarkGreen,
-            itemColor: Colors.white,
-            activeItemColor: ColorConfig.greenPrimary,
-            enableIconRotation: true,
-            onTap: (index) {
-              print('Tapped: item $index');
-              _controller.animateToPage(
-                index,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeOut,
-              );
-            },
-          ),
-          body: SafeArea(
-            child: PageView(
-              controller: _controller,
-              children: <Widget> [
-                OlympicScreen(),
-                DiceScreen(),
-                HistoryResultScreen(),
-                MenuScreen()
-              ],
-            ),
-          ),
-        ),
+        child: MainScreen(controller: _controller),
       ),
     );
   }
@@ -131,6 +104,6 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   Future<void> confirmATTStatus() async {
     final status = await AppTrackingTransparency.requestTrackingAuthorization();
-    print('ATT Status = $status');
+    logger.d('ATT Status = $status');
   }
 }

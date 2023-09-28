@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/olympic/model/player_model.dart';
 
@@ -126,4 +127,32 @@ List<PlayerResult> playerResultListFromJson(String jsonData) {
   as List<dynamic>;
   return List<PlayerResult>.from(dynamicList.map<dynamic>((x) =>
       PlayerResult.fromJson(x)));
+}
+
+bool isVersionGreaterThan(String newVersion, String currentVersion){
+  final currentV = currentVersion.split('.');
+  final newV = newVersion.split('.');
+  bool a = false;
+  for (var i = 0 ; i <= 2; i++){
+    a = int.parse(newV[i]) > int.parse(currentV[i]);
+    if(int.parse(newV[i]) != int.parse(currentV[i])) {
+      break;
+    }
+  }
+  if (newVersion == currentVersion) {
+    a = true;
+  }
+  return a;
+}
+
+Future<void> openStore() async {
+  if (Platform.isAndroid || Platform.isIOS) {
+    final appId = Platform.isAndroid ? 'com.tetsukick.engolf' : '1507668448';
+    final url = Uri.parse(
+      Platform.isAndroid
+          ? 'market://details?id=$appId'
+          : 'https://apps.apple.com/app/id$appId',
+    );
+    await launchUrl(url, mode: LaunchMode.externalApplication);
+  }
 }
