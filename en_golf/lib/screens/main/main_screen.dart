@@ -1,3 +1,4 @@
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:engolf/common/shared_preference.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
+    confirmATTStatus();
     super.initState();
   }
 
@@ -121,5 +123,10 @@ class _MainScreenState extends State<MainScreen> {
         ).show();
       }
     }
+  }
+
+  Future<void> confirmATTStatus() async {
+    final status = await AppTrackingTransparency.requestTrackingAuthorization();
+    logger.d('ATT Status = $status');
   }
 }

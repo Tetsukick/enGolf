@@ -59,7 +59,6 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.light),
     );
-    confirmATTStatus();
     RemoteConfig().init();
     super.initState();
   }
@@ -101,9 +100,4 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _themeMode = mode;
     FlutterFlowTheme.saveThemeMode(mode);
   });
-
-  Future<void> confirmATTStatus() async {
-    final status = await AppTrackingTransparency.requestTrackingAuthorization();
-    logger.d('ATT Status = $status');
-  }
 }
