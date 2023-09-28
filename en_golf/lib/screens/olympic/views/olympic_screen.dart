@@ -101,9 +101,19 @@ class OlympicScreen extends StatelessWidget {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  child: Container(
+                  child: SizedBox(
                     height: 50,
-                    child: adBanner(),
+                    child: FutureBuilder<Widget>(
+                      future: adBanner(), // a previously-obtained Future<String> or null
+                      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+                        List<Widget> children;
+                        if (snapshot.hasData) {
+                          return snapshot.data ?? const AdmobBanner();
+                        } else {
+                          return const AdmobBanner();
+                        }
+                      },
+                    ),
                   ),
                 )
               ]
@@ -270,8 +280,8 @@ class OlympicScreen extends StatelessWidget {
     }
   }
 
-  Widget adBanner() {
-    final affiliateAds = RemoteConfig().getAffiliateAds();
+  Future<Widget> adBanner() async {
+    final affiliateAds = await RemoteConfig().getAffiliateAds();
     if (affiliateAds.bannerAd == null || affiliateAds.bannerAd!.isEmpty) {
       return AdmobBanner();
     } else {
@@ -288,7 +298,6 @@ class OlympicScreen extends StatelessWidget {
         }
       }
     }
-
   }
 
   Widget affiliateBanner(AffiliateAdsBannerAd ad) {

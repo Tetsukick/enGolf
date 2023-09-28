@@ -74,7 +74,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> checkForceUpdate(BuildContext context) async {
-    final versionConfig = RemoteConfig().getVersion();
+    final versionConfig = await RemoteConfig().getVersion();
     final currentVersion = (await PackageInfo.fromPlatform()).version;
     if (versionConfig.minSupportVersion == null
         || versionConfig.latestVersion == null) {
