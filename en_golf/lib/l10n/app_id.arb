@@ -4,6 +4,7 @@
   "rate": "menilai",
   "player": "Jumlah pemain",
   "cupName": "Nama Game",
+  "saveResult": "Simpan Hasil",
   "shake": "Generasi acak",
   "allowDuplicateNumber": "Izinkan duplikasi",
   "noServiceMessage": "Tidak kompatibel dengan Android.\nHarap tunggu sebentar karena saat ini sedang dalam pengembangan.",

@@ -16,6 +16,11 @@
         "description": "name of the game"
       },
 
+  "saveResult": "Save Result",
+      "@saveResult": {
+        "description": "save result"
+      },
+
   "shake": "Shake!!",
       "@shake": {
         "description": "start create random number"

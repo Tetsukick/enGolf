@@ -151,7 +151,7 @@ class _Item extends StatelessWidget {
             children: <Widget>[
               Icon(
                 iconData,
-                size: _kItemSize - 4,
+                size: _kItemSize - 8,
                 color: color ?? Colors.grey.shade700,
               ),
               if (label != null) ...[
@@ -160,7 +160,7 @@ class _Item extends StatelessWidget {
                   label!,
                   style: TextStyle(
                     color: color ?? Colors.grey.shade700,
-                    fontSize: 12.0,
+                    fontSize: 11,
                   ),
                 ),
               ],

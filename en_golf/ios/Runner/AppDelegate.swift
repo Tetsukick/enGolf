@@ -1,7 +1,7 @@
 import UIKit
 import Flutter
 
-@UIApplicationMain
+@main
 @objc class AppDelegate: FlutterAppDelegate {
     lazy var flutterEngine = FlutterEngine(name: "HomeScreen")
     override func application(

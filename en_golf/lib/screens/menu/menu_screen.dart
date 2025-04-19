@@ -122,7 +122,7 @@ class MenuScreen extends StatelessWidget {
   Future<void> setBrowserPage(String url) async {
     MyInAppBrowser browser = new MyInAppBrowser();
     await browser.openUrlRequest(
-      urlRequest: URLRequest(url: Uri.parse(url)),
+      urlRequest: URLRequest(url: WebUri(url)),
       options: InAppBrowserClassOptions(
         crossPlatform: InAppBrowserOptions(
           toolbarTopBackgroundColor: const Color(0xff2b374d),

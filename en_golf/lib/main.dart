@@ -26,6 +26,7 @@ import 'screens/menu/menu_screen.dart';
 import 'screens/olympic/model/olympic_bloc.dart';
 import 'screens/olympic/views/olympic_screen.dart';
 import 'common/views/floating_bottom_bar.dart';
+import 'package:sizer/sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,27 +72,29 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: MultiProvider(
-        providers: [
-          Provider<OlympicBloc>(
-            create: (context) => OlympicBloc(),
-            dispose: (context, bloc) => bloc.dispose(),
-          ),
-          Provider<DiceBloc>(
-            create: (context) => DiceBloc(),
-            dispose: (context, bloc) => bloc.dispose(),
-          ),
-        ],
-        child: MainScreen(controller: _controller),
-      ),
-    );
+    return Sizer(builder: (context, orientation, deviceType) {
+      return MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+        ),
+        home: MultiProvider(
+          providers: [
+            Provider<OlympicBloc>(
+              create: (context) => OlympicBloc(),
+              dispose: (context, bloc) => bloc.dispose(),
+            ),
+            Provider<DiceBloc>(
+              create: (context) => DiceBloc(),
+              dispose: (context, bloc) => bloc.dispose(),
+            ),
+          ],
+          child: MainScreen(controller: _controller),
+        ),
+      );
+    });
   }
 
   void setLocale(String language) =>

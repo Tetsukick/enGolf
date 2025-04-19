@@ -287,8 +287,8 @@ class _HistoryResultScreenState extends State<HistoryResultScreen> {
                 onTap: () async {
                   await AwesomeDialog(
                       context: context,
-                      dialogType: DialogType.WARNING,
-                      animType: AnimType.BOTTOMSLIDE,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.bottomSlide,
                       title: 'ゲームデータを削除しますか？',
                       desc: 'この作業は取り消しできません',
                       btnCancelOnPress: () {},

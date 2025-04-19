@@ -15,16 +15,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../common/utils.dart';
-import '../../../utils/logger.dart';
-import '../model/olympic_bloc.dart';
 import '../../../common/constants.dart' as Constants;
 
 class OlympicScreen extends StatelessWidget {
@@ -72,20 +68,21 @@ class OlympicScreen extends StatelessWidget {
                                       scrollDirection: Axis.horizontal,
                                       itemCount: players.length,
                                       itemBuilder: (BuildContext context, int index) {
-                                        return AnimationConfiguration.staggeredList(
-                                          position: index,
-                                          duration: const Duration(milliseconds: 375),
-                                          child: SlideAnimation(
-                                            horizontalOffset: 50.0,
-                                            child: FadeInAnimation(
-                                              child: SafeArea(
-                                                  top: false,
-                                                  bottom: true,
-                                                  child: ScoreCard(color: Constants.colors[players[index].rank!], player: players[index],)
-                                              ),
-                                            ),
-                                          ),
-                                        );
+                                        return ScoreCard(color: Constants.colors[players[index].rank!], player: players[index],);
+                                        // return AnimationConfiguration.staggeredList(
+                                        //   position: index,
+                                        //   duration: const Duration(milliseconds: 375),
+                                        //   child: SlideAnimation(
+                                        //     horizontalOffset: 50.0,
+                                        //     child: FadeInAnimation(
+                                        //       child: SafeArea(
+                                        //           top: false,
+                                        //           bottom: true,
+                                        //           child: ScoreCard(color: Constants.colors[players[index].rank!], player: players[index],)
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        // );
                                       },
                                     ),
                                   ),
@@ -154,7 +151,7 @@ class OlympicScreen extends StatelessWidget {
                   icon: Image.asset('assets/trophy_128.png',
                     width: 24,
                   ),
-                  label: const Text('結果を保存'),
+                  label: Text(AppLocalizations.of(context)!.saveResult,),
                   onPressed: () async {
                     await _showAdAndAskReview();
                     await Navigator.push(
@@ -281,23 +278,24 @@ class OlympicScreen extends StatelessWidget {
   }
 
   Future<Widget> adBanner() async {
-    final affiliateAds = await RemoteConfig().getAffiliateAds();
-    if (affiliateAds.bannerAd == null || affiliateAds.bannerAd!.isEmpty) {
-      return AdmobBanner();
-    } else {
-      final rand = math.Random();
-      final lottery = rand.nextInt(4);
-      affiliateAds.bannerAd!.sort((a, b) => b.priority!.compareTo(a.priority!));
-      if (lottery == 0) {
-        return AdmobBanner();
-      } else {
-        if (lottery == 1) {
-          return affiliateBanner(affiliateAds.bannerAd!.last);
-        } else {
-          return affiliateBanner(affiliateAds.bannerAd!.first);
-        }
-      }
-    }
+    return AdmobBanner();
+    // final affiliateAds = await RemoteConfig().getAffiliateAds();
+    // if (affiliateAds.bannerAd == null || affiliateAds.bannerAd!.isEmpty) {
+    //   return AdmobBanner();
+    // } else {
+    //   final rand = math.Random();
+    //   final lottery = rand.nextInt(4);
+    //   affiliateAds.bannerAd!.sort((a, b) => b.priority!.compareTo(a.priority!));
+    //   if (lottery == 0) {
+    //     return AdmobBanner();
+    //   } else {
+    //     if (lottery == 1) {
+    //       return affiliateBanner(affiliateAds.bannerAd!.last);
+    //     } else {
+    //       return affiliateBanner(affiliateAds.bannerAd!.first);
+    //     }
+    //   }
+    // }
   }
 
   Widget affiliateBanner(AffiliateAdsBannerAd ad) {

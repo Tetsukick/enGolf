@@ -187,8 +187,8 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
   Future<void> _showAlertAlreadyExistPlayer({required String playerName}) async {
     await AwesomeDialog(
       context: context,
-      dialogType: DialogType.ERROR,
-      animType: AnimType.RIGHSLIDE,
+      dialogType: DialogType.error,
+      animType: AnimType.rightSlide,
       headerAnimationLoop: false,
       title: 'Error',
       desc:
@@ -255,13 +255,15 @@ class _PlayerListScreenState extends State<PlayerListScreen> {
     final isEdit = player != null;
 
     if (isEdit) {
-      _editPlayer(playerName: playerName, player: player!, isMainUser: isMainUser);
+      _editPlayer(playerName: playerName, player: player, isMainUser: isMainUser);
     } else {
       _registerNewPlayer(playerName: playerName, isMainUser: isMainUser);
     }
   }
 
-  Future<void> _showAddEditPlayerDialog(BuildContext context, {Player? player}) async {
+  Future<void> _showAddEditPlayerDialog(
+      BuildContext context,
+      {Player? player}) {
     return showDialog(
       context: context,
       builder: (context) {

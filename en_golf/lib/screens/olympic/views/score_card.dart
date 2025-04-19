@@ -5,13 +5,11 @@ import 'package:engolf/model/floor/entity/player.dart';
 import 'package:engolf/screens/olympic/model/olympic_bloc.dart';
 import 'package:engolf/screens/olympic/model/player_model.dart';
 import 'package:engolf/screens/player_search/player_select_screen.dart';
-import 'package:engolf/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../../common/utils.dart';
+import 'package:sizer/sizer.dart';
 
 class ScoreCard extends StatelessWidget {
   const ScoreCard({
@@ -37,7 +35,6 @@ class ScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final olympicBloc = Provider.of<OlympicBloc>(context);
-    final size = MediaQuery.of(context).size;
     return Card(
       color: ColorConfig.bgDarkGreen,
       elevation: 1.5,
@@ -55,7 +52,7 @@ class ScoreCard extends StatelessWidget {
             vertical: SizeConfig.mediumSmallMargin
           ),
           child: Container(
-            width: 72,
+            width: 16.8.w,
             height: 250,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

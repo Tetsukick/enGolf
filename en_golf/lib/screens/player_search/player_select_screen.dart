@@ -147,10 +147,10 @@ class _PlayerSelectScreenState extends State<PlayerSelectScreen> {
 
     if (_currentPlayers != null
         && _currentPlayers.any((player) => player.name == playerName)) {
-      AwesomeDialog(
+      await AwesomeDialog(
         context: context,
-        dialogType: DialogType.ERROR,
-        animType: AnimType.RIGHSLIDE,
+        dialogType: DialogType.error,
+        animType: AnimType.rightSlide,
         headerAnimationLoop: false,
         title: 'Error',
         desc:

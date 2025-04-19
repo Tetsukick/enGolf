@@ -33,9 +33,7 @@ class FlutterFlowLineChart extends StatelessWidget {
         LineChartData(
           lineTouchData: LineTouchData(
             handleBuiltInTouches: chartStylingInfo.enableTooltip,
-            touchTooltipData: LineTouchTooltipData(
-              tooltipBgColor: chartStylingInfo.tooltipBackgroundColor,
-            ),
+            touchTooltipData: LineTouchTooltipData(),
           ),
           gridData: FlGridData(show: chartStylingInfo.showGrid),
           borderData: FlBorderData(
@@ -158,9 +156,7 @@ class FlutterFlowBarChart extends StatelessWidget {
       BarChartData(
         barTouchData: BarTouchData(
           handleBuiltInTouches: chartStylingInfo.enableTooltip,
-          touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: chartStylingInfo.tooltipBackgroundColor,
-          ),
+          touchTooltipData: BarTouchTooltipData(),
         ),
         alignment: alignment,
         gridData: FlGridData(show: chartStylingInfo.showGrid),
@@ -483,10 +479,10 @@ FlTitlesData getTitlesData(
               ),
         axisNameSize: xAxisLabelInfo.titleTextStyle?.fontSize != null
             ? xAxisLabelInfo.titleTextStyle!.fontSize! + 12
-            : null,
+            : 18,
         sideTitles: SideTitles(
           showTitles: xAxisLabelInfo.showLabels,
-          getTitlesWidget: getXTitlesWidget,
+          getTitlesWidget: getXTitlesWidget!,
           interval: xAxisLabelInfo.labelInterval,
         ),
       ),
@@ -501,7 +497,7 @@ FlTitlesData getTitlesData(
               ),
         axisNameSize: yAxisLabelInfo.titleTextStyle?.fontSize != null
             ? yAxisLabelInfo.titleTextStyle!.fontSize! + 12
-            : null,
+            : 18,
         sideTitles: SideTitles(
           getTitlesWidget: (val, _) => Text(
             _format.format(val),
