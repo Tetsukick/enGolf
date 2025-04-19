@@ -9,7 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:engolf/common/utils.dart';
 import 'package:in_app_review/in_app_review.dart';
 
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../player_search/player_list_screen.dart';
 
